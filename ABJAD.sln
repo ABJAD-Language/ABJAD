@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexEngine", "LexEngine\LexEngine.csproj", "{9BAE3F78-67FF-4DD3-8D78-306833468463}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexTest", "LexTest\LexTest.csproj", "{F368CEAB-3481-4485-AAED-34BC4D7A0C9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BAE3F78-67FF-4DD3-8D78-306833468463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BAE3F78-67FF-4DD3-8D78-306833468463}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BAE3F78-67FF-4DD3-8D78-306833468463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BAE3F78-67FF-4DD3-8D78-306833468463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F368CEAB-3481-4485-AAED-34BC4D7A0C9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F368CEAB-3481-4485-AAED-34BC4D7A0C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F368CEAB-3481-4485-AAED-34BC4D7A0C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F368CEAB-3481-4485-AAED-34BC4D7A0C9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
