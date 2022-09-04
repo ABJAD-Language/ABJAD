@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexEngine", "LexEngine\LexEngine.csproj", "{9BAE3F78-67FF-4DD3-8D78-306833468463}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexTest", "LexTest\LexTest.csproj", "{F368CEAB-3481-4485-AAED-34BC4D7A0C9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexEngine.Test", "LexEngine.Test\LexEngine.Test.csproj", "{F368CEAB-3481-4485-AAED-34BC4D7A0C9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

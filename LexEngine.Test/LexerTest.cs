@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using LexEngine;
 using LexEngine.Tokens;
 using Moq;
 using Xunit;
 
-namespace LexTest;
+namespace LexEngine.Test;
 
 public class LexerTest
 {

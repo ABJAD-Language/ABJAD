@@ -1,7 +1,7 @@
 using LexEngine.Characters;
 using Xunit;
 
-namespace LexTest.Characters;
+namespace LexEngine.Test.Characters;
 
 public class CharacterAnalyzerTest
 {
