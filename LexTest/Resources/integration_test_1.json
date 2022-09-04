@@ -1,0 +1,283 @@
+[
+  {
+    "startIndex": 1,
+    "startLine": 1,
+    "startLineIndex": 1,
+    "endIndex": 5,
+    "endLineIndex": 5,
+    "type": "VAR"
+  },
+  {
+    "startIndex": 6,
+    "startLine": 1,
+    "startLineIndex": 6,
+    "endIndex": 6,
+    "endLine": 1,
+    "endLineIndex": 6,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 7,
+    "startLine": 1,
+    "startLineIndex": 7,
+    "endIndex": 10,
+    "endLineIndex": 10,
+    "type": "ID",
+    "label": "عداد"
+  },
+  {
+    "startIndex": 11,
+    "startLine": 1,
+    "startLineIndex": 11,
+    "endIndex": 11,
+    "endLine": 1,
+    "endLineIndex": 11,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 12,
+    "startLine": 1,
+    "startLineIndex": 12,
+    "endIndex": 12,
+    "endLineIndex": 12,
+    "type": "EQUAL"
+  },
+  {
+    "startIndex": 13,
+    "startLine": 1,
+    "startLineIndex": 13,
+    "endIndex": 13,
+    "endLine": 1,
+    "endLineIndex": 13,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 14,
+    "startLine": 1,
+    "startLineIndex": 14,
+    "endIndex": 14,
+    "endLineIndex": 14,
+    "type": "NUMBER_CONST",
+    "label": "1"
+  },
+  {
+    "startIndex": 15,
+    "startLine": 1,
+    "startLineIndex": 15,
+    "endIndex": 15,
+    "endLineIndex": 15,
+    "type": "SEMICOLON"
+  },
+  {
+    "startIndex": 16,
+    "startLine": 1,
+    "startLineIndex": 16,
+    "endIndex": 17,
+    "endLine": 2,
+    "endLineIndex": 1,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 18,
+    "startLine": 2,
+    "startLineIndex": 1,
+    "endIndex": 22,
+    "endLineIndex": 5,
+    "type": "WHILE"
+  },
+  {
+    "startIndex": 23,
+    "startLine": 2,
+    "startLineIndex": 6,
+    "endIndex": 23,
+    "endLine": 2,
+    "endLineIndex": 6,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 24,
+    "startLine": 2,
+    "startLineIndex": 7,
+    "endIndex": 24,
+    "endLineIndex": 7,
+    "type": "OPEN_PAREN"
+  },
+  {
+    "startIndex": 25,
+    "startLine": 2,
+    "startLineIndex": 8,
+    "endIndex": 28,
+    "endLineIndex": 11,
+    "type": "ID",
+    "label": "عداد"
+  },
+  {
+    "startIndex": 29,
+    "startLine": 2,
+    "startLineIndex": 12,
+    "endIndex": 29,
+    "endLine": 2,
+    "endLineIndex": 12,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 30,
+    "startLine": 2,
+    "startLineIndex": 13,
+    "endIndex": 31,
+    "endLineIndex": 14,
+    "type": "LESS_EQUAL"
+  },
+  {
+    "startIndex": 32,
+    "startLine": 2,
+    "startLineIndex": 15,
+    "endIndex": 32,
+    "endLine": 2,
+    "endLineIndex": 15,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 33,
+    "startLine": 2,
+    "startLineIndex": 16,
+    "endIndex": 35,
+    "endLineIndex": 18,
+    "type": "NUMBER_CONST",
+    "label": "100"
+  },
+  {
+    "startIndex": 36,
+    "startLine": 2,
+    "startLineIndex": 19,
+    "endIndex": 36,
+    "endLineIndex": 19,
+    "type": "CLOSE_PAREN"
+  },
+  {
+    "startIndex": 37,
+    "startLine": 2,
+    "startLineIndex": 20,
+    "endIndex": 37,
+    "endLine": 2,
+    "endLineIndex": 20,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 38,
+    "startLine": 2,
+    "startLineIndex": 21,
+    "endIndex": 38,
+    "endLineIndex": 21,
+    "type": "OPEN_BRACE"
+  },
+  {
+    "startIndex": 39,
+    "startLine": 2,
+    "startLineIndex": 22,
+    "endIndex": 43,
+    "endLine": 3,
+    "endLineIndex": 4,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 44,
+    "startLine": 3,
+    "startLineIndex": 1,
+    "endIndex": 47,
+    "endLineIndex": 4,
+    "type": "PRINT"
+  },
+  {
+    "startIndex": 48,
+    "startLine": 3,
+    "startLineIndex": 5,
+    "endIndex": 48,
+    "endLineIndex": 5,
+    "type": "OPEN_PAREN"
+  },
+  {
+    "startIndex": 49,
+    "startLine": 3,
+    "startLineIndex": 6,
+    "endIndex": 52,
+    "endLineIndex": 9,
+    "type": "ID",
+    "label": "عداد"
+  },
+  {
+    "startIndex": 53,
+    "startLine": 3,
+    "startLineIndex": 10,
+    "endIndex": 53,
+    "endLineIndex": 10,
+    "type": "CLOSE_PAREN"
+  },
+  {
+    "startIndex": 54,
+    "startLine": 3,
+    "startLineIndex": 11,
+    "endIndex": 54,
+    "endLineIndex": 11,
+    "type": "SEMICOLON"
+  },
+  {
+    "startIndex": 55,
+    "startLine": 3,
+    "startLineIndex": 12,
+    "endIndex": 59,
+    "endLine": 4,
+    "endLineIndex": 4,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 60,
+    "startLine": 4,
+    "startLineIndex": 1,
+    "endIndex": 63,
+    "endLineIndex": 4,
+    "type": "ID",
+    "label": "عداد"
+  },
+  {
+    "startIndex": 64,
+    "startLine": 4,
+    "startLineIndex": 5,
+    "endIndex": 64,
+    "endLineIndex": 5,
+    "type": "PLUS"
+  },
+  {
+    "startIndex": 65,
+    "startLine": 4,
+    "startLineIndex": 6,
+    "endIndex": 65,
+    "endLineIndex": 6,
+    "type": "PLUS"
+  },
+  {
+    "startIndex": 66,
+    "startLine": 4,
+    "startLineIndex": 7,
+    "endIndex": 66,
+    "endLineIndex": 7,
+    "type": "SEMICOLON"
+  },
+  {
+    "startIndex": 67,
+    "startLine": 4,
+    "startLineIndex": 8,
+    "endIndex": 68,
+    "endLine": 5,
+    "endLineIndex": 1,
+    "type": "WHITE_SPACE"
+  },
+  {
+    "startIndex": 69,
+    "startLine": 5,
+    "startLineIndex": 1,
+    "endIndex": 69,
+    "endLineIndex": 1,
+    "type": "CLOSE_BRACE"
+  }
+]
