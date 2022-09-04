@@ -2,7 +2,7 @@ using LexEngine.Characters;
 using LexEngine.Tokens;
 using Xunit;
 
-namespace LexTest.Tokens;
+namespace LexEngine.Test.Tokens;
 
 public class TokenScannerTest
 {

@@ -1,7 +1,7 @@
 using LexEngine.Tokens;
 using Xunit;
 
-namespace LexTest.Tokens;
+namespace LexEngine.Test.Tokens;
 
 public class WordScannerTest
 {

@@ -1,7 +1,6 @@
-using LexEngine;
 using Xunit;
 
-namespace LexTest;
+namespace LexEngine.Test;
 
 public class StringUtilsTest
 {
