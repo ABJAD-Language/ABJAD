@@ -585,6 +585,34 @@ public class PatternsTest
             Assert.True(isMatch);
         }
         
+        [Fact]
+        public void LettersProceededByDigitDoesNotMatchPattern()
+        {
+            var isMatch = Regex.IsMatch("1ولد", Patterns.LiteralRegex);
+            Assert.False(isMatch);
+        }
+        
+        [Fact]
+        public void LettersProceededByDigitsDoesNotMatchPattern()
+        {
+            var isMatch = Regex.IsMatch("123ولد", Patterns.LiteralRegex);
+            Assert.False(isMatch);
+        }
+        
+        [Fact]
+        public void LettersProceededByUnderscoreDoesNotMatchPattern()
+        {
+            var isMatch = Regex.IsMatch("_ولد", Patterns.LiteralRegex);
+            Assert.False(isMatch);
+        }
+        
+        [Fact]
+        public void LettersProceededByUnderscoresDoesNotMatchPattern()
+        {
+            var isMatch = Regex.IsMatch("___ولد", Patterns.LiteralRegex);
+            Assert.False(isMatch);
+        }
+        
     }
 
     public class WordTerminalPatternTest

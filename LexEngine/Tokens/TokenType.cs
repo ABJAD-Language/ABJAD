@@ -1,4 +1,4 @@
-namespace LexEngine;
+namespace LexEngine.Tokens;
 
 public enum TokenType
 {
@@ -7,11 +7,13 @@ public enum TokenType
     GREATER_THAN, LESS_EQUAL, LESS_THAN, MINUS, MODULO, OR, PLUS, TIMES, 
 
     /* Other graphic characters */
-    CLOSE_BRACE, CLOSE_PAREN, COMMA, DOT, OPEN_BRACE, OPEN_PAREN, SEMICOLON,
+    CLOSE_BRACE, CLOSE_PAREN, COMMA, DOT, OPEN_BRACE, OPEN_PAREN, SEMICOLON, DOUBLE_QUOTE, HASH, AMPERSAND, VERTICAL_BAR,
 
     /* Keywords */
     BOOL, CLASS, CONST, ELSE, FALSE, FOR, FUNC, IF, NEW, NULL, NUMBER, PRINT, RETURN, STRING, TYPEOF, TRUE, WHILE, VAR,
 
     /* Primitives */
-    NUMBER_CONST, ID, STRING_CONST
+    NUMBER_CONST, ID, STRING_CONST,
+    
+    WHITE_SPACE, COMMENT
 }

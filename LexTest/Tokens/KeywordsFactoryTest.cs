@@ -1,16 +1,10 @@
-using LexEngine;
+using LexEngine.Tokens;
 using Xunit;
 
-namespace LexTest;
+namespace LexTest.Tokens;
 
 public class KeywordsFactoryTest
 {
-    private readonly KeywordsFactory keywordsFactory;
-    
-    public KeywordsFactoryTest()
-    {
-        keywordsFactory = new KeywordsFactory();
-    }
 
     [Theory]
     [InlineData("منطق", TokenType.BOOL)]
@@ -33,12 +27,16 @@ public class KeywordsFactoryTest
     [InlineData("متغير", TokenType.VAR)]
     private void TokensCheck(string label, TokenType type)
     {
-        Assert.Equal(type, keywordsFactory.GetToken(label));
+        Assert.Equal(type, KeywordsFactory.GetToken(label));
     }
 
-    [Fact]
-    private void ThrowsExceptionWhenTokenDoesNotExist()
+    [Theory]
+    [InlineData("منطق", true)]
+    [InlineData("ولد", false)]
+    [InlineData("متغير", true)]
+    [InlineData("متغي", false)]
+    private void KeywordCheck(string label, bool isKeyword)
     {
-        Assert.Throws<InvalidTokenException>(() => keywordsFactory.GetToken("غير_موجود"));
+        Assert.Equal(isKeyword, KeywordsFactory.IsKeyword(label));
     }
 }

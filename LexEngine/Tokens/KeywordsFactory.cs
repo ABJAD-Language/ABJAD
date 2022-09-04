@@ -1,8 +1,8 @@
-namespace LexEngine;
+namespace LexEngine.Tokens;
 
 public class KeywordsFactory
 {
-    private readonly Dictionary<string, TokenType> keywords = new()
+    private static readonly Dictionary<string, TokenType> Keywords = new()
     {
         { "منطق", TokenType.BOOL },
         { "صنف", TokenType.CLASS },
@@ -24,14 +24,13 @@ public class KeywordsFactory
         { "متغير", TokenType.VAR },
     };
 
-    public TokenType GetToken(string label)
+    public static bool IsKeyword(string label)
     {
-        var tokenExists = keywords.TryGetValue(label, out var tokenType);
-        if (tokenExists)
-        {
-            return tokenType;
-        }
+        return Keywords.ContainsKey(label);
+    }
 
-        throw new InvalidTokenException();
+    public static TokenType GetToken(string label)
+    {
+        return Keywords[label];
     }
 }
