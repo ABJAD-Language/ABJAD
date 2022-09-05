@@ -12,7 +12,11 @@ builder.Services.AddSingleton<StringUtils>();
 builder.Services.AddScoped<ILexer, Lexer>();
 builder.Services.AddScoped<Analyzer, LexicalAnalyzer>();
 
-//JsonSerializerOptions.IgnoreNullValues is obsolete. To ignore null values when serializing, set DefaultIgnoreCondition to JsonIgnoreCondition.WhenWritingNull.
+builder.Services.AddCors(options =>
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()));
 
 builder.Services.AddMvc()
     .AddJsonOptions(options =>
@@ -25,6 +29,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 

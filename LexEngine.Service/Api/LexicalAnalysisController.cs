@@ -1,4 +1,5 @@
 using System.Net;
+using LexEngine.Service.Api.Filters;
 using LexEngine.Service.Core;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ public class LexicalAnalysisController : ControllerBase
     }
 
     [HttpPost]
+    [LexicalAnalysisExceptionFilter]
     [ProducesResponseType((int) HttpStatusCode.OK, Type = typeof(List<LexicalToken>))]
     public ActionResult<List<LexicalToken>> ApplyLexicalAnalysis([FromBody] LexicalAnalysisRequest request)
     {

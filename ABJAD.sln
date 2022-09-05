@@ -11,6 +11,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{E5B11064-707C-4AEC-90B9-E19764338645}"
 	ProjectSection(SolutionItems) = preProject
 		Dockerfile = Dockerfile
+		.github\workflows\dotnet-ci.yml = .github\workflows\dotnet-ci.yml
 	EndProjectSection
 EndProject
 Global

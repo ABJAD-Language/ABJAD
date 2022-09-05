@@ -1,6 +1,6 @@
 namespace LexEngine.Tokens;
 
-public class InvalidWordException : Exception
+public class InvalidWordException : LexicalAnalysisException
 {
     public InvalidWordException(int index, int line, string label) : base(FormulateEnglishMessage(index, line, label))
     {
@@ -26,8 +26,6 @@ public class InvalidWordException : Exception
     public int Line { get; }
 
     public string Label { get; }
-
-    public string EnglishMessage { get; }
-
-    public string ArabicMessage { get; }
+    public override string EnglishMessage { get; }
+    public override string ArabicMessage { get; }
 }

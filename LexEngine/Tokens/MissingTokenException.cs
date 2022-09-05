@@ -1,6 +1,6 @@
 namespace LexEngine.Tokens;
 
-public class MissingTokenException : Exception
+public class MissingTokenException : LexicalAnalysisException
 {
     public MissingTokenException(int index, int line, string token) : base(FormulateEnglishMessage(index, line, token))
     {
@@ -17,9 +17,9 @@ public class MissingTokenException : Exception
 
     public string Token { get; }
 
-    public string EnglishMessage { get; }
+    public override string EnglishMessage { get; }
 
-    public string ArabicMessage { get; }
+    public override string ArabicMessage { get; }
 
     private static string FormulateEnglishMessage(int index, int line, string token)
     {

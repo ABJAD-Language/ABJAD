@@ -36,6 +36,17 @@ public class LexicalAnalysisControllerTest
         Assert.Equal(RemoveWhiteSpaces(ReadFile("lexical_analysis_response.json")), result);
     }
 
+    [Fact]
+    public async Task LexicalAnalysisReturnsBadRequestWithErrorMessageWhenFailure()
+    {
+        var request = ReadFile("lexical_analysis_failure_request.json");
+        var body = new StringContent(request, Encoding.UTF8, MediaTypeNames.Application.Json);
+        var response = await client.PostAsync("/", body);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var result = await response.Content.ReadAsStringAsync();
+        Assert.Equal(RemoveWhiteSpaces(ReadFile("lexical_analysis_failure_response.json")), result);
+    }
+
     private static string ReadFile(string fileName)
     {
         return File.ReadAllText("../../../Api/" + fileName);
@@ -44,6 +55,5 @@ public class LexicalAnalysisControllerTest
     private static string RemoveWhiteSpaces(string content)
     {
         return Regex.Replace(content, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");
-        // return content.Replace("\r", "").Replace("\n", "");
     }
 }
