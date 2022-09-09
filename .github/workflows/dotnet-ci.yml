@@ -1,4 +1,4 @@
-name: .NET
+name: CI
 
 on:
   push:
@@ -8,26 +8,30 @@ on:
 
 jobs:
   build:
-
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
+      
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
+
+    - name: Build Projects
       run: dotnet build --no-restore
-    - name: Test
+      
+    - name: Run Tests
       run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
     
-    - name: Code Coverage Summary
+    - name: Generate Code Coverage Summary
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        filename: LexEngine.Test/TestResults/**/coverage.cobertura.xml
+        filename: /**/TestResults/**/coverage.cobertura.xml
         badge: true
         format: markdown
         hide_branch_rate: true
@@ -42,3 +46,15 @@ jobs:
       with:
         recreate: true
         path: code-coverage-results.md
+        
+    - name: Build LexEngine.Service Image
+      run: docker build -t maezzedine/abjad-lex-service:latest -t maezzedine/abjad-lex-service:${{ github.run_number }} .
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: maezzedine
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+  
+    - name: Publish LexEngine.Service Image
+      run: docker push maezzedine/abjad-lex-service --all-tags
