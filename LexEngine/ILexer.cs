@@ -4,5 +4,5 @@ namespace LexEngine;
 
 public interface ILexer
 {
-    List<Token> Lex();
+    List<Token> Lex(string code);
 }

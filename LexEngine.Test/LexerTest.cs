@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LexEngine.Tokens;
 using Moq;
 using Xunit;
@@ -8,33 +9,40 @@ namespace LexEngine.Test;
 
 public class LexerTest
 {
+    private Lexer lexer;
+
+    public LexerTest()
+    {
+        lexer = new Lexer(new StringUtils());
+    }
+
     [Fact]
     private void InitializingLexerCallsStringUtilsIgnoreCaseSensitivity()
     {
         var stringUtils = new Mock<StringUtils>();
-        
-        new Lexer("code", stringUtils.Object);
+        stringUtils.Setup(m => m.IgnoreCaseSensitivity("code")).Returns("");
+
+        lexer = new Lexer(stringUtils.Object);
+        lexer.Lex("code");
         stringUtils.Verify(mock => mock.IgnoreCaseSensitivity("code"));
     }
 
     [Fact]
     private void ThrowsNullExceptionWhenCodeIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new Lexer(null, new StringUtils()));
+        Assert.Throws<ArgumentNullException>(() => lexer.Lex(null));
     }
 
     [Fact]
     private void ReturnsEmptyListForEmptyCode()
     {
-        var lexer = new Lexer("", new StringUtils());
-        Assert.Empty(lexer.Lex());
+        Assert.Empty(lexer.Lex(""));
     }
 
     [Fact]
     private void ReturnsListOfOneElementWhenCodeContainsSingleCharacter()
     {
-        var lexer = new Lexer(")", new StringUtils());
-        var tokens = lexer.Lex();
+        var tokens = lexer.Lex(")");
         Assert.Single(tokens);
         Assert.Equal(TokenType.CLOSE_PAREN, tokens[0].Type);
         Assert.Equal(1, tokens[0].StartIndex);
@@ -45,8 +53,7 @@ public class LexerTest
     [Fact]
     private void ReturnsListOfThreeElementWhenCodeContainsTwoCharactersSeparatedByNewLine()
     {
-        var lexer = new Lexer(")\n!", new StringUtils());
-        var tokens = lexer.Lex();
+        var tokens = lexer.Lex(")\n!");
         Assert.Equal(3, tokens.Count);
 
         var parenthesisToken = tokens[0];
@@ -78,8 +85,6 @@ public class LexerTest
     [Fact]
     private void LexThreeStatements()
     {
-        var lexer = new Lexer("أكتب(\"مرحبا بالعالم\")؛\n\nارجع صحيح؛\nأكتب  (123)؛", new StringUtils());
-
         var expectedTokens = new List<Token>
         {
             new()
@@ -244,7 +249,9 @@ public class LexerTest
             },
         };
 
-        var actualTokens = lexer.Lex();
+        var actualTokens = lexer.Lex("أكتب(\"مرحبا بالعالم\")؛\n\nارجع صحيح؛\nأكتب  (123)؛");
+
+        var diff = actualTokens.Where(t => !expectedTokens.Contains(t)).ToList();
         Assert.Equal(expectedTokens, actualTokens);
     }
 }

@@ -6,27 +6,37 @@ namespace LexEngine;
 
 public class Lexer : ILexer
 {
-    private readonly string code;
+    public readonly StringUtils stringUtils;
+    private string code;
 
     private int line;
     private int lineIndex;
     private int current;
     private List<Token> tokens;
 
-    public Lexer(string code, StringUtils stringUtils)
+    public Lexer(StringUtils stringUtils)
     {
-        Guard.Against.Null(code);
-        this.code = stringUtils.IgnoreCaseSensitivity(code);
+        this.stringUtils = stringUtils;
+    }
+
+    public Lexer()
+    {
+        // TODO create default implementation of pre-analysis code checker
+        stringUtils = new StringUtils();
     }
     
-    public List<Token> Lex()
+    public List<Token> Lex(string _code)
     {
+        Guard.Against.Null(_code);
+        code = stringUtils.IgnoreCaseSensitivity(_code);
+        
         line = 1;
         lineIndex = 1;
         current = 0;
         
         tokens = new List<Token>();
         char c;
+        // TODO refactor
         while (HasNext(out c))
         {
             var characterType = CharacterAnalyzer.AnalyzeCharacterType(c);
