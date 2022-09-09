@@ -1,0 +1,28 @@
+[
+  {
+    "line": 1,
+    "index": 1,
+    "type": "PRINT"
+  },
+  {
+    "line": 1,
+    "index": 5,
+    "type" : "OPEN_PAREN"
+  },
+  {
+    "line": 1,
+    "index": 6,
+    "type": "STRING_CONST",
+    "content": "مرحبا بالعالم"
+  },
+  {
+    "line": 1,
+    "index": 21,
+    "type": "CLOSE_PAREN"
+  },
+  {
+    "line": 1,
+    "index": 22,
+    "type": "SEMICOLON"
+  }
+]

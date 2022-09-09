@@ -4,7 +4,7 @@ using LexEngine.Tokens;
 using Moq;
 using Xunit;
 
-namespace LexEngine.Service.Test;
+namespace LexEngine.Service.Test.Core;
 
 public class LexicalAnalyzerTest
 {
