@@ -15,6 +15,7 @@ public class TokenScannerTest
         Assert.Equal(3, token.StartLine);
         Assert.Equal(2, token.StartLineIndex);
         Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal("(", token.Label);
         Assert.Equal(TokenType.OPEN_PAREN, token.Type);
     }
 
@@ -27,6 +28,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal(")", token.Label);
         Assert.Equal(TokenType.CLOSE_PAREN, token.Type);
     }
 
@@ -39,6 +41,7 @@ public class TokenScannerTest
         Assert.Equal(3, token.StartLine);
         Assert.Equal(5, token.StartLineIndex);
         Assert.Equal(5, token.EndLineIndex);
+        Assert.Equal("{", token.Label);
         Assert.Equal(TokenType.OPEN_BRACE, token.Type);
     }
     
@@ -51,6 +54,7 @@ public class TokenScannerTest
         Assert.Equal(3, token.StartLine);
         Assert.Equal(5, token.StartLineIndex);
         Assert.Equal(5, token.EndLineIndex);
+        Assert.Equal("}", token.Label);
         Assert.Equal(TokenType.CLOSE_BRACE, token.Type);
     }
     
@@ -63,6 +67,7 @@ public class TokenScannerTest
         Assert.Equal(3, token.StartLine);
         Assert.Equal(5, token.StartLineIndex);
         Assert.Equal(5, token.EndLineIndex);
+        Assert.Equal("؛", token.Label);
         Assert.Equal(TokenType.SEMICOLON, token.Type);
     }
     
@@ -75,6 +80,7 @@ public class TokenScannerTest
         Assert.Equal(3, token.StartLine);
         Assert.Equal(5, token.StartLineIndex);
         Assert.Equal(5, token.EndLineIndex);
+        Assert.Equal("،", token.Label);
         Assert.Equal(TokenType.COMMA, token.Type);
     }
     
@@ -87,6 +93,7 @@ public class TokenScannerTest
         Assert.Equal(3, token.StartLine);
         Assert.Equal(5, token.StartLineIndex);
         Assert.Equal(5, token.EndLineIndex);
+        Assert.Equal(".", token.Label);
         Assert.Equal(TokenType.DOT, token.Type);
     }
     
@@ -99,6 +106,7 @@ public class TokenScannerTest
         Assert.Equal(3, token.StartLine);
         Assert.Equal(5, token.StartLineIndex);
         Assert.Equal(5, token.EndLineIndex);
+        Assert.Equal("%", token.Label);
         Assert.Equal(TokenType.MODULO, token.Type);
     }
     
@@ -111,6 +119,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("-", token.Label);
         Assert.Equal(TokenType.MINUS, token.Type);
     }
     
@@ -123,6 +132,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("+", token.Label);
         Assert.Equal(TokenType.PLUS, token.Type);
     }
     
@@ -135,6 +145,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("*", token.Label);
         Assert.Equal(TokenType.TIMES, token.Type);
     }
     
@@ -147,6 +158,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("\\", token.Label);
         Assert.Equal(TokenType.DIVIDED_BY, token.Type);
     }
     
@@ -159,6 +171,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("=", token.Label);
         Assert.Equal(TokenType.EQUAL, token.Type);
     }
     
@@ -171,6 +184,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("=", token.Label);
         Assert.Equal(TokenType.EQUAL, token.Type);
     }
     
@@ -183,6 +197,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal("==", token.Label);
         Assert.Equal(TokenType.EQUAL_EQUAL, token.Type);
     }
     
@@ -195,6 +210,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("!", token.Label);
         Assert.Equal(TokenType.BANG, token.Type);
     }
     
@@ -207,6 +223,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("!", token.Label);
         Assert.Equal(TokenType.BANG, token.Type);
     }
     
@@ -219,6 +236,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal("!=", token.Label);
         Assert.Equal(TokenType.BANG_EQUAL, token.Type);
     }
     
@@ -231,6 +249,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(2, token.StartLineIndex);
         Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal("<", token.Label);
         Assert.Equal(TokenType.LESS_THAN, token.Type);
     }
     
@@ -243,6 +262,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(2, token.StartLineIndex);
         Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal("<", token.Label);
         Assert.Equal(TokenType.LESS_THAN, token.Type);
     }
     
@@ -255,6 +275,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(2, token.StartLineIndex);
         Assert.Equal(3, token.EndLineIndex);
+        Assert.Equal("<=", token.Label);
         Assert.Equal(TokenType.LESS_EQUAL, token.Type);
     }
     
@@ -267,6 +288,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(2, token.StartLineIndex);
         Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal(">", token.Label);
         Assert.Equal(TokenType.GREATER_THAN, token.Type);
     }
     
@@ -279,6 +301,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(2, token.StartLineIndex);
         Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal(">", token.Label);
         Assert.Equal(TokenType.GREATER_THAN, token.Type);
     }
     
@@ -291,6 +314,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(2, token.StartLineIndex);
         Assert.Equal(3, token.EndLineIndex);
+        Assert.Equal(">=", token.Label);
         Assert.Equal(TokenType.GREATER_EQUAL, token.Type);
     }
 
@@ -314,6 +338,7 @@ public class TokenScannerTest
         Assert.Equal(3, token.StartLine);
         Assert.Equal(6, token.StartLineIndex);
         Assert.Equal(7, token.EndLineIndex);
+        Assert.Equal("&&", token.Label);
         Assert.Equal(TokenType.AND, token.Type);
     }
 
@@ -326,6 +351,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(6, token.StartLineIndex);
         Assert.Equal(7, token.EndIndex);
+        Assert.Equal("&&", token.Label);
         Assert.Equal(TokenType.AND, token.Type);
     }
 
@@ -349,6 +375,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(6, token.StartLineIndex);
         Assert.Equal(7, token.EndLineIndex);
+        Assert.Equal("||", token.Label);
         Assert.Equal(TokenType.OR, token.Type);
     }
 
@@ -361,6 +388,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(6, token.StartLineIndex);
         Assert.Equal(7, token.EndLineIndex);
+        Assert.Equal("||", token.Label);
         Assert.Equal(TokenType.OR, token.Type);
     }
     
@@ -420,6 +448,7 @@ public class TokenScannerTest
         Assert.Equal(13, token.EndIndex);
         Assert.Equal(1, token.StartLine);
         Assert.Equal(13, token.StartLineIndex);
+        Assert.Equal(" ", token.Label);
         Assert.Equal(TokenType.WHITE_SPACE, token.Type);
     }
     
@@ -431,6 +460,31 @@ public class TokenScannerTest
         Assert.Equal(13, token.EndIndex);
         Assert.Equal(1, token.StartLine);
         Assert.Equal(13, token.StartLineIndex);
+        Assert.Equal(" ", token.Label);
+        Assert.Equal(TokenType.WHITE_SPACE, token.Type);
+    }
+    
+    [Fact]
+    private void ScansWhiteSpacesCorrectly()
+    {
+        var token = TokenScanner.ScanToken("متغير ا = 4؛  متغير ا = 4؛", 13, 13, 1, CharacterType.WHITE_SPACE);
+        Assert.Equal(13, token.StartIndex);
+        Assert.Equal(14, token.EndIndex);
+        Assert.Equal(1, token.StartLine);
+        Assert.Equal(13, token.StartLineIndex);
+        Assert.Equal("  ", token.Label);
+        Assert.Equal(TokenType.WHITE_SPACE, token.Type);
+    }
+    
+    [Fact]
+    private void ScansTabsAsWhiteSpaces()
+    {
+        var token = TokenScanner.ScanToken("متغير ا = 4؛\r متغير ا = 4؛", 13, 13, 1, CharacterType.WHITE_SPACE);
+        Assert.Equal(13, token.StartIndex);
+        Assert.Equal(14, token.EndIndex);
+        Assert.Equal(1, token.StartLine);
+        Assert.Equal(13, token.StartLineIndex);
+        Assert.Equal("\r ", token.Label);
         Assert.Equal(TokenType.WHITE_SPACE, token.Type);
     }
     
@@ -444,6 +498,7 @@ public class TokenScannerTest
         Assert.Equal(3, token.EndLine);
         Assert.Equal(13, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("\n\n", token.Label);
         Assert.Equal(TokenType.WHITE_SPACE, token.Type);
     }
     
@@ -457,6 +512,7 @@ public class TokenScannerTest
         Assert.Equal(2, token.EndLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal("\n", token.Label);
         Assert.Equal(TokenType.WHITE_SPACE, token.Type);
     }
     
@@ -469,6 +525,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(4, token.EndLine);
         Assert.Equal(13, token.StartLineIndex);
+        Assert.Equal("\n\n\n", token.Label);
         Assert.Equal(TokenType.WHITE_SPACE, token.Type);
     }
     
@@ -542,6 +599,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(5, token.EndLineIndex);
+        Assert.Equal("متغير", token.Label);
         Assert.Equal(TokenType.VAR, token.Type);
     }
     
@@ -554,6 +612,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(6, token.StartLineIndex);
         Assert.Equal(10, token.EndLineIndex);
+        Assert.Equal("متغير", token.Label);
         Assert.Equal(TokenType.VAR, token.Type);
     }
     
@@ -566,6 +625,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLine);
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(4, token.EndLineIndex);
+        Assert.Equal("ثابت", token.Label);
         Assert.Equal(TokenType.CONST, token.Type);
     }
 

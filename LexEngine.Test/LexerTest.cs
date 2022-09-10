@@ -94,6 +94,7 @@ public class LexerTest
                 StartLineIndex = 1,
                 EndIndex = 4, 
                 EndLineIndex = 4,
+                Label = "اكتب",
                 Type = TokenType.PRINT
             },
             new()
@@ -103,6 +104,7 @@ public class LexerTest
                 StartLineIndex = 5,
                 EndIndex = 5, 
                 EndLineIndex = 5,
+                Label = "(",
                 Type = TokenType.OPEN_PAREN
             },
             new()
@@ -122,6 +124,7 @@ public class LexerTest
                 StartLineIndex = 21,
                 EndIndex = 21, 
                 EndLineIndex = 21,
+                Label = ")",
                 Type = TokenType.CLOSE_PAREN
             },
             new()
@@ -131,6 +134,7 @@ public class LexerTest
                 StartLineIndex = 22,
                 EndIndex = 22, 
                 EndLineIndex = 22,
+                Label = "؛",
                 Type = TokenType.SEMICOLON
             },
             new()
@@ -141,6 +145,7 @@ public class LexerTest
                 EndIndex = 24, 
                 EndLineIndex = 1,
                 EndLine = 3,
+                Label = "\n\n",
                 Type = TokenType.WHITE_SPACE
             },
             new()
@@ -150,6 +155,7 @@ public class LexerTest
                 StartLineIndex = 1,
                 EndIndex = 28, 
                 EndLineIndex = 4,
+                Label = "ارجع",
                 Type = TokenType.RETURN
             },
             new()
@@ -160,6 +166,7 @@ public class LexerTest
                 EndIndex = 29,
                 EndLine = 3,
                 EndLineIndex = 5,
+                Label = " ",
                 Type = TokenType.WHITE_SPACE
             },
             new()
@@ -169,6 +176,7 @@ public class LexerTest
                 StartLineIndex = 6,
                 EndIndex = 33, 
                 EndLineIndex = 9,
+                Label = "صحيح",
                 Type = TokenType.TRUE
             },
             new()
@@ -178,6 +186,7 @@ public class LexerTest
                 StartLineIndex = 10,
                 EndIndex = 34, 
                 EndLineIndex = 10,
+                Label = "؛",
                 Type = TokenType.SEMICOLON
             },
             new()
@@ -188,6 +197,7 @@ public class LexerTest
                 EndIndex = 35, 
                 EndLine = 4, 
                 EndLineIndex = 1,
+                Label = "\n",
                 Type = TokenType.WHITE_SPACE
             },
             new()
@@ -197,6 +207,7 @@ public class LexerTest
                 StartLineIndex = 1,
                 EndIndex = 39, 
                 EndLineIndex = 4,
+                Label = "اكتب",
                 Type = TokenType.PRINT
             },
             new()
@@ -207,9 +218,9 @@ public class LexerTest
                 EndIndex = 41, 
                 EndLineIndex = 6,
                 EndLine = 4,
+                Label = "  ",
                 Type = TokenType.WHITE_SPACE
             },
-            
             new()
             {
                 StartIndex = 42,
@@ -217,6 +228,7 @@ public class LexerTest
                 StartLineIndex = 7,
                 EndIndex = 42,
                 EndLineIndex = 7,
+                Label = "(",
                 Type = TokenType.OPEN_PAREN
             },
             new()
@@ -236,6 +248,7 @@ public class LexerTest
                 StartLineIndex = 11,
                 EndIndex = 46, 
                 EndLineIndex = 11,
+                Label = ")",
                 Type = TokenType.CLOSE_PAREN
             },
             new()
@@ -245,13 +258,13 @@ public class LexerTest
                 StartLineIndex = 12,
                 EndIndex = 47, 
                 EndLineIndex = 12,
+                Label = "؛",
                 Type = TokenType.SEMICOLON
             },
         };
 
         var actualTokens = lexer.Lex("أكتب(\"مرحبا بالعالم\")؛\n\nارجع صحيح؛\nأكتب  (123)؛");
 
-        var diff = actualTokens.Where(t => !expectedTokens.Contains(t)).ToList();
         Assert.Equal(expectedTokens, actualTokens);
     }
 }

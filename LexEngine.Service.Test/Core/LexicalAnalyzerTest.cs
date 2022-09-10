@@ -41,13 +41,15 @@ public class LexicalAnalyzerTest
             {
                 Line = 1,
                 Index = 1,
-                Type = "PRINT"
+                Type = "PRINT",
+                Content = "اكتب"
             },
             new()
             {
                 Line = 1,
                 Index = 5,
-                Type = "OPEN_PAREN"
+                Type = "OPEN_PAREN",
+                Content = "("
             },
             new()
             {
@@ -60,13 +62,15 @@ public class LexicalAnalyzerTest
             {
                 Line = 1,
                 Index = 21,
-                Type = "CLOSE_PAREN"
+                Type = "CLOSE_PAREN",
+                Content = ")"
             },
             new()
             {
                 Line = 1,
                 Index = 22,
-                Type = "SEMICOLON"
+                Type = "SEMICOLON",
+                Content = "؛"
             }
         };
     }
@@ -82,7 +86,8 @@ public class LexicalAnalyzerTest
                 StartLineIndex = 1,
                 EndIndex = 4,
                 EndLineIndex = 4,
-                Type = TokenType.PRINT
+                Type = TokenType.PRINT,
+                Label = "اكتب"
             },
             new()
             {
@@ -91,7 +96,8 @@ public class LexicalAnalyzerTest
                 StartLineIndex = 5,
                 EndIndex = 5,
                 EndLineIndex = 5,
-                Type = TokenType.OPEN_PAREN
+                Type = TokenType.OPEN_PAREN,
+                Label = "("
             },
             new()
             {
@@ -110,7 +116,8 @@ public class LexicalAnalyzerTest
                 StartLineIndex = 21,
                 EndIndex = 21,
                 EndLineIndex = 21,
-                Type = TokenType.CLOSE_PAREN
+                Type = TokenType.CLOSE_PAREN,
+                Label = ")"
             },
             new()
             {
@@ -119,7 +126,8 @@ public class LexicalAnalyzerTest
                 StartLineIndex = 22,
                 EndIndex = 22,
                 EndLineIndex = 22,
-                Type = TokenType.SEMICOLON
+                Type = TokenType.SEMICOLON,
+                Label = "؛"
             }
         };
     }

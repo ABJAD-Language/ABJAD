@@ -2,12 +2,14 @@
   {
     "line": 1,
     "index": 1,
-    "type": "PRINT"
+    "type": "PRINT",
+    "content": "اكتب"
   },
   {
     "line": 1,
     "index": 5,
-    "type" : "OPEN_PAREN"
+    "type" : "OPEN_PAREN",
+    "content": "("
   },
   {
     "line": 1,
@@ -18,11 +20,13 @@
   {
     "line": 1,
     "index": 21,
-    "type": "CLOSE_PAREN"
+    "type": "CLOSE_PAREN",
+    "content": ")"
   },
   {
     "line": 1,
     "index": 22,
-    "type": "SEMICOLON"
+    "type": "SEMICOLON",
+    "content": "؛"
   }
 ]

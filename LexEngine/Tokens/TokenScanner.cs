@@ -9,18 +9,18 @@ public static class TokenScanner
     {
         return characterType switch
         {
-            CharacterType.RIGHT_PAREN        => ScanSingletonToken(current, line, startLineIndex, TokenType.OPEN_PAREN),
-            CharacterType.LEFT_PAREN         => ScanSingletonToken(current, line, startLineIndex, TokenType.CLOSE_PAREN),
-            CharacterType.RIGHT_BRACE        => ScanSingletonToken(current, line, startLineIndex, TokenType.OPEN_BRACE),
-            CharacterType.LEFT_BRACE         => ScanSingletonToken(current, line, startLineIndex, TokenType.CLOSE_BRACE),
-            CharacterType.SEMICOLON          => ScanSingletonToken(current, line, startLineIndex, TokenType.SEMICOLON),
-            CharacterType.COMMA              => ScanSingletonToken(current, line, startLineIndex, TokenType.COMMA),
-            CharacterType.DOT                => ScanSingletonToken(current, line, startLineIndex, TokenType.DOT),
-            CharacterType.PERCENTAGE         => ScanSingletonToken(current, line, startLineIndex, TokenType.MODULO),
-            CharacterType.DASH               => ScanSingletonToken(current, line, startLineIndex, TokenType.MINUS),
-            CharacterType.PLUS               => ScanSingletonToken(current, line, startLineIndex, TokenType.PLUS),
-            CharacterType.STAR               => ScanSingletonToken(current, line, startLineIndex, TokenType.TIMES),
-            CharacterType.SLASH              => ScanSingletonToken(current, line, startLineIndex, TokenType.DIVIDED_BY),
+            CharacterType.RIGHT_PAREN        => ScanSingletonToken(current, line, startLineIndex, "(", TokenType.OPEN_PAREN),
+            CharacterType.LEFT_PAREN         => ScanSingletonToken(current, line, startLineIndex, ")", TokenType.CLOSE_PAREN),
+            CharacterType.RIGHT_BRACE        => ScanSingletonToken(current, line, startLineIndex, "{", TokenType.OPEN_BRACE),
+            CharacterType.LEFT_BRACE         => ScanSingletonToken(current, line, startLineIndex, "}", TokenType.CLOSE_BRACE),
+            CharacterType.SEMICOLON          => ScanSingletonToken(current, line, startLineIndex, "؛", TokenType.SEMICOLON),
+            CharacterType.COMMA              => ScanSingletonToken(current, line, startLineIndex, "،", TokenType.COMMA),
+            CharacterType.DOT                => ScanSingletonToken(current, line, startLineIndex, ".", TokenType.DOT),
+            CharacterType.PERCENTAGE         => ScanSingletonToken(current, line, startLineIndex, "%", TokenType.MODULO),
+            CharacterType.DASH               => ScanSingletonToken(current, line, startLineIndex, "-", TokenType.MINUS),
+            CharacterType.PLUS               => ScanSingletonToken(current, line, startLineIndex, "+", TokenType.PLUS),
+            CharacterType.STAR               => ScanSingletonToken(current, line, startLineIndex, "*", TokenType.TIMES),
+            CharacterType.SLASH              => ScanSingletonToken(current, line, startLineIndex, "\\", TokenType.DIVIDED_BY),
             CharacterType.EQUAL              => ScanEqualSign(code, current, line, startLineIndex),
             CharacterType.EXCLAMATION_MARK   => ScanExclamationMark(code, current, line, startLineIndex),
             CharacterType.RIGHT_SINGLE_ANGLE => ScanRightAngleSign(code, current, line, startLineIndex),
@@ -35,11 +35,12 @@ public static class TokenScanner
         };
     }
 
-    private static Token ScanSingletonToken(int current, int line, int startLineIndex, TokenType tokenType)
+    private static Token ScanSingletonToken(int current, int line, int startLineIndex, string label, TokenType tokenType)
     {
         return new Token
         {
-            StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = startLineIndex, EndLineIndex = startLineIndex, Type = tokenType
+            StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = startLineIndex,
+            EndLineIndex = startLineIndex, Type = tokenType, Label = label
         };
     }
 
@@ -105,6 +106,7 @@ public static class TokenScanner
                     StartLine = line,
                     StartLineIndex = lineIndex,
                     EndLineIndex = lineIndex + word.Length - 1,
+                    Label = word,
                     Type = KeywordsFactory.GetToken(word)
                 };
                 return true;
@@ -157,11 +159,13 @@ public static class TokenScanner
         var spaceIndex = current;
         var spaceLine = line;
         var beginningLineIndex = lineIndex;
+        var content = new StringBuilder();
         if (code[current-1] == '\n')
         {
             line++;
             lineIndex = 1;
         }
+        content.Append(code[current-1]);
         while (code.Length > current &&
                CharacterAnalyzer.AnalyzeCharacterType(code[current]) == CharacterType.WHITE_SPACE)
         {
@@ -174,13 +178,14 @@ public static class TokenScanner
             {
                 lineIndex++;
             }
+            content.Append(code[current]);
             current++;
         }
 
         return new Token
         {
             StartIndex = spaceIndex, EndIndex = current, StartLine = spaceLine, StartLineIndex = beginningLineIndex,
-            EndLineIndex = lineIndex, EndLine = line, Type = TokenType.WHITE_SPACE
+            EndLineIndex = lineIndex, EndLine = line, Label = content.ToString(), Type = TokenType.WHITE_SPACE
         };
     }
 
@@ -204,7 +209,11 @@ public static class TokenScanner
     {
         if (code.Length > current && code[current] == '|')
         {
-            return new Token {StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex + 1, Type = TokenType.OR};
+            return new Token
+            {
+                StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex,
+                EndLineIndex = lineIndex + 1, Label = "||", Type = TokenType.OR
+            };
         }
 
         throw new MissingTokenException(lineIndex, line, "|");
@@ -215,7 +224,10 @@ public static class TokenScanner
         if (code.Length > current && code[current] == '&')
         {
             return new Token
-                {StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex + 1, Type = TokenType.AND};
+            {
+                StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex,
+                EndLineIndex = lineIndex + 1, Label = "&&", Type = TokenType.AND
+            };
         }
 
         throw new MissingTokenException(lineIndex, line, "&");
@@ -226,11 +238,17 @@ public static class TokenScanner
         if (code.Length > current && code[current] == '=')
         {
             return new Token
-                {StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex + 1, Type = TokenType.GREATER_EQUAL};
+            {
+                StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex,
+                EndLineIndex = lineIndex + 1, Label = ">=", Type = TokenType.GREATER_EQUAL
+            };
         }
 
         return new Token
-            {StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex, Type = TokenType.GREATER_THAN};
+        {
+            StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = lineIndex,
+            EndLineIndex = lineIndex, Label = ">", Type = TokenType.GREATER_THAN
+        };
     }
 
     private static Token ScanRightAngleSign(string code, int current, int line, int lineIndex)
@@ -238,11 +256,17 @@ public static class TokenScanner
         if (code.Length > current && code[current] == '=')
         {
             return new Token
-                {StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex + 1, Type = TokenType.LESS_EQUAL};
+            {
+                StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex,
+                EndLineIndex = lineIndex + 1, Label = "<=", Type = TokenType.LESS_EQUAL
+            };
         }
 
         return new Token
-            {StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex, Type = TokenType.LESS_THAN};
+        {
+            StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = lineIndex,
+            EndLineIndex = lineIndex, Label = "<", Type = TokenType.LESS_THAN
+        };
     }
 
     private static Token ScanExclamationMark(string code, int current, int line, int lineIndex)
@@ -250,10 +274,17 @@ public static class TokenScanner
         if (code.Length > current && code[current] == '=')
         {
             return new Token
-                {StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex + 1, Type = TokenType.BANG_EQUAL};
+            {
+                StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex,
+                EndLineIndex = lineIndex + 1, Label = "!=", Type = TokenType.BANG_EQUAL
+            };
         }
 
-        return new Token {StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex, Type = TokenType.BANG};
+        return new Token
+        {
+            StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = lineIndex,
+            EndLineIndex = lineIndex, Label = "!", Type = TokenType.BANG
+        };
     }
 
     private static Token ScanEqualSign(string code, int current, int line, int lineIndex)
@@ -261,9 +292,16 @@ public static class TokenScanner
         if (code.Length > current && code[current] == '=')
         {
             return new Token
-                {StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex + 1, Type = TokenType.EQUAL_EQUAL};
+            {
+                StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex,
+                EndLineIndex = lineIndex + 1, Label = "==", Type = TokenType.EQUAL_EQUAL
+            };
         }
 
-        return new Token {StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = lineIndex, EndLineIndex = lineIndex, Type = TokenType.EQUAL};
+        return new Token
+        {
+            StartIndex = current, EndIndex = current, StartLine = line, StartLineIndex = lineIndex,
+            EndLineIndex = lineIndex, Label = "=", Type = TokenType.EQUAL
+        };
     }
 }
