@@ -129,7 +129,23 @@ public static class TokenScanner
         {
             if (code[current] == '\n')
             {
-                throw new MissingTokenException(current + 1, line, "\"");
+                throw new MissingTokenException(lineIndex + 1, line, "\"");
+            }
+
+            if (code[current] == '\\')
+            {
+                if (code.Length > current + 1)
+                {
+                    if (code[current + 1] == '"' || code[current + 1] == '\\')
+                    {
+                        current++;
+                        lineIndex++;
+                    }
+                    else
+                    {
+                        throw new InvalidTokenException(line, lineIndex + 1);
+                    }
+                }
             }
 
             stringContent.Append(code[current]);
@@ -144,7 +160,7 @@ public static class TokenScanner
         }
         else
         {
-            throw new MissingTokenException(current, line, "\"");
+            throw new MissingTokenException(lineIndex, line, "\"");
         }
 
         return new Token

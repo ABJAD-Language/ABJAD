@@ -567,6 +567,42 @@ public class TokenScannerTest
         Assert.Equal(12, token.EndLineIndex);
         Assert.Equal(TokenType.STRING_CONST, token.Type);
     }
+
+    [Fact(DisplayName = "Scans String Literal Correctly When Containing Escaped Quotations")]
+    private void Scans_String_Literal_Correctly_When_Containing_Escaped_Quotations()
+    {
+        var token = TokenScanner.ScanToken("متغير ع = \"مرحبا\\\"بالعالم\"؛", 11, 11, 1, CharacterType.DOUBLE_QUOTE);
+        Assert.Equal(11, token.StartIndex);
+        Assert.Equal(26, token.EndIndex);
+        Assert.Equal(1, token.StartLine);
+        Assert.Equal("مرحبا\"بالعالم", token.Label);
+        Assert.Equal(11, token.StartLineIndex);
+        Assert.Equal(26, token.EndLineIndex);
+        Assert.Equal(TokenType.STRING_CONST, token.Type);
+    }
+
+    [Fact(DisplayName = "Throws Exception If Slash Was Not Followed With Anything")]
+    private void Throws_Exception_If_Slash_Was_Not_Followed_With_Anything()
+    {
+        var exception = Assert.Throws<InvalidTokenException>(() => TokenScanner.ScanToken("متغير ع = \"مرحبا\\بالعالم\"؛", 11, 11, 1, CharacterType.DOUBLE_QUOTE));
+        Assert.Equal(17, exception.Index);
+        Assert.Equal(1, exception.Line);
+        Assert.Equal("Invalid token at line 1 : 17", exception.EnglishMessage);
+        Assert.Equal("رمز غير صالح على السطر 1 : 17", exception.ArabicMessage);
+    }
+
+    [Fact(DisplayName = "Scans String Literal Correctly When Containing Escaped Slash")]
+    private void Scans_String_Literal_Correctly_When_Containing_Escaped_Slash()
+    {
+        var token = TokenScanner.ScanToken("متغير ع = \"مرحبا\\\\بالعالم\"؛", 11, 11, 1, CharacterType.DOUBLE_QUOTE);
+        Assert.Equal(11, token.StartIndex);
+        Assert.Equal(26, token.EndIndex);
+        Assert.Equal(1, token.StartLine);
+        Assert.Equal("مرحبا\\بالعالم", token.Label);
+        Assert.Equal(11, token.StartLineIndex);
+        Assert.Equal(26, token.EndLineIndex);
+        Assert.Equal(TokenType.STRING_CONST, token.Type);
+    }
     
     [Fact]
     private void ThrowsExceptionWhenNewLineWasFoundInsideString()
