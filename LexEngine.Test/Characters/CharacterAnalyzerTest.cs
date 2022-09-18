@@ -27,6 +27,7 @@ public class CharacterAnalyzerTest
     [InlineData('|', CharacterType.VERTICAL_BAR)]
     [InlineData('\\', CharacterType.SLASH)]
     [InlineData('\r', CharacterType.WHITE_SPACE)]
+    [InlineData('\t', CharacterType.WHITE_SPACE)]
     [InlineData('\n', CharacterType.WHITE_SPACE)]
     [InlineData(' ', CharacterType.WHITE_SPACE)]
     [InlineData('1', CharacterType.LITERAL)]

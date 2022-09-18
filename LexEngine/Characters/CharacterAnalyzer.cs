@@ -28,6 +28,7 @@ public class CharacterAnalyzer
             '\\' => CharacterType.SLASH,
             '\r' => CharacterType.WHITE_SPACE,
             '\n' => CharacterType.WHITE_SPACE,
+            '\t' => CharacterType.WHITE_SPACE,
             ' '  => CharacterType.WHITE_SPACE,
             _    => CharacterType.LITERAL
         };

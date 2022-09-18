@@ -477,7 +477,7 @@ public class TokenScannerTest
     }
     
     [Fact]
-    private void ScansTabsAsWhiteSpaces()
+    private void ScansEndOfLineAsWhiteSpaces()
     {
         var token = TokenScanner.ScanToken("متغير ا = 4؛\r متغير ا = 4؛", 13, 13, 1, CharacterType.WHITE_SPACE);
         Assert.Equal(13, token.StartIndex);
@@ -486,6 +486,32 @@ public class TokenScannerTest
         Assert.Equal(13, token.StartLineIndex);
         Assert.Equal("\r ", token.Label);
         Assert.Equal(TokenType.WHITE_SPACE, token.Type);
+    }
+
+    [Fact(DisplayName = "Scans Tab As WhiteSpaces")]
+    private void ScansTabAsWhiteSpaces()
+    {
+        var token = TokenScanner.ScanToken("\tمتغير", 1, 1, 1, CharacterType.WHITE_SPACE);
+        Assert.Equal(1, token.StartIndex);
+        Assert.Equal(1, token.EndIndex);
+        Assert.Equal(1, token.StartLine);
+        Assert.Equal("\t", token.Label);
+        Assert.Equal(1, token.StartLineIndex);
+        Assert.Equal(1, token.EndLineIndex);
+        Assert.Equal(TokenType.WHITE_SPACE, token.Type);   
+    }
+
+    [Fact(DisplayName = "Scans Tabs As WhiteSpaces")]
+    private void ScansTabsAsWhiteSpaces()
+    {
+        var token = TokenScanner.ScanToken("\t\tمتغير", 1, 1, 1, CharacterType.WHITE_SPACE);
+        Assert.Equal(1, token.StartIndex);
+        Assert.Equal(2, token.EndIndex);
+        Assert.Equal(1, token.StartLine);
+        Assert.Equal("\t\t", token.Label);
+        Assert.Equal(1, token.StartLineIndex);
+        Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal(TokenType.WHITE_SPACE, token.Type);   
     }
     
     [Fact]
@@ -677,7 +703,6 @@ public class TokenScannerTest
         Assert.Equal(5, token.EndLineIndex);
         Assert.Equal(TokenType.VAR, token.Type);   
     }
-
 
     [Fact]
     private void ScansNumberCorrectly()
