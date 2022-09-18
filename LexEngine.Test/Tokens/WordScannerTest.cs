@@ -12,6 +12,11 @@ public class WordScannerTest
         {
             Assert.Equal("متغير", WordScanner.ScanNextWord("متغير", 0, 1));
         }
+        [Fact]
+        private void ReturnsCompleteWordWhenOneWordInSentenceExistsFollowedByNewLine()
+        {
+            Assert.Equal("متغير", WordScanner.ScanNextWord("متغير\n", 0, 1));
+        }
 
         [Fact]
         private void ReturnsCompleteWordWhenOneWordInSentenceExistsFollowedByTerminator()

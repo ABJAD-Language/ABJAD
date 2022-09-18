@@ -665,6 +665,20 @@ public class TokenScannerTest
         Assert.Equal(TokenType.CONST, token.Type);
     }
 
+    [Fact(DisplayName = "Scans Keyword Correctly When Followed By A New Line")]
+    private void Scans_Keyword_Correctly_When_Followed_By_A_New_Line()
+    {
+        var token = TokenScanner.ScanToken("متغير\n", 1, 1, 1, CharacterType.LITERAL);
+        Assert.Equal(1, token.StartIndex);
+        Assert.Equal(5, token.EndIndex);
+        Assert.Equal(1, token.StartLine);
+        Assert.Equal("متغير", token.Label);
+        Assert.Equal(1, token.StartLineIndex);
+        Assert.Equal(5, token.EndLineIndex);
+        Assert.Equal(TokenType.VAR, token.Type);   
+    }
+
+
     [Fact]
     private void ScansNumberCorrectly()
     {
@@ -716,7 +730,6 @@ public class TokenScannerTest
         Assert.Equal(7, token.EndLineIndex);
         Assert.Equal(TokenType.ID, token.Type);   
     }
-
     [Fact]
     private void ThrowsExceptionWhenIdentifierBeginsWithDigit()
     {
