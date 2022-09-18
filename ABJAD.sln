@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexEngine", "LexEngine\LexEngine.csproj", "{9BAE3F78-67FF-4DD3-8D78-306833468463}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.LexEngine", "ABJAD.LexEngine\ABJAD.LexEngine.csproj", "{9BAE3F78-67FF-4DD3-8D78-306833468463}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexEngine.Test", "LexEngine.Test\LexEngine.Test.csproj", "{F368CEAB-3481-4485-AAED-34BC4D7A0C9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.LexEngine.Test", "ABJAD.LexEngine.Test\ABJAD.LexEngine.Test.csproj", "{F368CEAB-3481-4485-AAED-34BC4D7A0C9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexEngine.Service", "LexEngine.Service\LexEngine.Service.csproj", "{28907A9A-4F0D-4171-93BE-7EC254F0D357}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.LexEngine.Service", "ABJAD.LexEngine.Service\ABJAD.LexEngine.Service.csproj", "{28907A9A-4F0D-4171-93BE-7EC254F0D357}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexEngine.Service.Test", "LexEngine.Service.Test\LexEngine.Service.Test.csproj", "{37B56C37-3399-4D11-80BC-9008BCA2EC24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.LexEngine.Service.Test", "ABJAD.LexEngine.Service.Test\ABJAD.LexEngine.Service.Test.csproj", "{37B56C37-3399-4D11-80BC-9008BCA2EC24}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{E5B11064-707C-4AEC-90B9-E19764338645}"
 	ProjectSection(SolutionItems) = preProject

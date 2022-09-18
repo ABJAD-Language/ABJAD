@@ -47,7 +47,7 @@ jobs:
         recreate: true
         path: code-coverage-results.md
         
-    - name: Build LexEngine.Service Image
+    - name: Build ABJAD.LexEngine.Service Image
       run: docker build -t maezzedine/abjad-lex-service:latest -t maezzedine/abjad-lex-service:${{ github.run_number }} .
 
     - name: Login to Docker Hub
