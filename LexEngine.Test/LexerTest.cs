@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using LexEngine.Tokens;
 using Moq;
 using Xunit;
@@ -264,7 +263,6 @@ public class LexerTest
         };
 
         var actualTokens = lexer.Lex("أكتب(\"مرحبا بالعالم\")؛\n\nارجع صحيح؛\nأكتب  (123)؛");
-
         Assert.Equal(expectedTokens, actualTokens);
     }
 }

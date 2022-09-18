@@ -120,7 +120,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
         Assert.Equal("-", token.Label);
-        Assert.Equal(TokenType.MINUS, token.Type);
+        Assert.Equal(TokenType.DASH, token.Type);
     }
     
     [Fact]
@@ -146,7 +146,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
         Assert.Equal("*", token.Label);
-        Assert.Equal(TokenType.TIMES, token.Type);
+        Assert.Equal(TokenType.STAR, token.Type);
     }
     
     [Fact]
@@ -159,7 +159,7 @@ public class TokenScannerTest
         Assert.Equal(1, token.StartLineIndex);
         Assert.Equal(1, token.EndLineIndex);
         Assert.Equal("\\", token.Label);
-        Assert.Equal(TokenType.DIVIDED_BY, token.Type);
+        Assert.Equal(TokenType.SLASH, token.Type);
     }
     
     [Fact]
