@@ -9,16 +9,18 @@ public class ScanCommentStrategy : ScanningStrategy
     {
         var comment = new StringBuilder();
         var commentIndex = current;
+        var endLineIndex = lineIndex;
         while (code.Length > current && code[current] != '\n')
         {
             comment.Append(code[current]);
             current++;
+            endLineIndex++;
         }
 
         return new Token
         {
             StartIndex = commentIndex, EndIndex = current, StartLine = line, StartLineIndex = lineIndex,
-            Label = comment.ToString(), Type = TokenType.COMMENT
+            EndLineIndex = endLineIndex, Label = comment.ToString(), Type = TokenType.COMMENT
         };
     }
 }

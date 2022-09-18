@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LexEngine.Tokens;
 using Moq;
 using Xunit;
@@ -263,6 +264,231 @@ public class LexerTest
         };
 
         var actualTokens = lexer.Lex("أكتب(\"مرحبا بالعالم\")؛\n\nارجع صحيح؛\nأكتب  (123)؛");
+        Assert.Equal(expectedTokens, actualTokens);
+    }
+
+    [Fact(DisplayName = "AnalyzeRandomTokensContainingComment")]
+    private void AnalyzeRandomTokensContainingComment()
+    {
+        var code = "أكتب\n# هذا تعليق\n==\n";
+        var expectedTokens = new List<Token>
+        {
+            new()
+            {
+                StartIndex = 1,
+                StartLine = 1,
+                StartLineIndex = 1,
+                EndIndex = 4, 
+                EndLineIndex = 4,
+                Label = "اكتب",
+                Type = TokenType.PRINT
+            },
+            new()
+            {
+                StartIndex = 5,
+                StartLine = 1,
+                StartLineIndex = 5,
+                EndIndex = 5, 
+                EndLineIndex = 1,
+                EndLine = 2,
+                Label = "\n",
+                Type = TokenType.WHITE_SPACE
+            },
+            new()
+            {
+                StartIndex = 6,
+                StartLine = 2,
+                StartLineIndex = 1,
+                EndIndex = 16, 
+                EndLineIndex = 11,
+                Label = " هذا تعليق",
+                Type = TokenType.COMMENT
+            },
+            new()
+            {
+                StartIndex = 17,
+                StartLine = 2,
+                StartLineIndex = 12,
+                EndIndex = 17, 
+                EndLineIndex = 1,
+                EndLine = 3,
+                Label = "\n",
+                Type = TokenType.WHITE_SPACE
+            },
+            new()
+            {
+                StartIndex = 18,
+                StartLine = 3,
+                StartLineIndex = 1,
+                EndIndex = 19, 
+                EndLineIndex = 2,
+                Label = "==",
+                Type = TokenType.EQUAL_EQUAL
+            },
+            new()
+            {
+                StartIndex = 20,
+                StartLine = 3,
+                StartLineIndex = 3,
+                EndIndex = 20, 
+                EndLineIndex = 1,
+                EndLine = 4,
+                Label = "\n",
+                Type = TokenType.WHITE_SPACE
+            },
+           
+        };
+        
+        var actualTokens = lexer.Lex(code);
+        var diff = actualTokens.Where(t => !expectedTokens.Contains(t)).ToList();
+        Assert.Equal(expectedTokens, actualTokens);
+    }
+
+    [Fact(DisplayName = "AnalyzeThreeStatementsIncludingComment")]
+    private void AnalyzeThreeStatementsIncludingComment()
+    {
+        var code = "متغير ب = 2؛\n# هذا تعليق\n==\n";
+        var expectedTokens = new List<Token>
+        {
+            new()
+            {
+                StartIndex = 1,
+                StartLine = 1,
+                StartLineIndex = 1,
+                EndIndex = 5, 
+                EndLineIndex = 5,
+                Label = "متغير",
+                Type = TokenType.VAR
+            },
+            new()
+            {
+                StartIndex = 6,
+                StartLine = 1,
+                StartLineIndex = 6,
+                EndIndex = 6, 
+                EndLineIndex = 6,
+                EndLine = 1,
+                Label = " ",
+                Type = TokenType.WHITE_SPACE
+            },
+            new()
+            {
+                StartIndex = 7,
+                StartLine = 1,
+                StartLineIndex = 7,
+                EndIndex = 7, 
+                EndLineIndex = 7,
+                Label = "ب",
+                Type = TokenType.ID
+            },
+            new()
+            {
+                StartIndex = 8,
+                StartLine = 1,
+                StartLineIndex = 8,
+                EndIndex = 8, 
+                EndLineIndex = 8,
+                EndLine = 1,
+                Label = " ",
+                Type = TokenType.WHITE_SPACE
+            },
+            new()
+            {
+                StartIndex = 9,
+                StartLine = 1,
+                StartLineIndex = 9,
+                EndIndex = 9, 
+                EndLineIndex = 9,
+                Label = "=",
+                Type = TokenType.EQUAL
+            },
+            new()
+            {
+                StartIndex = 10,
+                StartLine = 1,
+                StartLineIndex = 10,
+                EndIndex = 10, 
+                EndLineIndex = 10,
+                EndLine = 1,
+                Label = " ",
+                Type = TokenType.WHITE_SPACE
+            },
+            new()
+            {
+                StartIndex = 11,
+                StartLine = 1,
+                StartLineIndex = 11,
+                EndIndex = 11, 
+                EndLineIndex = 11,
+                Label = "2",
+                Type = TokenType.NUMBER_CONST
+            },
+            new()
+            {
+                StartIndex = 12,
+                StartLine = 1,
+                StartLineIndex = 12,
+                EndIndex = 12, 
+                EndLineIndex = 12,
+                Label = "؛",
+                Type = TokenType.SEMICOLON
+            },
+            new()
+            {
+                StartIndex = 13,
+                StartLine = 1,
+                StartLineIndex = 13,
+                EndIndex = 13, 
+                EndLineIndex = 1,
+                EndLine = 2,
+                Label = "\n",
+                Type = TokenType.WHITE_SPACE
+            },
+            new()
+            {
+                StartIndex = 14,
+                StartLine = 2,
+                StartLineIndex = 1,
+                EndIndex = 24, 
+                EndLineIndex = 11,
+                Label = " هذا تعليق",
+                Type = TokenType.COMMENT
+            },
+            new()
+            {
+                StartIndex = 25,
+                StartLine = 2,
+                StartLineIndex = 12,
+                EndIndex = 25, 
+                EndLineIndex = 1,
+                EndLine = 3,
+                Label = "\n",
+                Type = TokenType.WHITE_SPACE
+            },
+            new()
+            {
+                StartIndex = 26,
+                StartLine = 3,
+                StartLineIndex = 1,
+                EndIndex = 27, 
+                EndLineIndex = 2,
+                Label = "==",
+                Type = TokenType.EQUAL_EQUAL
+            },
+            new()
+            {
+                StartIndex = 28,
+                StartLine = 3,
+                StartLineIndex = 3,
+                EndIndex = 28, 
+                EndLineIndex = 1,
+                EndLine = 4,
+                Label = "\n",
+                Type = TokenType.WHITE_SPACE
+            }
+        };
+        
+        var actualTokens = lexer.Lex(code);
         Assert.Equal(expectedTokens, actualTokens);
     }
 }
