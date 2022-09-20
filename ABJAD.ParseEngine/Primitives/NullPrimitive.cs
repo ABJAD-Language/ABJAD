@@ -2,8 +2,13 @@ namespace ABJAD.ParseEngine.Primitives;
 
 public class NullPrimitive : Primitive<dynamic?>
 {
-    public NullPrimitive()
+    private NullPrimitive()
     {
         Value = null;
+    }
+
+    public static NullPrimitive Instance()
+    {
+        return new NullPrimitive();
     }
 }

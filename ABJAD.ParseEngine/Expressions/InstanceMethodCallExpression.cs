@@ -1,13 +1,11 @@
-using ABJAD.ParseEngine.Shared;
-
 namespace ABJAD.ParseEngine.Expressions;
 
 public class InstanceMethodCallExpression : CallExpression
 {
-    public InstanceMethodCallExpression(Token @class, Token method, List<Expression> arguments) : base(method, arguments)
+    public InstanceMethodCallExpression(PrimitiveExpression instance, PrimitiveExpression method, List<Expression> arguments) : base(method, arguments)
     {
-        Class = @class;
+        Instance = instance;
     }
 
-    public Token Class { get; }
+    public PrimitiveExpression Instance { get; }
 }

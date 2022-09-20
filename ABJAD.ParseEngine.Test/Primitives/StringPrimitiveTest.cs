@@ -9,13 +9,13 @@ public class StringPrimitiveTest
     [Fact]
     private void StoresValueCorrectlyOnHappyPath()
     {
-        var stringConstant = new StringPrimitive("مرحبا بالعالم");
+        var stringConstant = StringPrimitive.From("مرحبا بالعالم");
         Assert.Equal("مرحبا بالعالم", stringConstant.Value);
     }
 
     [Fact]
     private void ThrowsExceptionIfValueIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new StringPrimitive(null));
+        Assert.Throws<ArgumentNullException>(() => StringPrimitive.From(null));
     }
 }

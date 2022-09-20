@@ -8,7 +8,7 @@ public class NullPrimitiveTest
     [Fact]
     private void ValueIsNull()
     {
-        var nullPrimitive = new NullPrimitive();
+        var nullPrimitive = NullPrimitive.Instance();
         Assert.Null(nullPrimitive.Value);
     }
 }
