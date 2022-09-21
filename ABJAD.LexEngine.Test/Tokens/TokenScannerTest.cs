@@ -124,6 +124,19 @@ public class TokenScannerTest
     }
     
     [Fact]
+    private void ScansMinusMinusCorrectly()
+    {
+        var token = TokenScanner.ScanToken("--", 1, 1, 1, CharacterType.DASH);
+        Assert.Equal(1, token.StartIndex);
+        Assert.Equal(2, token.EndIndex);
+        Assert.Equal(1, token.StartLine);
+        Assert.Equal(1, token.StartLineIndex);
+        Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal("--", token.Label);
+        Assert.Equal(TokenType.DASH_DASH, token.Type);
+    }
+    
+    [Fact]
     private void ScansPlusCorrectly()
     {
         var token = TokenScanner.ScanToken("+", 1, 1, 1, CharacterType.PLUS);
@@ -134,6 +147,19 @@ public class TokenScannerTest
         Assert.Equal(1, token.EndLineIndex);
         Assert.Equal("+", token.Label);
         Assert.Equal(TokenType.PLUS, token.Type);
+    }
+    
+    [Fact]
+    private void ScansPlusPlusCorrectly()
+    {
+        var token = TokenScanner.ScanToken("++", 1, 1, 1, CharacterType.PLUS);
+        Assert.Equal(1, token.StartIndex);
+        Assert.Equal(2, token.EndIndex);
+        Assert.Equal(1, token.StartLine);
+        Assert.Equal(1, token.StartLineIndex);
+        Assert.Equal(2, token.EndLineIndex);
+        Assert.Equal("++", token.Label);
+        Assert.Equal(TokenType.PLUS_PLUS, token.Type);
     }
     
     [Fact]
