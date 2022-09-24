@@ -795,6 +795,19 @@ public class ParsingExpressionStrategyTest
     }
 
     [Fact]
+    private void ThrowsExceptionIfFieldTokenWasNotFound()
+    {
+        var tokens = new List<Token>
+        {
+            new() {Type = TokenType.ID, Content = "instance"},
+            new() {Type = TokenType.DOT},
+            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
+        };
+
+        AssertFails<MissingExpressionException>(tokens);
+    }
+
+    [Fact]
     public void ParsingInstanceFieldThrowsExceptionIfFieldWasNotIdentifiers()
     {
         var tokens = new List<Token>

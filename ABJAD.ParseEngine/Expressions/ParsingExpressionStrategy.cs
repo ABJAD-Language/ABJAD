@@ -12,51 +12,55 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     {
         this.index = index;
         this.tokens = tokens.Where(t => t.Type != TokenType.WHITE_SPACE).ToList();
-        return ParseOrExpression();
+        return ParseAbstractSyntaxTree();
+    }
+
+    private Expression ParseAbstractSyntaxTree()
+    {
+        return ParseOrOperationExpression();
     }
 
     private Expression ParseExpression(Func<Expression> higherPrecedenceExpressionParser, params TokenType[] target)
     {
-        var expression = higherPrecedenceExpressionParser();
+        var expression = higherPrecedenceExpressionParser.Invoke();
 
         while (Match(target))
         {
             var @operator = tokens[index++];
-            var secondOperand = higherPrecedenceExpressionParser();
-
-            expression = @operator.Type switch
-            {
-                TokenType.OR            => new OrOperationExpression(expression, secondOperand),
-                TokenType.AND           => new AndOperationExpression(expression, secondOperand),
-                TokenType.EQUAL_EQUAL   => new EqualityCheckExpression(expression, secondOperand),
-                TokenType.BANG_EQUAL    => new InequalityCheckExpression(expression, secondOperand),
-                TokenType.LESS_THAN     => new LessCheckExpression(expression, secondOperand),
-                TokenType.LESS_EQUAL    => new LessOrEqualCheckExpression(expression, secondOperand),
-                TokenType.GREATER_THAN  => new GreaterCheckExpression(expression, secondOperand),
-                TokenType.GREATER_EQUAL => new GreaterOrEqualCheckExpression(expression, secondOperand),
-                TokenType.PLUS          => new AdditionExpression(expression, secondOperand),
-                TokenType.DASH          => new SubtractionExpression(expression, secondOperand),
-                TokenType.STAR          => new MultiplicationExpression(expression, secondOperand),
-                TokenType.SLASH         => new DivisionExpression(expression, secondOperand),
-                TokenType.MODULO        => new ModuloExpression(expression, secondOperand),
-                _                       => expression
-            };
+            var secondOperand = higherPrecedenceExpressionParser.Invoke();
+            expression = BuildBinaryExpression(@operator, expression, secondOperand);
         }
 
         return expression;
     }
 
-    private bool Match(params TokenType[] target)
+    private static Expression BuildBinaryExpression(Token @operator, Expression expression, Expression secondOperand)
     {
-        return tokens.Count > index && target.Contains(tokens[index].Type);
+        return @operator.Type switch
+        {
+            TokenType.OR            => new OrOperationExpression(expression, secondOperand),
+            TokenType.AND           => new AndOperationExpression(expression, secondOperand),
+            TokenType.EQUAL_EQUAL   => new EqualityCheckExpression(expression, secondOperand),
+            TokenType.BANG_EQUAL    => new InequalityCheckExpression(expression, secondOperand),
+            TokenType.LESS_THAN     => new LessCheckExpression(expression, secondOperand),
+            TokenType.LESS_EQUAL    => new LessOrEqualCheckExpression(expression, secondOperand),
+            TokenType.GREATER_THAN  => new GreaterCheckExpression(expression, secondOperand),
+            TokenType.GREATER_EQUAL => new GreaterOrEqualCheckExpression(expression, secondOperand),
+            TokenType.PLUS          => new AdditionExpression(expression, secondOperand),
+            TokenType.DASH          => new SubtractionExpression(expression, secondOperand),
+            TokenType.STAR          => new MultiplicationExpression(expression, secondOperand),
+            TokenType.SLASH         => new DivisionExpression(expression, secondOperand),
+            TokenType.MODULO        => new ModuloExpression(expression, secondOperand),
+            _                       => expression
+        };
     }
 
-    private Expression ParseOrExpression()
+    private Expression ParseOrOperationExpression()
     {
-        return ParseExpression(ParseAndExpression, TokenType.OR);
+        return ParseExpression(ParseAndOperationExpression, TokenType.OR);
     }
 
-    private Expression ParseAndExpression()
+    private Expression ParseAndOperationExpression()
     {
         return ParseExpression(ParseEqualityCheckExpression, TokenType.AND);
     }
@@ -79,31 +83,47 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private Expression ParseMultiplicationExpression()
     {
-        return ParseExpression(ParseUnaryExpression, TokenType.STAR, TokenType.SLASH, TokenType.MODULO);
+        return ParseExpression(ParseUnaryOrHigherPrecedenceExpression, TokenType.STAR, TokenType.SLASH,
+            TokenType.MODULO);
+    }
+
+    private Expression ParseUnaryOrHigherPrecedenceExpression()
+    {
+        if (Match(TokenType.DASH, TokenType.BANG, TokenType.PLUS_PLUS, TokenType.DASH_DASH, TokenType.NUMBER,
+                TokenType.BOOL, TokenType.STRING, TokenType.TYPEOF))
+        {
+            return ParseUnaryExpression();
+        }
+
+        return ParsePostfixOrHigherPrecedenceExpression();
     }
 
     private Expression ParseUnaryExpression()
     {
-        if (!Match(TokenType.DASH, TokenType.BANG, TokenType.PLUS_PLUS, TokenType.DASH_DASH, TokenType.NUMBER,
-                TokenType.BOOL, TokenType.STRING, TokenType.TYPEOF))
-        {
-            return ParsePostfixExpression();
-        }
-
         var @operator = tokens[index++];
 
-        if (@operator.Type is TokenType.NUMBER or TokenType.BOOL or TokenType.STRING or TokenType.TYPEOF)
+        if (UnaryExpressionRequiresGrouping(@operator))
         {
             Consume(TokenType.OPEN_PAREN);
         }
 
-        var expression = ParsePostfixExpression();
+        var expression = ParsePostfixOrHigherPrecedenceExpression();
 
-        if (@operator.Type is TokenType.NUMBER or TokenType.BOOL or TokenType.STRING or TokenType.TYPEOF)
+        if (UnaryExpressionRequiresGrouping(@operator))
         {
             Consume(TokenType.CLOSE_PAREN);
         }
 
+        return BuildUnaryExpression(@operator, expression);
+    }
+
+    private static bool UnaryExpressionRequiresGrouping(Token @operator)
+    {
+        return @operator.Type is TokenType.NUMBER or TokenType.BOOL or TokenType.STRING or TokenType.TYPEOF;
+    }
+
+    private Expression BuildUnaryExpression(Token @operator, Expression expression)
+    {
         return @operator.Type switch
         {
             TokenType.DASH      => new NegativeExpression(expression),
@@ -136,17 +156,23 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
             return new PrefixAdditionExpression(expression);
         }
 
+        index--;
         throw new InvalidPrefixExpressionException(GetCurrentLine(), GetCurrentIndex());
     }
 
-    private Expression ParsePostfixExpression()
+    private Expression ParsePostfixOrHigherPrecedenceExpression()
     {
-        var expression = ParsePrimitiveExpression();
-        if (!Match(TokenType.PLUS_PLUS, TokenType.DASH_DASH))
+        var expression = ParsePrimitiveOrHigherPrecedenceExpression();
+        if (Match(TokenType.PLUS_PLUS, TokenType.DASH_DASH))
         {
-            return expression;
+            return ParsePostfixExpression(expression);
         }
 
+        return expression;
+    }
+
+    private Expression ParsePostfixExpression(Expression expression)
+    {
         if (expression is not PrimitiveExpression {Primitive: IdentifierPrimitive})
         {
             index--;
@@ -154,15 +180,16 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         }
 
         var @operator = tokens[index++];
-        return @operator.Type switch
+
+        if (@operator.Type == TokenType.PLUS_PLUS)
         {
-            TokenType.PLUS_PLUS => new PostfixAdditionExpression(expression),
-            TokenType.DASH_DASH => new PostfixSubtractionExpression(expression),
-            _                   => throw new Exception("not postfix " + @operator) // TODO refactor
-        };
+            return new PostfixAdditionExpression(expression);
+        }
+
+        return new PostfixSubtractionExpression(expression);
     }
 
-    private Expression ParsePrimitiveExpression()
+    private Expression ParsePrimitiveOrHigherPrecedenceExpression()
     {
         if (Match(TokenType.OPEN_PAREN))
         {
@@ -175,27 +202,34 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         }
 
         var primitive = GetPrimitive();
-        if (primitive is IdentifierPrimitive parentIdentifier)
+        if (primitive is not IdentifierPrimitive parentIdentifier)
         {
-            if (TryConsume(TokenType.DOT))
+            return new PrimitiveExpression(primitive);
+        }
+
+        if (TryConsume(TokenType.DOT))
+        {
+            if (GetPrimitive() is IdentifierPrimitive childIdentifier)
             {
-                if (GetPrimitive() is IdentifierPrimitive childIdentifier)
-                {
-                    return ParseInstanceStateExpression(parentIdentifier, childIdentifier);
-                }
+                return ParseInstanceStateExpression(parentIdentifier, childIdentifier);
             }
-            else
-            {
-                if (TryConsume(TokenType.OPEN_PAREN))
-                {
-                    var arguments = ParseMethodCallArguments();
-                    Consume(TokenType.CLOSE_PAREN);
-                    return new CallExpression(new PrimitiveExpression(parentIdentifier), arguments);
-                }
-            }
+
+            throw new MissingExpressionException(GetCurrentLine(), GetCurrentIndex(), TokenType.ID.ToString());
+        }
+
+        if (TryConsume(TokenType.OPEN_PAREN))
+        {
+            var arguments = ParseMethodCallArguments();
+            Consume(TokenType.CLOSE_PAREN);
+            return new CallExpression(new PrimitiveExpression(parentIdentifier), arguments);
         }
 
         return new PrimitiveExpression(primitive);
+    }
+
+    private bool Match(params TokenType[] target)
+    {
+        return tokens.Count > index && target.Contains(tokens[index].Type);
     }
 
     private InstantiationExpression ParseInstantiationExpression()
@@ -243,16 +277,10 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         {
             while (!Match(TokenType.CLOSE_PAREN))
             {
-                arguments.Add(ParseOrExpression());
+                arguments.Add(ParseAbstractSyntaxTree());
 
-                if (!TryConsume(TokenType.COMMA))
+                if (!MoreArgumentsExist())
                 {
-                    if (!Match(TokenType.CLOSE_PAREN))
-                    {
-                        throw new MissingTokenException(GetCurrentLine(), GetCurrentIndex(),
-                            TokenType.COMMA.ToString());
-                    }
-
                     break;
                 }
             }
@@ -276,10 +304,25 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         return arguments;
     }
 
+    private bool MoreArgumentsExist()
+    {
+        if (TryConsume(TokenType.COMMA))
+        {
+            return true;
+        }
+
+        if (Match(TokenType.CLOSE_PAREN))
+        {
+            return false;
+        }
+
+        throw new MissingTokenException(GetCurrentLine(), GetCurrentIndex(), TokenType.COMMA.ToString());
+    }
+
     private Expression ParseGroupExpression()
     {
         Consume(TokenType.OPEN_PAREN);
-        var expression = ParseOrExpression();
+        var expression = ParseAbstractSyntaxTree();
         Consume(TokenType.CLOSE_PAREN);
 
         return new GroupExpression(expression);
@@ -293,6 +336,11 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         }
 
         var token = tokens[index++];
+        return BuildPrimitive(token);
+    }
+
+    private static Primitive BuildPrimitive(Token token)
+    {
         return token.Type switch
         {
             TokenType.NUMBER_CONST => NumberPrimitive.From(token.Content),
