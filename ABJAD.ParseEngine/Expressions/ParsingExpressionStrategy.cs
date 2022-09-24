@@ -1,5 +1,8 @@
+using ABJAD.ParseEngine.Expressions.Binary;
+using ABJAD.ParseEngine.Expressions.Unary;
 using ABJAD.ParseEngine.Primitives;
 using ABJAD.ParseEngine.Shared;
+using Ardalis.GuardClauses;
 
 namespace ABJAD.ParseEngine.Expressions;
 
@@ -10,8 +13,12 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     public Expression Parse(List<Token> tokens, int index)
     {
+        Guard.Against.Negative(index);
+        Guard.Against.Null(tokens);
+
         this.index = index;
         this.tokens = tokens.Where(t => t.Type != TokenType.WHITE_SPACE).ToList();
+        Guard.Against.NullOrEmpty(this.tokens);
         return ParseAbstractSyntaxTree();
     }
 
@@ -28,31 +35,11 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         {
             var @operator = tokens[index++];
             var secondOperand = higherPrecedenceExpressionParser.Invoke();
-            expression = BuildBinaryExpression(@operator, expression, secondOperand);
+            expression =
+                BinaryOperationExpressionFactory.BuildBinaryExpression(@operator.Type, expression, secondOperand);
         }
 
         return expression;
-    }
-
-    private static Expression BuildBinaryExpression(Token @operator, Expression expression, Expression secondOperand)
-    {
-        return @operator.Type switch
-        {
-            TokenType.OR            => new OrOperationExpression(expression, secondOperand),
-            TokenType.AND           => new AndOperationExpression(expression, secondOperand),
-            TokenType.EQUAL_EQUAL   => new EqualityCheckExpression(expression, secondOperand),
-            TokenType.BANG_EQUAL    => new InequalityCheckExpression(expression, secondOperand),
-            TokenType.LESS_THAN     => new LessCheckExpression(expression, secondOperand),
-            TokenType.LESS_EQUAL    => new LessOrEqualCheckExpression(expression, secondOperand),
-            TokenType.GREATER_THAN  => new GreaterCheckExpression(expression, secondOperand),
-            TokenType.GREATER_EQUAL => new GreaterOrEqualCheckExpression(expression, secondOperand),
-            TokenType.PLUS          => new AdditionExpression(expression, secondOperand),
-            TokenType.DASH          => new SubtractionExpression(expression, secondOperand),
-            TokenType.STAR          => new MultiplicationExpression(expression, secondOperand),
-            TokenType.SLASH         => new DivisionExpression(expression, secondOperand),
-            TokenType.MODULO        => new ModuloExpression(expression, secondOperand),
-            _                       => expression
-        };
     }
 
     private Expression ParseOrOperationExpression()
@@ -104,15 +91,19 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
         if (UnaryExpressionRequiresGrouping(@operator))
         {
-            Consume(TokenType.OPEN_PAREN);
+            return ParseUnaryExpressionWithGrouping(@operator);
         }
 
         var expression = ParsePostfixOrHigherPrecedenceExpression();
 
-        if (UnaryExpressionRequiresGrouping(@operator))
-        {
-            Consume(TokenType.CLOSE_PAREN);
-        }
+        return BuildUnaryExpression(@operator, expression);
+    }
+
+    private Expression ParseUnaryExpressionWithGrouping(Token @operator)
+    {
+        Consume(TokenType.OPEN_PAREN);
+        var expression = ParsePostfixOrHigherPrecedenceExpression();
+        Consume(TokenType.CLOSE_PAREN);
 
         return BuildUnaryExpression(@operator, expression);
     }
@@ -181,12 +172,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
         var @operator = tokens[index++];
 
-        if (@operator.Type == TokenType.PLUS_PLUS)
-        {
-            return new PostfixAdditionExpression(expression);
-        }
-
-        return new PostfixSubtractionExpression(expression);
+        return PostfixExpressionFactory.Get(expression, @operator.Type);
     }
 
     private Expression ParsePrimitiveOrHigherPrecedenceExpression()
@@ -336,21 +322,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         }
 
         var token = tokens[index++];
-        return BuildPrimitive(token);
-    }
-
-    private static Primitive BuildPrimitive(Token token)
-    {
-        return token.Type switch
-        {
-            TokenType.NUMBER_CONST => NumberPrimitive.From(token.Content),
-            TokenType.STRING_CONST => StringPrimitive.From(token.Content),
-            TokenType.TRUE         => BoolPrimitive.True(),
-            TokenType.FALSE        => BoolPrimitive.False(),
-            TokenType.NULL         => NullPrimitive.Instance(),
-            TokenType.ID           => IdentifierPrimitive.From(token.Content),
-            _                      => throw new FailedToParseExpressionException(token.Line, token.Index)
-        };
+        return PrimitiveFactory.Get(token);
     }
 
     private void Consume(TokenType targetType)
