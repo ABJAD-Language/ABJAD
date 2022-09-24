@@ -1130,6 +1130,92 @@ public class ParsingExpressionStrategyTest
         ParseAndAssertResult(tokens, expectedExpression);
     }
 
+    /// <summary>
+    /// parsing expression: 3 * var1 + true || (!var2 + ++var3) && 4 <= -(var4 % numberOf("2"))
+    /// </summary>
+    [Fact]
+    private void IgnoresWhiteSpaces()
+    {
+        var tokens = new List<Token>
+        {
+            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.STAR},
+            new() {Type = TokenType.ID, Content = "var1"},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.PLUS},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.TRUE},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.OR},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.OPEN_PAREN},
+            new() {Type = TokenType.BANG},
+            new() {Type = TokenType.ID, Content = "var2"},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.PLUS},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.PLUS_PLUS},
+            new() {Type = TokenType.ID, Content = "var3"},
+            new() {Type = TokenType.CLOSE_PAREN},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.AND},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.NUMBER_CONST, Content = "4"},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.LESS_EQUAL},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.DASH},
+            new() {Type = TokenType.OPEN_PAREN},
+            new() {Type = TokenType.ID, Content = "var4"},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.MODULO},
+            new() {Type = TokenType.WHITE_SPACE},
+            new() {Type = TokenType.NUMBER},
+            new() {Type = TokenType.OPEN_PAREN},
+            new() {Type = TokenType.STRING_CONST, Content = "2"},
+            new() {Type = TokenType.CLOSE_PAREN},
+            new() {Type = TokenType.CLOSE_PAREN}
+        };
+
+        var expectedExpression = new OrOperationExpression(
+            new AdditionExpression(
+                new MultiplicationExpression(
+                    new PrimitiveExpression(NumberPrimitive.From("3")),
+                    new PrimitiveExpression(IdentifierPrimitive.From("var1"))
+                ),
+                new PrimitiveExpression(BoolPrimitive.True())
+            ),
+            new AndOperationExpression(
+                new GroupExpression(
+                    new AdditionExpression(
+                        new NegationExpression(
+                            new PrimitiveExpression(IdentifierPrimitive.From("var2"))
+                        ),
+                        new PrefixAdditionExpression(
+                            new PrimitiveExpression(IdentifierPrimitive.From("var3"))
+                        )
+                    )
+                ),
+                new LessOrEqualCheckExpression(
+                    new PrimitiveExpression(NumberPrimitive.From("4")),
+                    new NegationExpression(
+                        new GroupExpression(
+                            new ModuloExpression(
+                                new PrimitiveExpression(IdentifierPrimitive.From("var4")),
+                                new ToNumberExpression(
+                                    new PrimitiveExpression(StringPrimitive.From("2"))
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        ParseAndAssertResult(tokens, expectedExpression);
+    }
+
     private static void ParseAndAssertResult(List<Token> tokens, Expression expectedExpression)
     {
         var strategy = new ParsingExpressionStrategy();

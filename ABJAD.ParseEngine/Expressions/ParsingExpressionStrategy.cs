@@ -11,7 +11,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     public Expression Parse(List<Token> tokens, int index)
     {
         this.index = index;
-        this.tokens = tokens;
+        this.tokens = tokens.Where(t => t.Type != TokenType.WHITE_SPACE).ToList();
         return ParseOrExpression();
     }
 
@@ -299,15 +299,15 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private int GetCurrentIndex()
     {
-        return GetCurrentToken().Index;
+        return GetCurrentOrLastToken().Index;
     }
 
     private int GetCurrentLine()
     {
-        return GetCurrentToken().Line;
+        return GetCurrentOrLastToken().Line;
     }
 
-    private Token GetCurrentToken()
+    private Token GetCurrentOrLastToken()
     {
         if (tokens.Count <= index)
         {
