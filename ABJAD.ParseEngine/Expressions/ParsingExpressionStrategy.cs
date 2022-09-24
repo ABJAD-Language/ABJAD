@@ -108,8 +108,8 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         {
             TokenType.DASH      => new NegativeExpression(expression),
             TokenType.BANG      => new NegationExpression(expression),
-            TokenType.PLUS_PLUS => new PrefixAdditionExpression(expression),
-            TokenType.DASH_DASH => new PrefixSubtractionExpression(expression),
+            TokenType.PLUS_PLUS => BuildPrefixAdditionExpressionIfEligible(expression),
+            TokenType.DASH_DASH => BuildPrefixSubtractionExpressionIfEligible(expression),
             TokenType.NUMBER    => new ToNumberExpression(expression),
             TokenType.BOOL      => new ToBoolExpression(expression),
             TokenType.STRING    => new ToStringExpression(expression),
@@ -118,12 +118,39 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         };
     }
 
+    private PrefixSubtractionExpression BuildPrefixSubtractionExpressionIfEligible(Expression expression)
+    {
+        if (expression is PrimitiveExpression {Primitive: IdentifierPrimitive})
+        {
+            return new PrefixSubtractionExpression(expression);
+        }
+
+        index--;
+        throw new InvalidPrefixExpressionException(GetCurrentLine(), GetCurrentIndex());
+    }
+
+    private Expression BuildPrefixAdditionExpressionIfEligible(Expression expression)
+    {
+        if (expression is PrimitiveExpression {Primitive: IdentifierPrimitive})
+        {
+            return new PrefixAdditionExpression(expression);
+        }
+
+        throw new InvalidPrefixExpressionException(GetCurrentLine(), GetCurrentIndex());
+    }
+
     private Expression ParsePostfixExpression()
     {
         var expression = ParsePrimitiveExpression();
         if (!Match(TokenType.PLUS_PLUS, TokenType.DASH_DASH))
         {
             return expression;
+        }
+
+        if (expression is not PrimitiveExpression {Primitive: IdentifierPrimitive})
+        {
+            index--;
+            throw new InvalidPostfixExpressionException(GetCurrentLine(), GetCurrentIndex());
         }
 
         var @operator = tokens[index++];

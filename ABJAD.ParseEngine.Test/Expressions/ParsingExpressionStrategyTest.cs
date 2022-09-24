@@ -552,6 +552,39 @@ public class ParsingExpressionStrategyTest
         ParseAndAssertResult(tokens, expectedExpression);
     }
 
+    [Fact]
+    private void PrefixThrowsExceptionWhenFollowedByNumber()
+    {
+        var tokens = new List<Token>
+        {
+            new() {Type = TokenType.DASH_DASH},
+            new() {Type = TokenType.NUMBER_CONST, Content = "2", Index = 3, Line = 2},
+            new() {Type = TokenType.SEMICOLON}
+        };
+
+        var exception = AssertFails<InvalidPrefixExpressionException>(tokens);
+        Assert.Equal("Prefix can only be used with variables (2:3)", exception.EnglishMessage);
+        Assert.Equal("العمليات الحسابية المقدمة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
+    }
+
+    [Fact]
+    private void PrefixThrowsExceptionWhenFollowedByField()
+    {
+        var tokens = new List<Token>
+        {
+            new() {Type = TokenType.DASH_DASH},
+            new() {Type = TokenType.ID, Content = "instance"},
+            new() {Type = TokenType.DOT},
+            new() {Type = TokenType.ID, Content = "field", Index = 3, Line = 2},
+            new() {Type = TokenType.SEMICOLON},
+        };
+
+        var exception = AssertFails<InvalidPrefixExpressionException>(tokens);
+        Assert.Equal("Prefix can only be used with variables (2:3)", exception.EnglishMessage);
+        Assert.Equal("العمليات الحسابية المقدمة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
+    }
+
+
     /// <summary>
     /// parsing expression var1++
     /// </summary>
@@ -588,6 +621,38 @@ public class ParsingExpressionStrategyTest
         );
 
         ParseAndAssertResult(tokens, expectedExpression);
+    }
+
+    [Fact]
+    private void ParsingPostfixThrowsExceptionWhenPrecededByNumber()
+    {
+        var tokens = new List<Token>
+        {
+            new() {Type = TokenType.NUMBER_CONST, Content = "2", Index = 3, Line = 2},
+            new() {Type = TokenType.PLUS_PLUS},
+            new() {Type = TokenType.SEMICOLON}
+        };
+
+        var exception = AssertFails<InvalidPostfixExpressionException>(tokens);
+        Assert.Equal("Postfix can only be used with variables (2:3)", exception.EnglishMessage);
+        Assert.Equal("العمليات الحسابية المؤخرة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
+    }
+
+    [Fact]
+    private void ParsingPostfixThrowsExceptionWhenPrecededByField()
+    {
+        var tokens = new List<Token>
+        {
+            new() {Type = TokenType.ID, Content = "instance"},
+            new() {Type = TokenType.DOT},
+            new() {Type = TokenType.ID, Content = "field", Index = 3, Line = 2},
+            new() {Type = TokenType.PLUS_PLUS},
+            new() {Type = TokenType.SEMICOLON}
+        };
+
+        var exception = AssertFails<InvalidPostfixExpressionException>(tokens);
+        Assert.Equal("Postfix can only be used with variables (2:3)", exception.EnglishMessage);
+        Assert.Equal("العمليات الحسابية المؤخرة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
     }
 
     /// <summary>
