@@ -125,7 +125,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
             TokenType.BOOL      => new ToBoolExpression(expression),
             TokenType.STRING    => new ToStringExpression(expression),
             TokenType.TYPEOF    => new TypeOfExpression(expression),
-            _                   => throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex())
+            _                   => throw new Exception()
         };
     }
 
@@ -136,8 +136,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
             return new PrefixSubtractionExpression(expression);
         }
 
-        index--;
-        throw new InvalidPrefixExpressionException(GetCurrentLine(), GetCurrentIndex());
+        throw new Exception();
     }
 
     private Expression BuildPrefixAdditionExpressionIfEligible(Expression expression)
@@ -148,7 +147,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         }
 
         index--;
-        throw new InvalidPrefixExpressionException(GetCurrentLine(), GetCurrentIndex());
+        throw new Exception();
     }
 
     private Expression ParsePostfixOrHigherPrecedenceExpression()
@@ -166,8 +165,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     {
         if (expression is not PrimitiveExpression {Primitive: IdentifierPrimitive})
         {
-            index--;
-            throw new InvalidPostfixExpressionException(GetCurrentLine(), GetCurrentIndex());
+            throw new Exception();
         }
 
         var @operator = tokens[index++];
@@ -200,7 +198,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
                 return ParseInstanceStateExpression(parentIdentifier, childIdentifier);
             }
 
-            throw new MissingExpressionException(GetCurrentLine(), GetCurrentIndex(), TokenType.ID.ToString());
+            throw new Exception();
         }
 
         if (TryConsume(TokenType.OPEN_PAREN))
@@ -229,7 +227,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
             return new InstantiationExpression(new PrimitiveExpression(@class), arguments);
         }
 
-        throw new MissingExpressionException(GetCurrentLine(), GetCurrentIndex(), "ID");
+        throw new Exception();
     }
 
     private Expression ParseInstanceStateExpression(IdentifierPrimitive parentIdentifier,
@@ -259,32 +257,14 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     {
         var arguments = new List<Expression>();
 
-        try
+        while (!Match(TokenType.CLOSE_PAREN))
         {
-            while (!Match(TokenType.CLOSE_PAREN))
-            {
-                arguments.Add(ParseAbstractSyntaxTree());
+            arguments.Add(ParseAbstractSyntaxTree());
 
-                if (!MoreArgumentsExist())
-                {
-                    break;
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            if (e is ArgumentOutOfRangeException)
+            if (!MoreArgumentsExist())
             {
-                throw new MissingTokenException(GetCurrentLine(), GetCurrentIndex() + 1,
-                    TokenType.CLOSE_PAREN.ToString());
+                break;
             }
-
-            if (e is ParsingException cause)
-            {
-                throw new MissingTokenException(cause.Line, cause.Index, TokenType.CLOSE_PAREN.ToString());
-            }
-
-            throw;
         }
 
         return arguments;
@@ -302,7 +282,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
             return false;
         }
 
-        throw new MissingTokenException(GetCurrentLine(), GetCurrentIndex(), TokenType.COMMA.ToString());
+        throw new Exception();
     }
 
     private Expression ParseGroupExpression()
@@ -318,7 +298,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     {
         if (tokens.Count <= index)
         {
-            throw new MissingExpressionException(GetCurrentLine(), GetCurrentIndex() + 1);
+            throw new Exception();
         }
 
         var token = tokens[index++];
@@ -329,7 +309,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     {
         if (tokens.Count <= index || tokens[index++].Type != targetType)
         {
-            throw new MissingTokenException(GetCurrentLine(), GetCurrentIndex(), targetType.ToString());
+            throw new Exception();
         }
     }
 
