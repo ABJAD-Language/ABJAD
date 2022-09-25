@@ -27,7 +27,8 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         return ParseOrOperationExpression();
     }
 
-    private Expression ParseExpression(Func<Expression> higherPrecedenceExpressionParser, params TokenType[] target)
+    private Expression ParseBinaryExpression(Func<Expression> higherPrecedenceExpressionParser,
+        params TokenType[] target)
     {
         var expression = higherPrecedenceExpressionParser.Invoke();
 
@@ -35,8 +36,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         {
             var @operator = tokens[index++];
             var secondOperand = higherPrecedenceExpressionParser.Invoke();
-            expression =
-                BinaryOperationExpressionFactory.BuildBinaryExpression(@operator.Type, expression, secondOperand);
+            expression = BinaryOperationExpressionFactory.Get(@operator.Type, expression, secondOperand);
         }
 
         return expression;
@@ -44,33 +44,33 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private Expression ParseOrOperationExpression()
     {
-        return ParseExpression(ParseAndOperationExpression, TokenType.OR);
+        return ParseBinaryExpression(ParseAndOperationExpression, TokenType.OR);
     }
 
     private Expression ParseAndOperationExpression()
     {
-        return ParseExpression(ParseEqualityCheckExpression, TokenType.AND);
+        return ParseBinaryExpression(ParseEqualityCheckExpression, TokenType.AND);
     }
 
     private Expression ParseEqualityCheckExpression()
     {
-        return ParseExpression(ParseComparisonExpression, TokenType.EQUAL_EQUAL, TokenType.BANG_EQUAL);
+        return ParseBinaryExpression(ParseComparisonExpression, TokenType.EQUAL_EQUAL, TokenType.BANG_EQUAL);
     }
 
     private Expression ParseComparisonExpression()
     {
-        return ParseExpression(ParseAdditionExpression, TokenType.LESS_THAN, TokenType.LESS_EQUAL,
+        return ParseBinaryExpression(ParseAdditionExpression, TokenType.LESS_THAN, TokenType.LESS_EQUAL,
             TokenType.GREATER_THAN, TokenType.GREATER_EQUAL);
     }
 
     private Expression ParseAdditionExpression()
     {
-        return ParseExpression(ParseMultiplicationExpression, TokenType.PLUS, TokenType.DASH);
+        return ParseBinaryExpression(ParseMultiplicationExpression, TokenType.PLUS, TokenType.DASH);
     }
 
     private Expression ParseMultiplicationExpression()
     {
-        return ParseExpression(ParseUnaryOrHigherPrecedenceExpression, TokenType.STAR, TokenType.SLASH,
+        return ParseBinaryExpression(ParseUnaryOrHigherPrecedenceExpression, TokenType.STAR, TokenType.SLASH,
             TokenType.MODULO);
     }
 
@@ -163,11 +163,6 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private Expression ParsePostfixExpression(Expression expression)
     {
-        if (expression is not PrimitiveExpression {Primitive: IdentifierPrimitive})
-        {
-            throw new Exception();
-        }
-
         var @operator = tokens[index++];
 
         return PostfixExpressionFactory.Get(expression, @operator.Type);
@@ -193,12 +188,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
         if (TryConsume(TokenType.DOT))
         {
-            if (GetPrimitive() is IdentifierPrimitive childIdentifier)
-            {
-                return ParseInstanceStateExpression(parentIdentifier, childIdentifier);
-            }
-
-            throw new Exception();
+            return ParseInstanceStateExpression(parentIdentifier, GetPrimitive());
         }
 
         if (TryConsume(TokenType.OPEN_PAREN))
@@ -213,28 +203,32 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private bool Match(params TokenType[] target)
     {
-        return tokens.Count > index && target.Contains(tokens[index].Type);
+        return tokens.Count > index && target.Contains(GetCurrentToken().Type);
     }
 
     private InstantiationExpression ParseInstantiationExpression()
     {
         Consume(TokenType.NEW);
-        if (GetPrimitive() is IdentifierPrimitive @class)
+        if (GetPrimitive() is not IdentifierPrimitive @class)
         {
-            Consume(TokenType.OPEN_PAREN);
-            var arguments = ParseMethodCallArguments();
-            Consume(TokenType.CLOSE_PAREN);
-            return new InstantiationExpression(new PrimitiveExpression(@class), arguments);
+            throw new Exception();
         }
 
-        throw new Exception();
+        Consume(TokenType.OPEN_PAREN);
+        var arguments = ParseMethodCallArguments();
+        Consume(TokenType.CLOSE_PAREN);
+        return new InstantiationExpression(new PrimitiveExpression(@class), arguments);
     }
 
-    private Expression ParseInstanceStateExpression(IdentifierPrimitive parentIdentifier,
-        IdentifierPrimitive childIdentifier)
+    private Expression ParseInstanceStateExpression(IdentifierPrimitive parent, Primitive child)
     {
-        var parentIdentifierExpression = new PrimitiveExpression(parentIdentifier);
-        var childIdentifierExpression = new PrimitiveExpression(childIdentifier);
+        if (child is not IdentifierPrimitive)
+        {
+            throw new Exception();
+        }
+
+        var parentIdentifierExpression = new PrimitiveExpression(parent);
+        var childIdentifierExpression = new PrimitiveExpression(child);
         if (Match(TokenType.OPEN_PAREN))
         {
             return ParseInstanceMethodCallExpression(parentIdentifierExpression, childIdentifierExpression);
@@ -243,14 +237,14 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         return new InstanceFieldExpression(parentIdentifierExpression, childIdentifierExpression);
     }
 
-    private InstanceMethodCallExpression ParseInstanceMethodCallExpression(
-        PrimitiveExpression parentIdentifierExpression, PrimitiveExpression childIdentifierExpression)
+    private InstanceMethodCallExpression ParseInstanceMethodCallExpression(PrimitiveExpression parent,
+        PrimitiveExpression child)
     {
         Consume(TokenType.OPEN_PAREN);
         var arguments = ParseMethodCallArguments();
 
         Consume(TokenType.CLOSE_PAREN);
-        return new InstanceMethodCallExpression(parentIdentifierExpression, childIdentifierExpression, arguments);
+        return new InstanceMethodCallExpression(parent, child, arguments);
     }
 
     private List<Expression> ParseMethodCallArguments()
@@ -261,7 +255,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         {
             arguments.Add(ParseAbstractSyntaxTree());
 
-            if (!MoreArgumentsExist())
+            if (NoMoreArgumentsExist())
             {
                 break;
             }
@@ -270,16 +264,16 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         return arguments;
     }
 
-    private bool MoreArgumentsExist()
+    private bool NoMoreArgumentsExist()
     {
         if (TryConsume(TokenType.COMMA))
         {
-            return true;
+            return false;
         }
 
         if (Match(TokenType.CLOSE_PAREN))
         {
-            return false;
+            return true;
         }
 
         throw new Exception();
@@ -296,7 +290,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private Primitive GetPrimitive()
     {
-        if (tokens.Count <= index)
+        if (NoMoreTokensToConsume())
         {
             throw new Exception();
         }
@@ -305,9 +299,14 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         return PrimitiveFactory.Get(token);
     }
 
+    private bool NoMoreTokensToConsume()
+    {
+        return tokens.Count <= index;
+    }
+
     private void Consume(TokenType targetType)
     {
-        if (tokens.Count <= index || tokens[index++].Type != targetType)
+        if (NoMoreTokensToConsume() || tokens[index++].Type != targetType)
         {
             throw new Exception();
         }
@@ -315,7 +314,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private bool TryConsume(TokenType targetType)
     {
-        if (tokens.Count <= index || tokens[index].Type != targetType)
+        if (NoMoreTokensToConsume() || GetCurrentToken().Type != targetType)
         {
             return false;
         }
@@ -336,11 +335,16 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private Token GetCurrentOrLastToken()
     {
-        if (tokens.Count <= index)
+        if (NoMoreTokensToConsume())
         {
             return tokens.Last();
         }
 
+        return GetCurrentToken();
+    }
+
+    private Token GetCurrentToken()
+    {
         return tokens[index];
     }
 }

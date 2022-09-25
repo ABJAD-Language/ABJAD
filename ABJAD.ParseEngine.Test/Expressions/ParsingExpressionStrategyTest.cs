@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ABJAD.ParseEngine.Expressions;
 using ABJAD.ParseEngine.Expressions.Binary;
 using ABJAD.ParseEngine.Expressions.Unary;
+using ABJAD.ParseEngine.Expressions.Unary.Postfix;
 using ABJAD.ParseEngine.Primitives;
 using ABJAD.ParseEngine.Shared;
 using FluentAssertions;
@@ -680,7 +681,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.SEMICOLON}
         };
 
-        AssertFails<Exception>(tokens);
+        AssertFails<PostfixIllegalArgumentException>(tokens);
         // var exception = AssertFails<InvalidPostfixExpressionException>(tokens);
         // Assert.Equal("Postfix can only be used with variables (2:3)", exception.EnglishMessage);
         // Assert.Equal("العمليات الحسابية المؤخرة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
@@ -698,7 +699,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.SEMICOLON}
         };
 
-        AssertFails<Exception>(tokens);
+        AssertFails<PostfixIllegalArgumentException>(tokens);
         // var exception = AssertFails<InvalidPostfixExpressionException>(tokens);
         // Assert.Equal("Postfix can only be used with variables (2:3)", exception.EnglishMessage);
         // Assert.Equal("العمليات الحسابية المؤخرة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);

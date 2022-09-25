@@ -25,7 +25,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingOrOperatorReturnsOrExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.OR,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.OR,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -37,7 +37,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingAndOperatorReturnsAndExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.AND,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.AND,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -49,7 +49,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingEqualEqualOperatorReturnsEqualityCheckExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.EQUAL_EQUAL,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.EQUAL_EQUAL,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -61,7 +61,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingBangEqualOperatorReturnsInequalityCheckExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.BANG_EQUAL,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.BANG_EQUAL,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -73,7 +73,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingLessThanOperatorReturnsLessCheckExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.LESS_THAN,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.LESS_THAN,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -85,7 +85,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingLessEqualOperatorReturnsLessOrEqualCheckExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.LESS_EQUAL,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.LESS_EQUAL,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -98,7 +98,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingGreaterThanOperatorReturnsGreaterCheckExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.GREATER_THAN,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.GREATER_THAN,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -110,7 +110,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingGreaterEqualOperatorReturnsGreaterOrEqualCheckExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.GREATER_EQUAL,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.GREATER_EQUAL,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -123,7 +123,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingPlusOperatorReturnsAdditionExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.PLUS,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.PLUS,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -135,7 +135,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingDashOperatorReturnsSubtractionExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.DASH,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.DASH,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -147,7 +147,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingStarOperatorReturnsMultiplicationExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.STAR,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.STAR,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -159,7 +159,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingSlashOperatorReturnsDivisionExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.SLASH,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.SLASH,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -171,7 +171,7 @@ public class BinaryOperationExpressionFactoryTest
     [Fact]
     private void PassingModuloOperatorReturnsModuloExpression()
     {
-        var expression = BinaryOperationExpressionFactory.BuildBinaryExpression(TokenType.MODULO,
+        var expression = BinaryOperationExpressionFactory.Get(TokenType.MODULO,
             firstExpressionMock.Object,
             secondExpressionMock.Object);
 
@@ -184,7 +184,7 @@ public class BinaryOperationExpressionFactoryTest
     [MemberData(nameof(GetBinaryOperatorTypes))]
     private void PassingBinaryOperatorDoesNotThrowException(TokenType operatorType)
     {
-        var exception = Record.Exception(() => BinaryOperationExpressionFactory.BuildBinaryExpression(operatorType,
+        var exception = Record.Exception(() => BinaryOperationExpressionFactory.Get(operatorType,
             firstExpressionMock.Object, secondExpressionMock.Object));
         Assert.Null(exception);
     }
@@ -198,7 +198,7 @@ public class BinaryOperationExpressionFactoryTest
     [MemberData(nameof(GetNonBinaryOperatorTypes))]
     private void PassingAnyOtherOperatorThrowsException(TokenType operatorType)
     {
-        Assert.Throws<ArgumentException>(() => BinaryOperationExpressionFactory.BuildBinaryExpression(operatorType,
+        Assert.Throws<ArgumentException>(() => BinaryOperationExpressionFactory.Get(operatorType,
             firstExpressionMock.Object, secondExpressionMock.Object));
     }
 

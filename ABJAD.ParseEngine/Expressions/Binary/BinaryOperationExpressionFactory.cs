@@ -4,7 +4,7 @@ namespace ABJAD.ParseEngine.Expressions.Binary;
 
 public static class BinaryOperationExpressionFactory
 {
-    public static Expression BuildBinaryExpression(TokenType operatorType, Expression expression,
+    public static Expression Get(TokenType operatorType, Expression expression,
         Expression secondOperand)
     {
         return operatorType switch
