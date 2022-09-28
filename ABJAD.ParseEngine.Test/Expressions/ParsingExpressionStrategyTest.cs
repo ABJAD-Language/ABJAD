@@ -4,6 +4,7 @@ using ABJAD.ParseEngine.Expressions;
 using ABJAD.ParseEngine.Expressions.Binary;
 using ABJAD.ParseEngine.Expressions.Unary;
 using ABJAD.ParseEngine.Expressions.Unary.Postfix;
+using ABJAD.ParseEngine.Expressions.Unary.Prefix;
 using ABJAD.ParseEngine.Primitives;
 using ABJAD.ParseEngine.Shared;
 using FluentAssertions;
@@ -79,9 +80,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.OR, Line = 4, Index = 2}
         };
 
-        AssertFails<Exception>(tokens);
-        // var exception = AssertFails<MissingExpressionException>(tokens);
-        // Assert.Equal("Expected expression was not found at line 4:3", exception.EnglishMessage);
+        AssertFails<FailedToParseExpressionException>(tokens);
     }
 
     [Fact]
@@ -127,9 +126,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.AND, Line = 4, Index = 2}
         };
 
-        AssertFails<Exception>(tokens);
-        // var exception = AssertFails<MissingExpressionException>(tokens);
-        // Assert.Equal("Expected expression was not found at line 4:3", exception.EnglishMessage);
+        AssertFails<FailedToParseExpressionException>(tokens);
     }
 
     [Fact]
@@ -227,9 +224,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.EQUAL_EQUAL, Line = 4, Index = 2}
         };
 
-        AssertFails<Exception>(tokens);
-        // var exception = AssertFails<MissingExpressionException>(tokens);
-        // Assert.Equal("Expected expression was not found at line 4:3", exception.EnglishMessage);
+        AssertFails<FailedToParseExpressionException>(tokens);
     }
 
     [Fact]
@@ -604,14 +599,13 @@ public class ParsingExpressionStrategyTest
         var tokens = new List<Token>
         {
             new() {Type = TokenType.DASH_DASH},
-            new() {Type = TokenType.NUMBER_CONST, Content = "2", Index = 3, Line = 2},
-            new() {Type = TokenType.SEMICOLON}
+            new() {Type = TokenType.NUMBER_CONST, Content = "2"},
+            new() {Type = TokenType.SEMICOLON, Index = 3, Line = 2}
         };
 
-        AssertFails<Exception>(tokens);
-        // var exception = AssertFails<InvalidPrefixExpressionException>(tokens);
-        // Assert.Equal("Prefix can only be used with variables (2:3)", exception.EnglishMessage);
-        // Assert.Equal("العمليات الحسابية المقدمة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
+        var exception = AssertFails<InvalidPrefixExpressionException>(tokens);
+        Assert.Equal("Prefix can only be used with variables (2:3)", exception.EnglishMessage);
+        Assert.Equal("العمليات الحسابية المقدمة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
     }
 
     [Fact]
@@ -622,14 +616,13 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.DASH_DASH},
             new() {Type = TokenType.ID, Content = "instance"},
             new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "field", Index = 3, Line = 2},
-            new() {Type = TokenType.SEMICOLON},
+            new() {Type = TokenType.ID, Content = "field"},
+            new() {Type = TokenType.SEMICOLON, Index = 3, Line = 2},
         };
 
-        AssertFails<Exception>(tokens);
-        // var exception = AssertFails<InvalidPrefixExpressionException>(tokens);
-        // Assert.Equal("Prefix can only be used with variables (2:3)", exception.EnglishMessage);
-        // Assert.Equal("العمليات الحسابية المقدمة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
+        var exception = AssertFails<InvalidPrefixExpressionException>(tokens);
+        Assert.Equal("Prefix can only be used with variables (2:3)", exception.EnglishMessage);
+        Assert.Equal("العمليات الحسابية المقدمة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
     }
 
 
@@ -676,15 +669,12 @@ public class ParsingExpressionStrategyTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "2", Index = 3, Line = 2},
+            new() {Type = TokenType.NUMBER_CONST, Content = "2"},
             new() {Type = TokenType.PLUS_PLUS},
             new() {Type = TokenType.SEMICOLON}
         };
 
-        AssertFails<PostfixIllegalArgumentException>(tokens);
-        // var exception = AssertFails<InvalidPostfixExpressionException>(tokens);
-        // Assert.Equal("Postfix can only be used with variables (2:3)", exception.EnglishMessage);
-        // Assert.Equal("العمليات الحسابية المؤخرة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
+        AssertFails<InvalidPostfixExpressionException>(tokens);
     }
 
     [Fact]
@@ -694,15 +684,12 @@ public class ParsingExpressionStrategyTest
         {
             new() {Type = TokenType.ID, Content = "instance"},
             new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "field", Index = 3, Line = 2},
+            new() {Type = TokenType.ID, Content = "field"},
             new() {Type = TokenType.PLUS_PLUS},
             new() {Type = TokenType.SEMICOLON}
         };
 
-        AssertFails<PostfixIllegalArgumentException>(tokens);
-        // var exception = AssertFails<InvalidPostfixExpressionException>(tokens);
-        // Assert.Equal("Postfix can only be used with variables (2:3)", exception.EnglishMessage);
-        // Assert.Equal("العمليات الحسابية المؤخرة يجب أن تستعمل مع المتغيرات فقط (2:3)", exception.ArabicMessage);
+        AssertFails<InvalidPostfixExpressionException>(tokens);
     }
 
     /// <summary>
@@ -840,9 +827,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.ID, Content = "field"}
         };
 
-        var strategy = new ParsingExpressionStrategy();
-        Assert.Throws<Exception>(() => strategy.Parse(tokens, 0));
-        // Assert.Throws<MissingTokenException>(() => strategy.Parse(tokens, 0));
+        AssertFails<FailedToParseExpressionException>(tokens);
     }
 
     [Fact]
@@ -855,8 +840,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.NUMBER_CONST, Content = "3"},
         };
 
-        AssertFails<Exception>(tokens);
-        // AssertFails<MissingExpressionException>(tokens);
+        AssertFails<FailedToParseExpressionException>(tokens);
     }
 
     [Fact]
@@ -911,9 +895,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.OPEN_PAREN, Line = 1, Index = 3},
         };
 
-        AssertFails<Exception>(tokens);
-        // var exception = AssertFails<MissingTokenException>(tokens);
-        // Assert.Equal("Expected token of type CLOSE_PAREN was not found at line 1:4", exception.EnglishMessage);
+        AssertFails<FailedToParseExpressionException>(tokens);
     }
 
 
@@ -948,9 +930,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.CLOSE_PAREN}
         };
 
-        AssertFails<Exception>(tokens);
-        // var exception = AssertFails<MissingTokenException>(tokens);
-        // Assert.Equal("Expected token of type CLOSE_PAREN was not found at line 9:5", exception.EnglishMessage);
+        AssertFails<FailedToParseExpressionException>(tokens);
     }
 
     /// <summary>
@@ -1063,11 +1043,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.CLOSE_PAREN}
         };
 
-        var strategy = new ParsingExpressionStrategy();
-        Assert.Throws<Exception>(() => strategy.Parse(tokens, 0));
-        // var exception = Assert.Throws<MissingExpressionException>(() => strategy.Parse(tokens, 0));
-        // Assert.Equal("Expected expression of type ID was not found at line 4:3", exception.EnglishMessage);
-        // Assert.Equal("عبارة متوقعة من نوع ID لم توجد على السطر 4:3", exception.ArabicMessage);
+        AssertFails<FailedToParseExpressionException>(tokens);
     }
 
     /// <summary>

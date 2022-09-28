@@ -1,5 +1,7 @@
 using ABJAD.ParseEngine.Expressions.Binary;
 using ABJAD.ParseEngine.Expressions.Unary;
+using ABJAD.ParseEngine.Expressions.Unary.Postfix;
+using ABJAD.ParseEngine.Expressions.Unary.Prefix;
 using ABJAD.ParseEngine.Primitives;
 using ABJAD.ParseEngine.Shared;
 using Ardalis.GuardClauses;
@@ -125,7 +127,6 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
             TokenType.BOOL      => new ToBoolExpression(expression),
             TokenType.STRING    => new ToStringExpression(expression),
             TokenType.TYPEOF    => new TypeOfExpression(expression),
-            _                   => throw new Exception()
         };
     }
 
@@ -136,7 +137,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
             return new PrefixSubtractionExpression(expression);
         }
 
-        throw new Exception();
+        throw new InvalidPrefixExpressionException(GetCurrentLine(), GetCurrentIndex());
     }
 
     private Expression BuildPrefixAdditionExpressionIfEligible(Expression expression)
@@ -146,8 +147,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
             return new PrefixAdditionExpression(expression);
         }
 
-        index--;
-        throw new Exception();
+        throw new InvalidPrefixExpressionException(GetCurrentLine(), GetCurrentIndex());
     }
 
     private Expression ParsePostfixOrHigherPrecedenceExpression()
@@ -165,7 +165,21 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     {
         var @operator = tokens[index++];
 
-        return PostfixExpressionFactory.Get(expression, @operator.Type);
+        return BuildPostfixExpression(expression, @operator.Type);
+    }
+
+    private Expression BuildPostfixExpression(Expression expression, TokenType operatorType)
+    {
+        if (expression is not PrimitiveExpression {Primitive: IdentifierPrimitive})
+        {
+            throw new InvalidPostfixExpressionException(GetCurrentLine(), GetCurrentIndex());
+        }
+
+        return operatorType switch
+        {
+            TokenType.PLUS_PLUS => new PostfixAdditionExpression(expression),
+            TokenType.DASH_DASH => new PostfixSubtractionExpression(expression),
+        };
     }
 
     private Expression ParsePrimitiveOrHigherPrecedenceExpression()
@@ -211,7 +225,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         Consume(TokenType.NEW);
         if (GetPrimitive() is not IdentifierPrimitive @class)
         {
-            throw new Exception();
+            throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
         }
 
         Consume(TokenType.OPEN_PAREN);
@@ -224,7 +238,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     {
         if (child is not IdentifierPrimitive)
         {
-            throw new Exception();
+            throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
         }
 
         var parentIdentifierExpression = new PrimitiveExpression(parent);
@@ -276,7 +290,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
             return true;
         }
 
-        throw new Exception();
+        throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
     }
 
     private Expression ParseGroupExpression()
@@ -292,7 +306,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     {
         if (NoMoreTokensToConsume())
         {
-            throw new Exception();
+            throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
         }
 
         var token = tokens[index++];
@@ -308,7 +322,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     {
         if (NoMoreTokensToConsume() || tokens[index++].Type != targetType)
         {
-            throw new Exception();
+            throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
         }
     }
 
