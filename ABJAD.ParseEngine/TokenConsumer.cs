@@ -3,7 +3,7 @@ using Ardalis.GuardClauses;
 
 namespace ABJAD.ParseEngine;
 
-public class TokenConsumer
+public class TokenConsumer : ITokenConsumer
 {
     private readonly List<Token> tokens;
     private int headIndex;
@@ -12,16 +12,16 @@ public class TokenConsumer
     {
         Guard.Against.NullOrEmpty(tokens);
         Guard.Against.Negative(headIndex);
-        
-        this.tokens = tokens;
+        this.tokens = tokens.Where(t => t.Type != TokenType.WHITE_SPACE).ToList();
+        Guard.Against.NullOrEmpty(this.tokens);
+
         this.headIndex = headIndex;
     }
 
     public Token Consume(TokenType targetType)
     {
-        GuardAgainstIndexOutOfRange(targetType);
-        SkipWhiteSpaces();
-        
+        GuardAgainstIndexOutOfRange();
+
         var headToken = GetHeadToken();
         if (headToken.Type == targetType)
         {
@@ -32,20 +32,29 @@ public class TokenConsumer
         throw new ExpectedTokenNotFoundException(headToken.Line, headToken.Index, targetType);
     }
 
-    private void GuardAgainstIndexOutOfRange(TokenType targetType)
+    public Token Consume()
+    {
+        GuardAgainstIndexOutOfRange();
+        var headToken = GetHeadToken();
+        MoveIndexForward();
+        return headToken;
+    }
+
+    public Token Peek()
+    {
+        return GetHeadToken();
+    }
+
+    public bool CanConsume()
+    {
+        return tokens.Count > headIndex;
+    }
+
+    private void GuardAgainstIndexOutOfRange()
     {
         if (tokens.Count <= headIndex)
         {
-            var previousToken = tokens[headIndex - 1];
-            throw new ExpectedTokenNotFoundException(previousToken.Line, previousToken.Index + 1, targetType);
-        }
-    }
-
-    private void SkipWhiteSpaces()
-    {
-        while (GetHeadToken().Type == TokenType.WHITE_SPACE)
-        {
-            MoveIndexForward();
+            throw new ArgumentOutOfRangeException();
         }
     }
 

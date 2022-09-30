@@ -12,42 +12,17 @@ using Xunit;
 
 namespace ABJAD.ParseEngine.Test.Expressions;
 
-public class ParsingExpressionStrategyTest
+public class AbstractSyntaxTreeExpressionParserTest
 {
     [Fact]
-    private void FailsIfTokensAreNull()
-    {
-        var strategy = new ParsingExpressionStrategy();
-        Assert.Throws<ArgumentNullException>(() => strategy.Parse(null, 0));
-    }
-
-    [Fact]
-    private void FailsIfTokensAreEmpty()
-    {
-        var strategy = new ParsingExpressionStrategy();
-        Assert.Throws<ArgumentException>(() => strategy.Parse(new List<Token>(), 0));
-    }
-
-    [Fact]
-    private void FailsIfTokensWhereOnlyWhitespaces()
-    {
-        var tokens = new List<Token>
-        {
-            new() {Type = TokenType.WHITE_SPACE},
-        };
-        var strategy = new ParsingExpressionStrategy();
-        Assert.Throws<ArgumentException>(() => strategy.Parse(tokens, 0));
-    }
-
-    [Fact]
-    private void FailsIfIndexIsNegative()
+    private void FailsIfTokenConsumerIsNull()
     {
         var tokens = new List<Token>
         {
             new() {Type = TokenType.NUMBER_CONST, Content = "3"},
         };
-        var strategy = new ParsingExpressionStrategy();
-        Assert.Throws<ArgumentException>(() => strategy.Parse(tokens, -1));
+
+        Assert.Throws<ArgumentNullException>(() => new AbstractSyntaxTreeExpressionParser(null));
     }
 
     /// <summary>
@@ -80,7 +55,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.OR, Line = 4, Index = 2}
         };
 
-        AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<ArgumentOutOfRangeException>(tokens);
     }
 
     [Fact]
@@ -92,8 +67,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.NUMBER_CONST, Content = "3"}
         };
 
-        Assert.NotNull(Record.Exception(() => new ParsingExpressionStrategy().Parse(tokens, 0)));
-        // AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<InvalidPrimitiveTypeException>(tokens);
     }
 
     /// <summary>
@@ -126,7 +100,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.AND, Line = 4, Index = 2}
         };
 
-        AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<ArgumentOutOfRangeException>(tokens);
     }
 
     [Fact]
@@ -138,8 +112,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.NUMBER_CONST, Content = "3"}
         };
 
-        Assert.NotNull(Record.Exception(() => new ParsingExpressionStrategy().Parse(tokens, 0)));
-        // AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<InvalidPrimitiveTypeException>(tokens);
     }
 
     /// <summary>
@@ -224,7 +197,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.EQUAL_EQUAL, Line = 4, Index = 2}
         };
 
-        AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<ArgumentOutOfRangeException>(tokens);
     }
 
     [Fact]
@@ -236,8 +209,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.EQUAL_EQUAL, Content = "3"}
         };
 
-        Assert.NotNull(Record.Exception(() => new ParsingExpressionStrategy().Parse(tokens, 0)));
-        // AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<InvalidPrimitiveTypeException>(tokens);
     }
 
     /// <summary>
@@ -298,8 +270,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.ID, Content = "var2"}
         };
 
-        Assert.NotNull(Record.Exception(() => new ParsingExpressionStrategy().Parse(tokens, 0)));
-        // AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<InvalidPrimitiveTypeException>(tokens);
     }
 
     /// <summary>
@@ -827,7 +798,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.ID, Content = "field"}
         };
 
-        AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<ExpectedTokenNotFoundException>(tokens);
     }
 
     [Fact]
@@ -840,7 +811,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.NUMBER_CONST, Content = "3"},
         };
 
-        AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<ArgumentOutOfRangeException>(tokens);
     }
 
     [Fact]
@@ -853,11 +824,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.NUMBER, Content = "1", Line = 1, Index = 3},
         };
 
-        var strategy = new ParsingExpressionStrategy();
-        Assert.NotNull(Record.Exception(() => strategy.Parse(tokens, 0)));
-        // var exception = Assert.Throws<MissingExpressionException>(() => strategy.Parse(tokens, 0));
-        // Assert.Equal("Expected expression of type ID was not found at line 1:3", exception.EnglishMessage);
-        // Assert.Equal("عبارة متوقعة من نوع ID لم توجد على السطر 1:3", exception.ArabicMessage);
+        AssertFails<InvalidPrimitiveTypeException>(tokens);
     }
 
     /// <summary>
@@ -895,7 +862,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.OPEN_PAREN, Line = 1, Index = 3},
         };
 
-        AssertFails<FailedToParseExpressionException>(tokens);
+        AssertFails<ArgumentOutOfRangeException>(tokens);
     }
 
 
@@ -911,9 +878,7 @@ public class ParsingExpressionStrategyTest
             new() {Type = TokenType.SEMICOLON, Line = 1, Index = 4},
         };
 
-        Assert.NotNull(Record.Exception(() => new ParsingExpressionStrategy().Parse(tokens, 0)));
-        // var exception = AssertFails<MissingTokenException>(tokens);
-        // Assert.Equal("Expected token of type CLOSE_PAREN was not found at line 1:4", exception.EnglishMessage);
+        AssertFails<InvalidPrimitiveTypeException>(tokens);
     }
 
     [Fact]
@@ -1327,19 +1292,19 @@ public class ParsingExpressionStrategyTest
         ParseAndAssertResult(tokens, expectedExpression);
     }
 
-    private static void ParseAndAssertResult(List<Token> tokens, Expression expectedExpression)
+    private void ParseAndAssertResult(List<Token> tokens, Expression expectedExpression)
     {
-        var strategy = new ParsingExpressionStrategy();
-        var expression = strategy.Parse(tokens, 0);
+        var strategy = new AbstractSyntaxTreeExpressionParser(new TokenConsumer(tokens, 0));
+        var expression = strategy.Parse();
 
         expectedExpression
             .Should()
             .BeEquivalentTo(expression, options => options.RespectingRuntimeTypes());
     }
 
-    private static T AssertFails<T>(List<Token> tokens) where T : Exception
+    private T AssertFails<T>(List<Token> tokens) where T : Exception
     {
-        var strategy = new ParsingExpressionStrategy();
-        return Assert.Throws<T>(() => strategy.Parse(tokens, 0));
+        var strategy = new AbstractSyntaxTreeExpressionParser(new TokenConsumer(tokens, 0));
+        return Assert.Throws<T>(() => strategy.Parse());
     }
 }

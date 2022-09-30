@@ -8,23 +8,17 @@ using Ardalis.GuardClauses;
 
 namespace ABJAD.ParseEngine.Expressions;
 
-public class ParsingExpressionStrategy : ParsingStrategy<Expression>
+public class AbstractSyntaxTreeExpressionParser : ExpressionParser
 {
-    private List<Token> tokens;
-    private int index;
+    private readonly ITokenConsumer consumer;
 
-    public Expression Parse(List<Token> tokens, int index)
+    public AbstractSyntaxTreeExpressionParser(ITokenConsumer consumer)
     {
-        Guard.Against.Negative(index);
-        Guard.Against.Null(tokens);
-
-        this.index = index;
-        this.tokens = tokens.Where(t => t.Type != TokenType.WHITE_SPACE).ToList();
-        Guard.Against.NullOrEmpty(this.tokens);
-        return ParseAbstractSyntaxTree();
+        Guard.Against.Null(consumer);
+        this.consumer = consumer;
     }
 
-    private Expression ParseAbstractSyntaxTree()
+    public Expression Parse()
     {
         return ParseOrOperationExpression();
     }
@@ -36,7 +30,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
         while (Match(target))
         {
-            var @operator = tokens[index++];
+            var @operator = consumer.Consume();
             var secondOperand = higherPrecedenceExpressionParser.Invoke();
             expression = BinaryOperationExpressionFactory.Get(@operator.Type, expression, secondOperand);
         }
@@ -89,7 +83,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private Expression ParseUnaryExpression()
     {
-        var @operator = tokens[index++];
+        var @operator = consumer.Consume();
 
         if (UnaryExpressionRequiresGrouping(@operator))
         {
@@ -103,9 +97,9 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private Expression ParseUnaryExpressionWithGrouping(Token @operator)
     {
-        Consume(TokenType.OPEN_PAREN);
+        consumer.Consume(TokenType.OPEN_PAREN);
         var expression = ParsePostfixOrHigherPrecedenceExpression();
-        Consume(TokenType.CLOSE_PAREN);
+        consumer.Consume(TokenType.CLOSE_PAREN);
 
         return BuildUnaryExpression(@operator, expression);
     }
@@ -163,7 +157,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private Expression ParsePostfixExpression(Expression expression)
     {
-        var @operator = tokens[index++];
+        var @operator = consumer.Consume();
 
         return BuildPostfixExpression(expression, @operator.Type);
     }
@@ -208,7 +202,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
         if (TryConsume(TokenType.OPEN_PAREN))
         {
             var arguments = ParseMethodCallArguments();
-            Consume(TokenType.CLOSE_PAREN);
+            consumer.Consume(TokenType.CLOSE_PAREN);
             return new CallExpression(new PrimitiveExpression(parentIdentifier), arguments);
         }
 
@@ -217,20 +211,20 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private bool Match(params TokenType[] target)
     {
-        return tokens.Count > index && target.Contains(GetCurrentToken().Type);
+        return consumer.CanConsume() && target.Contains(GetCurrentToken().Type);
     }
 
     private InstantiationExpression ParseInstantiationExpression()
     {
-        Consume(TokenType.NEW);
+        consumer.Consume(TokenType.NEW);
         if (GetPrimitive() is not IdentifierPrimitive @class)
         {
             throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
         }
 
-        Consume(TokenType.OPEN_PAREN);
+        consumer.Consume(TokenType.OPEN_PAREN);
         var arguments = ParseMethodCallArguments();
-        Consume(TokenType.CLOSE_PAREN);
+        consumer.Consume(TokenType.CLOSE_PAREN);
         return new InstantiationExpression(new PrimitiveExpression(@class), arguments);
     }
 
@@ -254,10 +248,10 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
     private InstanceMethodCallExpression ParseInstanceMethodCallExpression(PrimitiveExpression parent,
         PrimitiveExpression child)
     {
-        Consume(TokenType.OPEN_PAREN);
+        consumer.Consume(TokenType.OPEN_PAREN);
         var arguments = ParseMethodCallArguments();
 
-        Consume(TokenType.CLOSE_PAREN);
+        consumer.Consume(TokenType.CLOSE_PAREN);
         return new InstanceMethodCallExpression(parent, child, arguments);
     }
 
@@ -267,7 +261,7 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
         while (!Match(TokenType.CLOSE_PAREN))
         {
-            arguments.Add(ParseAbstractSyntaxTree());
+            arguments.Add(Parse());
 
             if (NoMoreArgumentsExist())
             {
@@ -295,70 +289,47 @@ public class ParsingExpressionStrategy : ParsingStrategy<Expression>
 
     private Expression ParseGroupExpression()
     {
-        Consume(TokenType.OPEN_PAREN);
-        var expression = ParseAbstractSyntaxTree();
-        Consume(TokenType.CLOSE_PAREN);
+        consumer.Consume(TokenType.OPEN_PAREN);
+        var expression = Parse();
+        consumer.Consume(TokenType.CLOSE_PAREN);
 
         return new GroupExpression(expression);
     }
 
     private Primitive GetPrimitive()
     {
-        if (NoMoreTokensToConsume())
+        if (!consumer.CanConsume())
         {
             throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
         }
 
-        var token = tokens[index++];
+        var token = consumer.Consume();
         return PrimitiveFactory.Get(token);
-    }
-
-    private bool NoMoreTokensToConsume()
-    {
-        return tokens.Count <= index;
-    }
-
-    private void Consume(TokenType targetType)
-    {
-        if (NoMoreTokensToConsume() || tokens[index++].Type != targetType)
-        {
-            throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
-        }
     }
 
     private bool TryConsume(TokenType targetType)
     {
-        if (NoMoreTokensToConsume() || GetCurrentToken().Type != targetType)
+        if (!consumer.CanConsume() || GetCurrentToken().Type != targetType)
         {
             return false;
         }
 
-        index++;
+        consumer.Consume();
         return true;
     }
 
     private int GetCurrentIndex()
     {
-        return GetCurrentOrLastToken().Index;
+        return GetCurrentToken().Index;
     }
 
     private int GetCurrentLine()
     {
-        return GetCurrentOrLastToken().Line;
-    }
-
-    private Token GetCurrentOrLastToken()
-    {
-        if (NoMoreTokensToConsume())
-        {
-            return tokens.Last();
-        }
-
-        return GetCurrentToken();
+        return GetCurrentToken().Line;
     }
 
     private Token GetCurrentToken()
     {
-        return tokens[index];
+        return consumer.Peek();
     }
 }
