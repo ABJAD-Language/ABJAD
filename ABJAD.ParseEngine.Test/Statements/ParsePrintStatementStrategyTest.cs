@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using ABJAD.ParseEngine.Expressions;
 using ABJAD.ParseEngine.Shared;
 using ABJAD.ParseEngine.Statements;
@@ -10,6 +9,7 @@ namespace ABJAD.ParseEngine.Test.Statements;
 
 public class ParsePrintStatementStrategyTest
 {
+    private Mock<ITokenConsumer> consumerMock = new();
     private readonly Mock<ExpressionParser> expressionParser = new();
     private readonly Mock<ExpressionParserFactory> expressionParserFactory = new();
 
@@ -22,107 +22,63 @@ public class ParsePrintStatementStrategyTest
     [Fact]
     private void ThrowsExceptionWhenFailsToConsumePrintToken()
     {
-        var tokens = new List<Token>
-        {
-            new() { Type = TokenType.ID }
-        };
-        var strategy = new ParsePrintStatementStrategy(new TokenConsumer(tokens, 0), expressionParserFactory.Object);
-        Assert.Throws<ExpectedTokenNotFoundException>(() => strategy.Parse());
+        consumerMock.Setup(c => c.Consume(TokenType.PRINT)).Throws<Exception>();
+
+        var strategy = GetStrategy();
+        Assert.Throws<Exception>(() => strategy.Parse());
     }
 
     [Fact]
     private void ThrowsExceptionIfFailsToConsumeOpenParenthesis()
     {
-        var tokens = new List<Token>
-        {
-            new() { Type = TokenType.PRINT }
-        };
-        var strategy = new ParsePrintStatementStrategy(new TokenConsumer(tokens, 0), expressionParserFactory.Object);
-        Assert.Throws<ArgumentOutOfRangeException>(() => strategy.Parse());
+        consumerMock.Setup(c => c.Consume(TokenType.OPEN_PAREN)).Throws<Exception>();
+
+        var strategy = GetStrategy();
+        Assert.Throws<Exception>(() => strategy.Parse());
     }
 
     [Fact]
     private void ThrowsExceptionIfFailsToParseAnExpression()
     {
-        expressionParser.Setup(parser => parser.Parse()).Throws(new FailedToParseExpressionException(1, 1));
+        expressionParser.Setup(parser => parser.Parse()).Throws<Exception>();
 
-        var tokens = new List<Token>
-        {
-            new() { Type = TokenType.PRINT },
-            new() { Type = TokenType.OPEN_PAREN },
-            new() { Type = TokenType.ID },
-        };
-        var strategy = new ParsePrintStatementStrategy(new TokenConsumer(tokens, 0), expressionParserFactory.Object);
-        Assert.Throws<FailedToParseExpressionException>(() => strategy.Parse());
+        var strategy = GetStrategy();
+        Assert.Throws<Exception>(() => strategy.Parse());
     }
 
     [Fact]
     private void ThrowsExceptionIfFailsToConsumeCloseParenthesis()
     {
-        var tokens = new List<Token>
-        {
-            new() { Type = TokenType.PRINT },
-            new() { Type = TokenType.OPEN_PAREN },
-            new() { Type = TokenType.ID },
-        };
+        consumerMock.Setup(c => c.Consume(TokenType.CLOSE_PAREN)).Throws<Exception>();
 
-        var tokenConsumer = new TokenConsumer(tokens, 0);
-        expressionParser.Setup(p => p.Parse()).Returns(() =>
-        {
-            tokenConsumer.Consume();
-            return default;
-        });
-
-        var strategy = new ParsePrintStatementStrategy(tokenConsumer, expressionParserFactory.Object);
-        Assert.Throws<ArgumentOutOfRangeException>(() => strategy.Parse());
+        var strategy = GetStrategy();
+        Assert.Throws<Exception>(() => strategy.Parse());
     }
 
     [Fact]
     private void ThrowsExceptionIfFailsToConsumeSemicolon()
     {
-        var tokens = new List<Token>
-        {
-            new() { Type = TokenType.PRINT },
-            new() { Type = TokenType.OPEN_PAREN },
-            new() { Type = TokenType.ID },
-            new() { Type = TokenType.CLOSE_PAREN },
-        };
-        var tokenConsumer = new TokenConsumer(tokens, 0);
+        consumerMock.Setup(c => c.Consume(TokenType.SEMICOLON)).Throws<Exception>();
 
-        expressionParser.Setup(p => p.Parse()).Returns(() =>
-        {
-            tokenConsumer.Consume();
-            return default;
-        });
-
-        var strategy = new ParsePrintStatementStrategy(tokenConsumer, expressionParserFactory.Object);
-        Assert.Throws<ArgumentOutOfRangeException>(() => strategy.Parse());
+        var strategy = GetStrategy();
+        Assert.Throws<Exception>(() => strategy.Parse());
     }
 
     [Fact]
     private void ReturnsPrintStatementOnHappyPath()
     {
-        var tokens = new List<Token>
-        {
-            new() { Type = TokenType.PRINT },
-            new() { Type = TokenType.OPEN_PAREN },
-            new() { Type = TokenType.ID },
-            new() { Type = TokenType.CLOSE_PAREN },
-            new() { Type = TokenType.SEMICOLON },
-        };
-        var tokenConsumer = new TokenConsumer(tokens, 0);
-
         var expression = new Mock<Expression>();
-        expressionParser.Setup(p => p.Parse()).Returns(() =>
-        {
-            tokenConsumer.Consume();
-            return expression.Object;
-        });
+        expressionParser.Setup(p => p.Parse()).Returns(() => expression.Object);
 
-        var strategy = new ParsePrintStatementStrategy(tokenConsumer, expressionParserFactory.Object);
+        var strategy = GetStrategy();
         var statement = strategy.Parse();
 
         Assert.True(statement is PrintStatement);
         Assert.Equal(expression.Object, (statement as PrintStatement).Target);
+    }
+
+    private ParsePrintStatementStrategy GetStrategy()
+    {
+        return new ParsePrintStatementStrategy(consumerMock.Object, expressionParserFactory.Object);
     }
 }
