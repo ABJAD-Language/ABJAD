@@ -10,14 +10,10 @@ namespace ABJAD.ParseEngine.Test.Statements;
 public class ParseAssignmentStatementStrategyTest
 {
     private Mock<ITokenConsumer> consumerMock = new();
-    private Mock<ExpressionParserFactory> expressionParserFactoryMock = new();
     private Mock<ExpressionParser> expressionParserMock = new();
 
     public ParseAssignmentStatementStrategyTest()
     {
-        expressionParserFactoryMock.Setup(f => f.CreateInstance(consumerMock.Object))
-            .Returns(expressionParserMock.Object);
-
         consumerMock.Setup(c => c.Consume(TokenType.ID)).Returns(new Token() { Content = "id" });
     }
 
@@ -25,7 +21,7 @@ public class ParseAssignmentStatementStrategyTest
     private void FailsIfConsumerIsNull()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            new ParseAssignmentStatementStrategy(null, expressionParserFactoryMock.Object));
+            new ParseAssignmentStatementStrategy(null, expressionParserMock.Object));
     }
 
     [Fact]
@@ -85,6 +81,6 @@ public class ParseAssignmentStatementStrategyTest
 
     private ParseAssignmentStatementStrategy GetStrategy()
     {
-        return new ParseAssignmentStatementStrategy(consumerMock.Object, expressionParserFactoryMock.Object);
+        return new ParseAssignmentStatementStrategy(consumerMock.Object, expressionParserMock.Object);
     }
 }

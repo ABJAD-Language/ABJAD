@@ -11,12 +11,17 @@ public class ParsePrintStatementStrategyTest
 {
     private Mock<ITokenConsumer> consumerMock = new();
     private readonly Mock<ExpressionParser> expressionParser = new();
-    private readonly Mock<ExpressionParserFactory> expressionParserFactory = new();
 
-    public ParsePrintStatementStrategyTest()
+    [Fact]
+    private void ThrowsExceptionIfTokenConsumerIsNull()
     {
-        expressionParserFactory.Setup(factory => factory.CreateInstance(It.IsAny<ITokenConsumer>()))
-            .Returns(expressionParser.Object);
+        Assert.Throws<ArgumentNullException>(() => new ParsePrintStatementStrategy(null, expressionParser.Object));
+    }
+
+    [Fact]
+    private void ThrowsExceptionIfExpressionParserIsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => new ParsePrintStatementStrategy(consumerMock.Object, null));
     }
 
     [Fact]
@@ -79,6 +84,6 @@ public class ParsePrintStatementStrategyTest
 
     private ParsePrintStatementStrategy GetStrategy()
     {
-        return new ParsePrintStatementStrategy(consumerMock.Object, expressionParserFactory.Object);
+        return new ParsePrintStatementStrategy(consumerMock.Object, expressionParser.Object);
     }
 }

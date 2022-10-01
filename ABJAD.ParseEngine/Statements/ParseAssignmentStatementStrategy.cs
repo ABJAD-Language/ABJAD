@@ -8,22 +8,20 @@ namespace ABJAD.ParseEngine.Statements;
 public class ParseAssignmentStatementStrategy : ParseStatementStrategy
 {
     private readonly ITokenConsumer tokenConsumer;
-    private readonly ExpressionParserFactory expressionParserFactory;
+    private readonly ExpressionParser expressionParser;
 
-    public ParseAssignmentStatementStrategy(ITokenConsumer tokenConsumer,
-        ExpressionParserFactory expressionParserFactory)
+    public ParseAssignmentStatementStrategy(ITokenConsumer tokenConsumer, ExpressionParser expressionParser)
     {
         Guard.Against.Null(tokenConsumer);
-        Guard.Against.Null(expressionParserFactory);
+        Guard.Against.Null(expressionParser);
         this.tokenConsumer = tokenConsumer;
-        this.expressionParserFactory = expressionParserFactory;
+        this.expressionParser = expressionParser;
     }
 
     public Statement Parse()
     {
         var targetToken = tokenConsumer.Consume(TokenType.ID);
         tokenConsumer.Consume(TokenType.EQUAL);
-        var expressionParser = expressionParserFactory.CreateInstance(tokenConsumer);
         var value = expressionParser.Parse();
         tokenConsumer.Consume(TokenType.SEMICOLON);
         return new AssignmentStatement(IdentifierPrimitive.From(targetToken.Content), value);
