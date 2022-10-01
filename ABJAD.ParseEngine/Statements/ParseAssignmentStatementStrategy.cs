@@ -1,5 +1,4 @@
 using ABJAD.ParseEngine.Expressions;
-using ABJAD.ParseEngine.Primitives;
 using ABJAD.ParseEngine.Shared;
 using Ardalis.GuardClauses;
 
@@ -24,6 +23,6 @@ public class ParseAssignmentStatementStrategy : ParseStatementStrategy
         tokenConsumer.Consume(TokenType.EQUAL);
         var value = expressionParser.Parse();
         tokenConsumer.Consume(TokenType.SEMICOLON);
-        return new AssignmentStatement(IdentifierPrimitive.From(targetToken.Content), value);
+        return new AssignmentStatement(targetToken.Content, value);
     }
 }

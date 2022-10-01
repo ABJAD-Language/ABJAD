@@ -75,7 +75,7 @@ public class ParseAssignmentStatementStrategyTest
         var statement = GetStrategy().Parse();
         Assert.True(statement is AssignmentStatement);
         var assignmentStatement = statement as AssignmentStatement;
-        Assert.Equal("id", assignmentStatement.Target.Value);
+        Assert.Equal("id", assignmentStatement.Target);
         Assert.Equal(expressionMock.Object, assignmentStatement.Value);
     }
 
