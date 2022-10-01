@@ -27,7 +27,7 @@
     if_stmt             →   if_clause
                         |   if_clause else_clause ;
 
-    while_stmt          →   WHILE OPEN_PAREN expression CLOSE_PAREN block_stmt ;
+    while_stmt          →   WHILE OPEN_PAREN expression CLOSE_PAREN statement ;
 
     for_stmt            →   FOR OPEN_PAREN declaration expression SEMICOLON expression CLOSE_PAREN block_stmt ;
 
