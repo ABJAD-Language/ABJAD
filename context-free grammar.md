@@ -25,6 +25,7 @@
     expr_stmt           →   expression SEMICOLON ;
 
     if_stmt             →   if_clause
+                        |   if_clause else_if_clause else_clause
                         |   if_clause else_clause ;
 
     while_stmt          →   WHILE OPEN_PAREN expression CLOSE_PAREN statement ;
@@ -42,9 +43,11 @@
     parameter_list      →   expr_list
                         |   ε ;
 
-    if_clause           →   IF OPEN_PAREN expression CLOSE_PAREN block_stmt ;
+    if_clause           →   IF OPEN_PAREN expression CLOSE_PAREN statement ;
 
-    else_clause         →   ELSE block_stmt
+    else_if_clause      →   ELSE if_clause ;
+
+    else_clause         →   ELSE statement ;
 
     expression          →   call_expr
                         |   instant_expr

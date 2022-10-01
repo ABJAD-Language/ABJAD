@@ -8,5 +8,6 @@ public interface ITokenConsumer
     Token Consume();
 
     Token Peek();
+    bool CanConsume(TokenType targetType);
     bool CanConsume();
 }

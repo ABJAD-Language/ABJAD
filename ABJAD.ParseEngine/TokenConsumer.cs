@@ -45,6 +45,11 @@ public class TokenConsumer : ITokenConsumer
         return GetHeadToken();
     }
 
+    public bool CanConsume(TokenType targetType)
+    {
+        return CanConsume() && GetHeadToken().Type == targetType;
+    }
+
     public bool CanConsume()
     {
         return tokens.Count > headIndex;
