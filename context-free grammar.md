@@ -67,6 +67,7 @@
     else_clause             →   ELSE statement ;
     
     expression              →   call_expr
+                            |   instance_field_expr
                             |   instant_expr
                             |   oper_expr
                             |   to_str_expr
@@ -79,8 +80,11 @@
     expr_list               →   expr_list COMMA expression
                             |   expression ;
     
-    call_expr               →   ID DOT ID OPEN_PAREN parameter_list CLOSE_PAREN SEMICOLON
+    call_expr               →   ID DOT call_expr
                             |   ID OPEN_PAREN parameter_list CLOSE_PAREN SEMICOLON ;
+
+    instance_field_expr     →   ID DOT instance_field_expr
+                            |   ID DOT ID
     
     instant_expr            →   NEW ID OPEN_PAREN parameter_List CLOSE_PAREN ;
     

@@ -126,7 +126,7 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
 
     private PrefixSubtractionExpression BuildPrefixSubtractionExpressionIfEligible(Expression expression)
     {
-        if (expression is PrimitiveExpression {Primitive: IdentifierPrimitive})
+        if (expression is PrimitiveExpression { Primitive: IdentifierPrimitive })
         {
             return new PrefixSubtractionExpression(expression);
         }
@@ -136,7 +136,7 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
 
     private Expression BuildPrefixAdditionExpressionIfEligible(Expression expression)
     {
-        if (expression is PrimitiveExpression {Primitive: IdentifierPrimitive})
+        if (expression is PrimitiveExpression { Primitive: IdentifierPrimitive })
         {
             return new PrefixAdditionExpression(expression);
         }
@@ -164,7 +164,7 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
 
     private Expression BuildPostfixExpression(Expression expression, TokenType operatorType)
     {
-        if (expression is not PrimitiveExpression {Primitive: IdentifierPrimitive})
+        if (expression is not PrimitiveExpression { Primitive: IdentifierPrimitive })
         {
             throw new InvalidPostfixExpressionException(GetCurrentLine(), GetCurrentIndex());
         }
@@ -196,7 +196,26 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
 
         if (TryConsume(TokenType.DOT))
         {
-            return ParseInstanceStateExpression(parentIdentifier, GetPrimitive());
+            var firstLevelChild = GetPrimitive();
+            if (firstLevelChild is not IdentifierPrimitive)
+            {
+                throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
+            }
+
+            var childIdentifiers = new List<Primitive> { firstLevelChild };
+            while (consumer.CanConsume(TokenType.DOT))
+            {
+                consumer.Consume(TokenType.DOT);
+                var child = GetPrimitive();
+                if (child is not IdentifierPrimitive)
+                {
+                    throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
+                }
+
+                childIdentifiers.Add(child);
+            }
+
+            return ParseInstanceStateExpression(parentIdentifier, childIdentifiers);
         }
 
         if (TryConsume(TokenType.OPEN_PAREN))
@@ -228,31 +247,26 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
         return new InstantiationExpression(new PrimitiveExpression(@class), arguments);
     }
 
-    private Expression ParseInstanceStateExpression(IdentifierPrimitive parent, Primitive child)
+    private Expression ParseInstanceStateExpression(IdentifierPrimitive parent, List<Primitive> children)
     {
-        if (child is not IdentifierPrimitive)
-        {
-            throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
-        }
-
         var parentIdentifierExpression = new PrimitiveExpression(parent);
-        var childIdentifierExpression = new PrimitiveExpression(child);
+        var childIdentifiersExpression = children.Select(child => new PrimitiveExpression(child));
         if (Match(TokenType.OPEN_PAREN))
         {
-            return ParseInstanceMethodCallExpression(parentIdentifierExpression, childIdentifierExpression);
+            return ParseInstanceMethodCallExpression(parentIdentifierExpression, childIdentifiersExpression);
         }
 
-        return new InstanceFieldExpression(parentIdentifierExpression, childIdentifierExpression);
+        return new InstanceFieldExpression(parentIdentifierExpression, childIdentifiersExpression);
     }
 
     private InstanceMethodCallExpression ParseInstanceMethodCallExpression(PrimitiveExpression parent,
-        PrimitiveExpression child)
+        IEnumerable<PrimitiveExpression> children)
     {
         consumer.Consume(TokenType.OPEN_PAREN);
         var arguments = ParseMethodCallArguments();
 
         consumer.Consume(TokenType.CLOSE_PAREN);
-        return new InstanceMethodCallExpression(parent, child, arguments);
+        return new InstanceMethodCallExpression(children.SkipLast(1).Prepend(parent), children.Last(), arguments);
     }
 
     private List<Expression> ParseMethodCallArguments()

@@ -19,7 +19,7 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
         };
 
         Assert.Throws<ArgumentNullException>(() => new AbstractSyntaxTreeExpressionParser(null));
@@ -33,9 +33,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.OR},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.OR },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new AndOperationExpression(
@@ -51,8 +51,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.OR, Line = 4, Index = 2}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.OR, Line = 4, Index = 2 }
         };
 
         AssertFails<ArgumentOutOfRangeException>(tokens);
@@ -63,8 +63,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.OR, Line = 4, Index = 2},
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"}
+            new() { Type = TokenType.OR, Line = 4, Index = 2 },
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" }
         };
 
         AssertFails<InvalidPrimitiveTypeException>(tokens);
@@ -78,9 +78,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.TRUE},
-            new() {Type = TokenType.AND},
-            new() {Type = TokenType.FALSE}
+            new() { Type = TokenType.TRUE },
+            new() { Type = TokenType.AND },
+            new() { Type = TokenType.FALSE }
         };
 
         var expectedExpression = new AndOperationExpression(
@@ -96,8 +96,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.AND, Line = 4, Index = 2}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.AND, Line = 4, Index = 2 }
         };
 
         AssertFails<ArgumentOutOfRangeException>(tokens);
@@ -108,8 +108,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.AND, Line = 4, Index = 2},
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"}
+            new() { Type = TokenType.AND, Line = 4, Index = 2 },
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" }
         };
 
         AssertFails<InvalidPrimitiveTypeException>(tokens);
@@ -123,11 +123,11 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.OR},
-            new() {Type = TokenType.ID, Content = "var2"},
-            new() {Type = TokenType.AND},
-            new() {Type = TokenType.ID, Content = "var3"}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.OR },
+            new() { Type = TokenType.ID, Content = "var2" },
+            new() { Type = TokenType.AND },
+            new() { Type = TokenType.ID, Content = "var3" }
         };
 
         var expectedExpression = new OrOperationExpression(
@@ -149,11 +149,11 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.AND},
-            new() {Type = TokenType.ID, Content = "var2"},
-            new() {Type = TokenType.OR},
-            new() {Type = TokenType.ID, Content = "var3"}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.AND },
+            new() { Type = TokenType.ID, Content = "var2" },
+            new() { Type = TokenType.OR },
+            new() { Type = TokenType.ID, Content = "var3" }
         };
 
         var expectedExpression = new OrOperationExpression(
@@ -175,9 +175,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.EQUAL_EQUAL},
-            new() {Type = TokenType.ID, Content = "var2"}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.EQUAL_EQUAL },
+            new() { Type = TokenType.ID, Content = "var2" }
         };
 
         var expectedExpression = new EqualityCheckExpression(
@@ -193,8 +193,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.EQUAL_EQUAL, Line = 4, Index = 2}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.EQUAL_EQUAL, Line = 4, Index = 2 }
         };
 
         AssertFails<ArgumentOutOfRangeException>(tokens);
@@ -205,8 +205,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.AND, Line = 4, Index = 2},
-            new() {Type = TokenType.EQUAL_EQUAL, Content = "3"}
+            new() { Type = TokenType.AND, Line = 4, Index = 2 },
+            new() { Type = TokenType.EQUAL_EQUAL, Content = "3" }
         };
 
         AssertFails<InvalidPrimitiveTypeException>(tokens);
@@ -220,9 +220,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.BANG_EQUAL},
-            new() {Type = TokenType.ID, Content = "var2"}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.BANG_EQUAL },
+            new() { Type = TokenType.ID, Content = "var2" }
         };
 
         var expectedExpression = new InequalityCheckExpression(
@@ -241,11 +241,11 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.AND},
-            new() {Type = TokenType.ID, Content = "var2"},
-            new() {Type = TokenType.EQUAL_EQUAL},
-            new() {Type = TokenType.ID, Content = "var3"}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.AND },
+            new() { Type = TokenType.ID, Content = "var2" },
+            new() { Type = TokenType.EQUAL_EQUAL },
+            new() { Type = TokenType.ID, Content = "var3" }
         };
 
         var expectedExpression = new AndOperationExpression(
@@ -264,10 +264,10 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.AND},
-            new() {Type = TokenType.EQUAL_EQUAL},
-            new() {Type = TokenType.ID, Content = "var2"}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.AND },
+            new() { Type = TokenType.EQUAL_EQUAL },
+            new() { Type = TokenType.ID, Content = "var2" }
         };
 
         AssertFails<InvalidPrimitiveTypeException>(tokens);
@@ -281,11 +281,11 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.BANG_EQUAL},
-            new() {Type = TokenType.ID, Content = "var2"},
-            new() {Type = TokenType.EQUAL_EQUAL},
-            new() {Type = TokenType.ID, Content = "var3"}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.BANG_EQUAL },
+            new() { Type = TokenType.ID, Content = "var2" },
+            new() { Type = TokenType.EQUAL_EQUAL },
+            new() { Type = TokenType.ID, Content = "var3" }
         };
 
         var expectedExpression = new EqualityCheckExpression(
@@ -307,9 +307,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.LESS_THAN},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.LESS_THAN },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new LessCheckExpression(
@@ -328,9 +328,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.LESS_EQUAL},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.LESS_EQUAL },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new LessOrEqualCheckExpression(
@@ -349,9 +349,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.GREATER_THAN},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.GREATER_THAN },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new GreaterCheckExpression(
@@ -370,9 +370,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.GREATER_EQUAL},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.GREATER_EQUAL },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new GreaterOrEqualCheckExpression(
@@ -391,9 +391,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.PLUS},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.PLUS },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new AdditionExpression(
@@ -412,9 +412,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.DASH},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.DASH },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new SubtractionExpression(
@@ -433,9 +433,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.STAR},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.STAR },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new MultiplicationExpression(
@@ -454,9 +454,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.SLASH},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.SLASH },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new DivisionExpression(
@@ -475,9 +475,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.MODULO},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.MODULO },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" }
         };
 
         var expectedExpression = new ModuloExpression(
@@ -496,8 +496,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.BANG},
-            new() {Type = TokenType.ID, Content = "var1"}
+            new() { Type = TokenType.BANG },
+            new() { Type = TokenType.ID, Content = "var1" }
         };
 
         var expectedExpression = new NegationExpression(
@@ -515,8 +515,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.DASH},
-            new() {Type = TokenType.ID, Content = "var1"}
+            new() { Type = TokenType.DASH },
+            new() { Type = TokenType.ID, Content = "var1" }
         };
 
         var expectedExpression = new NegativeExpression(
@@ -534,8 +534,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.PLUS_PLUS},
-            new() {Type = TokenType.ID, Content = "var1"}
+            new() { Type = TokenType.PLUS_PLUS },
+            new() { Type = TokenType.ID, Content = "var1" }
         };
 
         var expectedExpression = new PrefixAdditionExpression(
@@ -553,8 +553,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.DASH_DASH},
-            new() {Type = TokenType.ID, Content = "var1"}
+            new() { Type = TokenType.DASH_DASH },
+            new() { Type = TokenType.ID, Content = "var1" }
         };
 
         var expectedExpression = new PrefixSubtractionExpression(
@@ -569,9 +569,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.DASH_DASH},
-            new() {Type = TokenType.NUMBER_CONST, Content = "2"},
-            new() {Type = TokenType.SEMICOLON, Index = 3, Line = 2}
+            new() { Type = TokenType.DASH_DASH },
+            new() { Type = TokenType.NUMBER_CONST, Content = "2" },
+            new() { Type = TokenType.SEMICOLON, Index = 3, Line = 2 }
         };
 
         var exception = AssertFails<InvalidPrefixExpressionException>(tokens);
@@ -584,11 +584,11 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.DASH_DASH},
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "field"},
-            new() {Type = TokenType.SEMICOLON, Index = 3, Line = 2},
+            new() { Type = TokenType.DASH_DASH },
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "field" },
+            new() { Type = TokenType.SEMICOLON, Index = 3, Line = 2 },
         };
 
         var exception = AssertFails<InvalidPrefixExpressionException>(tokens);
@@ -605,8 +605,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.PLUS_PLUS}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.PLUS_PLUS }
         };
 
         var expectedExpression = new PostfixAdditionExpression(
@@ -624,8 +624,8 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.DASH_DASH}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.DASH_DASH }
         };
 
         var expectedExpression = new PostfixSubtractionExpression(
@@ -640,9 +640,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "2"},
-            new() {Type = TokenType.PLUS_PLUS},
-            new() {Type = TokenType.SEMICOLON}
+            new() { Type = TokenType.NUMBER_CONST, Content = "2" },
+            new() { Type = TokenType.PLUS_PLUS },
+            new() { Type = TokenType.SEMICOLON }
         };
 
         AssertFails<InvalidPostfixExpressionException>(tokens);
@@ -653,11 +653,11 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "field"},
-            new() {Type = TokenType.PLUS_PLUS},
-            new() {Type = TokenType.SEMICOLON}
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "field" },
+            new() { Type = TokenType.PLUS_PLUS },
+            new() { Type = TokenType.SEMICOLON }
         };
 
         AssertFails<InvalidPostfixExpressionException>(tokens);
@@ -671,10 +671,10 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.NUMBER },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new ToNumberExpression(
@@ -692,10 +692,10 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.BOOL},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.BOOL },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new ToBoolExpression(
@@ -713,10 +713,10 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.STRING},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.STRING },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new ToStringExpression(
@@ -734,10 +734,10 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.TYPEOF},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.TYPEOF },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new TypeOfExpression(
@@ -755,9 +755,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new GroupExpression(
@@ -775,14 +775,38 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "field"}
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "field" }
         };
 
         var expectedExpression = new InstanceFieldExpression(
             new PrimitiveExpression(IdentifierPrimitive.From("instance")),
-            new PrimitiveExpression(IdentifierPrimitive.From("field"))
+            new List<PrimitiveExpression> { new(IdentifierPrimitive.From("field")) }
+        );
+
+        ParseAndAssertResult(tokens, expectedExpression);
+    }
+
+    /// <summary>
+    /// parsing expression: instance.field1.field2
+    /// </summary>
+    [Fact]
+    public void ParsingInstanceFieldReturnsInstanceFieldExpressionWithNestedLevels()
+    {
+        var tokens = new List<Token>
+        {
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "field1" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "field2" }
+        };
+
+        var expectedExpression = new InstanceFieldExpression(
+            new PrimitiveExpression(IdentifierPrimitive.From("instance")),
+            new List<PrimitiveExpression>
+                { new(IdentifierPrimitive.From("field1")), new(IdentifierPrimitive.From("field2")) }
         );
 
         ParseAndAssertResult(tokens, expectedExpression);
@@ -793,9 +817,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER, Content = "1"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "field"}
+            new() { Type = TokenType.NUMBER, Content = "1" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "field" }
         };
 
         AssertFails<ExpectedTokenNotFoundException>(tokens);
@@ -806,9 +830,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
         };
 
         AssertFails<ArgumentOutOfRangeException>(tokens);
@@ -819,9 +843,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.NUMBER, Content = "1", Line = 1, Index = 3},
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.NUMBER, Content = "1", Line = 1, Index = 3 },
         };
 
         AssertFails<InvalidPrimitiveTypeException>(tokens);
@@ -835,15 +859,42 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "method"},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "method" },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new InstanceMethodCallExpression(
-            new PrimitiveExpression(IdentifierPrimitive.From("instance")),
+            new List<PrimitiveExpression> { new(IdentifierPrimitive.From("instance")) },
+            new PrimitiveExpression(IdentifierPrimitive.From("method")),
+            new List<Expression>()
+        );
+
+        ParseAndAssertResult(tokens, expectedExpression);
+    }
+
+    /// <summary>
+    /// parsing expression: instance1.instance2.method()
+    /// </summary>
+    [Fact]
+    public void ParsingNestedInstanceMethodCallReturnsInstanceMethodCallExpression()
+    {
+        var tokens = new List<Token>
+        {
+            new() { Type = TokenType.ID, Content = "instance1" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "instance2" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "method" },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.CLOSE_PAREN }
+        };
+
+        var expectedExpression = new InstanceMethodCallExpression(
+            new List<PrimitiveExpression>
+                { new(IdentifierPrimitive.From("instance1")), new(IdentifierPrimitive.From("instance2")) },
             new PrimitiveExpression(IdentifierPrimitive.From("method")),
             new List<Expression>()
         );
@@ -856,10 +907,10 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "method"},
-            new() {Type = TokenType.OPEN_PAREN, Line = 1, Index = 3},
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "method" },
+            new() { Type = TokenType.OPEN_PAREN, Line = 1, Index = 3 },
         };
 
         AssertFails<ArgumentOutOfRangeException>(tokens);
@@ -871,11 +922,11 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "method"},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.SEMICOLON, Line = 1, Index = 4},
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "method" },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.SEMICOLON, Line = 1, Index = 4 },
         };
 
         AssertFails<InvalidPrimitiveTypeException>(tokens);
@@ -886,13 +937,13 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "method"},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "arg1"},
-            new() {Type = TokenType.ID, Content = "arg2", Index = 5, Line = 9},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "method" },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "arg1" },
+            new() { Type = TokenType.ID, Content = "arg2", Index = 5, Line = 9 },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         AssertFails<FailedToParseExpressionException>(tokens);
@@ -906,18 +957,18 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "instance"},
-            new() {Type = TokenType.DOT},
-            new() {Type = TokenType.ID, Content = "method"},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "arg1"},
-            new() {Type = TokenType.COMMA},
-            new() {Type = TokenType.NUMBER_CONST, Content = "2"},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.ID, Content = "instance" },
+            new() { Type = TokenType.DOT },
+            new() { Type = TokenType.ID, Content = "method" },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "arg1" },
+            new() { Type = TokenType.COMMA },
+            new() { Type = TokenType.NUMBER_CONST, Content = "2" },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new InstanceMethodCallExpression(
-            new PrimitiveExpression(IdentifierPrimitive.From("instance")),
+            new List<PrimitiveExpression> { new(IdentifierPrimitive.From("instance")) },
             new PrimitiveExpression(IdentifierPrimitive.From("method")),
             new List<Expression>
             {
@@ -934,9 +985,9 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "method"},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.ID, Content = "method" },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new CallExpression(
@@ -955,12 +1006,12 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "method"},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "arg1"},
-            new() {Type = TokenType.COMMA},
-            new() {Type = TokenType.NUMBER_CONST, Content = "2"},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.ID, Content = "method" },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "arg1" },
+            new() { Type = TokenType.COMMA },
+            new() { Type = TokenType.NUMBER_CONST, Content = "2" },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new CallExpression(
@@ -983,10 +1034,10 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NEW},
-            new() {Type = TokenType.ID, Content = "class"},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.NEW },
+            new() { Type = TokenType.ID, Content = "class" },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new InstantiationExpression(
@@ -1002,10 +1053,10 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NEW},
-            new() {Type = TokenType.STRING_CONST, Content = "class"},
-            new() {Type = TokenType.OPEN_PAREN, Index = 3, Line = 4},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.NEW },
+            new() { Type = TokenType.STRING_CONST, Content = "class" },
+            new() { Type = TokenType.OPEN_PAREN, Index = 3, Line = 4 },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         AssertFails<FailedToParseExpressionException>(tokens);
@@ -1019,13 +1070,13 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NEW},
-            new() {Type = TokenType.ID, Content = "class"},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "arg1"},
-            new() {Type = TokenType.COMMA},
-            new() {Type = TokenType.NUMBER_CONST, Content = "2"},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.NEW },
+            new() { Type = TokenType.ID, Content = "class" },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "arg1" },
+            new() { Type = TokenType.COMMA },
+            new() { Type = TokenType.NUMBER_CONST, Content = "2" },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new InstantiationExpression(
@@ -1051,19 +1102,19 @@ public class AbstractSyntaxTreeExpressionParserTest
 
         var tokens = new List<Token>()
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.LESS_THAN},
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.OR},
-            new() {Type = TokenType.BANG},
-            new() {Type = TokenType.ID, Content = "var2"},
-            new() {Type = TokenType.AND},
-            new() {Type = TokenType.TYPEOF},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "var3"},
-            new() {Type = TokenType.CLOSE_PAREN},
-            new() {Type = TokenType.EQUAL_EQUAL},
-            new() {Type = TokenType.STRING_CONST, Content = "string"}
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.LESS_THAN },
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.OR },
+            new() { Type = TokenType.BANG },
+            new() { Type = TokenType.ID, Content = "var2" },
+            new() { Type = TokenType.AND },
+            new() { Type = TokenType.TYPEOF },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "var3" },
+            new() { Type = TokenType.CLOSE_PAREN },
+            new() { Type = TokenType.EQUAL_EQUAL },
+            new() { Type = TokenType.STRING_CONST, Content = "string" }
         };
 
         var expectedExpression = new OrOperationExpression(
@@ -1095,19 +1146,19 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.AND},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.BANG},
-            new() {Type = TokenType.ID, Content = "var2"},
-            new() {Type = TokenType.OR},
-            new() {Type = TokenType.ID, Content = "var3"},
-            new() {Type = TokenType.CLOSE_PAREN},
-            new() {Type = TokenType.OR},
-            new() {Type = TokenType.ID, Content = "var4"},
-            new() {Type = TokenType.LESS_THAN},
-            new() {Type = TokenType.ID, Content = "var5"},
-            new() {Type = TokenType.PLUS_PLUS},
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.AND },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.BANG },
+            new() { Type = TokenType.ID, Content = "var2" },
+            new() { Type = TokenType.OR },
+            new() { Type = TokenType.ID, Content = "var3" },
+            new() { Type = TokenType.CLOSE_PAREN },
+            new() { Type = TokenType.OR },
+            new() { Type = TokenType.ID, Content = "var4" },
+            new() { Type = TokenType.LESS_THAN },
+            new() { Type = TokenType.ID, Content = "var5" },
+            new() { Type = TokenType.PLUS_PLUS },
         };
 
         var expectedExpression = new OrOperationExpression(
@@ -1141,31 +1192,31 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.STAR},
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.PLUS},
-            new() {Type = TokenType.TRUE},
-            new() {Type = TokenType.OR},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.BANG},
-            new() {Type = TokenType.ID, Content = "var2"},
-            new() {Type = TokenType.PLUS},
-            new() {Type = TokenType.PLUS_PLUS},
-            new() {Type = TokenType.ID, Content = "var3"},
-            new() {Type = TokenType.CLOSE_PAREN},
-            new() {Type = TokenType.AND},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"},
-            new() {Type = TokenType.LESS_EQUAL},
-            new() {Type = TokenType.DASH},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "var4"},
-            new() {Type = TokenType.MODULO},
-            new() {Type = TokenType.NUMBER},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.STRING_CONST, Content = "2"},
-            new() {Type = TokenType.CLOSE_PAREN},
-            new() {Type = TokenType.CLOSE_PAREN},
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.STAR },
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.PLUS },
+            new() { Type = TokenType.TRUE },
+            new() { Type = TokenType.OR },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.BANG },
+            new() { Type = TokenType.ID, Content = "var2" },
+            new() { Type = TokenType.PLUS },
+            new() { Type = TokenType.PLUS_PLUS },
+            new() { Type = TokenType.ID, Content = "var3" },
+            new() { Type = TokenType.CLOSE_PAREN },
+            new() { Type = TokenType.AND },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" },
+            new() { Type = TokenType.LESS_EQUAL },
+            new() { Type = TokenType.DASH },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "var4" },
+            new() { Type = TokenType.MODULO },
+            new() { Type = TokenType.NUMBER },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.STRING_CONST, Content = "2" },
+            new() { Type = TokenType.CLOSE_PAREN },
+            new() { Type = TokenType.CLOSE_PAREN },
         };
 
         var expectedExpression = new OrOperationExpression(
@@ -1214,44 +1265,44 @@ public class AbstractSyntaxTreeExpressionParserTest
     {
         var tokens = new List<Token>
         {
-            new() {Type = TokenType.NUMBER_CONST, Content = "3"},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.STAR},
-            new() {Type = TokenType.ID, Content = "var1"},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.PLUS},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.TRUE},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.OR},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.BANG},
-            new() {Type = TokenType.ID, Content = "var2"},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.PLUS},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.PLUS_PLUS},
-            new() {Type = TokenType.ID, Content = "var3"},
-            new() {Type = TokenType.CLOSE_PAREN},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.AND},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.NUMBER_CONST, Content = "4"},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.LESS_EQUAL},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.DASH},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.ID, Content = "var4"},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.MODULO},
-            new() {Type = TokenType.WHITE_SPACE},
-            new() {Type = TokenType.NUMBER},
-            new() {Type = TokenType.OPEN_PAREN},
-            new() {Type = TokenType.STRING_CONST, Content = "2"},
-            new() {Type = TokenType.CLOSE_PAREN},
-            new() {Type = TokenType.CLOSE_PAREN}
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.STAR },
+            new() { Type = TokenType.ID, Content = "var1" },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.PLUS },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.TRUE },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.OR },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.BANG },
+            new() { Type = TokenType.ID, Content = "var2" },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.PLUS },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.PLUS_PLUS },
+            new() { Type = TokenType.ID, Content = "var3" },
+            new() { Type = TokenType.CLOSE_PAREN },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.AND },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.NUMBER_CONST, Content = "4" },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.LESS_EQUAL },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.DASH },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.ID, Content = "var4" },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.MODULO },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.NUMBER },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.STRING_CONST, Content = "2" },
+            new() { Type = TokenType.CLOSE_PAREN },
+            new() { Type = TokenType.CLOSE_PAREN }
         };
 
         var expectedExpression = new OrOperationExpression(

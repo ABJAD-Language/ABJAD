@@ -2,10 +2,11 @@ namespace ABJAD.ParseEngine.Expressions;
 
 public class InstanceMethodCallExpression : CallExpression
 {
-    public InstanceMethodCallExpression(PrimitiveExpression instance, PrimitiveExpression method, List<Expression> arguments) : base(method, arguments)
+    public InstanceMethodCallExpression(IEnumerable<PrimitiveExpression> instances, PrimitiveExpression method,
+        List<Expression> arguments) : base(method, arguments)
     {
-        Instance = instance;
+        Instances = instances;
     }
 
-    public PrimitiveExpression Instance { get; }
+    public IEnumerable<PrimitiveExpression> Instances { get; }
 }

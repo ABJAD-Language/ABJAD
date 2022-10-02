@@ -2,12 +2,12 @@ namespace ABJAD.ParseEngine.Expressions;
 
 public class InstanceFieldExpression : Expression
 {
-    public InstanceFieldExpression(PrimitiveExpression instance, PrimitiveExpression field)
+    public InstanceFieldExpression(PrimitiveExpression instance, IEnumerable<PrimitiveExpression> fields)
     {
         Instance = instance;
-        Field = field;
+        Fields = fields;
     }
 
     public PrimitiveExpression Instance { get; }
-    public PrimitiveExpression Field { get; }
+    public IEnumerable<PrimitiveExpression> Fields { get; }
 }
