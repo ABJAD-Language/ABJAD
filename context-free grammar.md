@@ -18,6 +18,7 @@
                             |   comment_stmt;
     
     declaration             →   function_declaration
+                            |   constructor_declaration
                             |   const_declaration
                             |   variable_declaration
                             |   class_declaration ;
@@ -44,6 +45,8 @@
                             |   ε ;
     
     function_declaration    →   FUNC ID OPEN_PAREN parameter_list CLOSE_PAREN block_stmt ;
+
+    constructor_declaration →   CONSTRUCTOR OPEN_PAREN parameter_list CLOSE_PAREN block_stmt ;
 
     const_declaration       →   CONST type ID EQUAL expression SEMICOLON ;
 

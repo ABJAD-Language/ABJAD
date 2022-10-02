@@ -35,6 +35,7 @@ public enum TokenType
     BOOL,
     CLASS,
     CONST,
+    CONSTRUCTOR,
     ELSE,
     FALSE,
     FOR,
