@@ -271,34 +271,7 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
 
     private List<Expression> ParseMethodCallArguments()
     {
-        var arguments = new List<Expression>();
-
-        while (!Match(TokenType.CLOSE_PAREN))
-        {
-            arguments.Add(Parse());
-
-            if (NoMoreArgumentsExist())
-            {
-                break;
-            }
-        }
-
-        return arguments;
-    }
-
-    private bool NoMoreArgumentsExist()
-    {
-        if (TryConsume(TokenType.COMMA))
-        {
-            return false;
-        }
-
-        if (Match(TokenType.CLOSE_PAREN))
-        {
-            return true;
-        }
-
-        throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
+        return new MethodCallArgumentsParser(consumer, this).Parse();
     }
 
     private Expression ParseGroupExpression()

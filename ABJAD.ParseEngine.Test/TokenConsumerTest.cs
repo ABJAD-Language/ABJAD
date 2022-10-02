@@ -206,6 +206,28 @@ public class TokenConsumerTest
         }
     }
 
+    public class GetCurrentLineTest
+    {
+        [Fact]
+        private void ReturnsTheLineOfTheHeadToken()
+        {
+            var token = new Token { Line = 10 };
+            var tokenConsumer = new TokenConsumer(new List<Token> { token }, 0);
+            Assert.Equal(10, tokenConsumer.GetCurrentLine());
+        }
+    }
+
+    public class GetCurrentIndexTest
+    {
+        [Fact]
+        private void ReturnsTheIndexOfTheHeadToken()
+        {
+            var token = new Token { Index = 3 };
+            var tokenConsumer = new TokenConsumer(new List<Token> { token }, 0);
+            Assert.Equal(3, tokenConsumer.GetCurrentIndex());
+        }
+    }
+
     public class CanConsumeTest
     {
         [Fact]

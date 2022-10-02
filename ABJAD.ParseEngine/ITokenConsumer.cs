@@ -6,8 +6,9 @@ public interface ITokenConsumer
 {
     Token Consume(TokenType targetType);
     Token Consume();
-
     Token Peek();
     bool CanConsume(TokenType targetType);
     bool CanConsume();
+    int GetCurrentLine();
+    int GetCurrentIndex();
 }

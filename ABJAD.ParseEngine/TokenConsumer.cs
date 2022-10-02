@@ -55,6 +55,16 @@ public class TokenConsumer : ITokenConsumer
         return tokens.Count > headIndex;
     }
 
+    public int GetCurrentLine()
+    {
+        return GetHeadToken().Line;
+    }
+
+    public int GetCurrentIndex()
+    {
+        return GetHeadToken().Index;
+    }
+
     private void GuardAgainstIndexOutOfRange()
     {
         if (tokens.Count <= headIndex)
