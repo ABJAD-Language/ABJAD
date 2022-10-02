@@ -45,7 +45,7 @@
     
     function_declaration    →   FUNC ID OPEN_PAREN parameter_list CLOSE_PAREN block_stmt ;
 
-    const_declaration       →   CONST ID EQUAL expression SEMICOLON ;
+    const_declaration       →   CONST type ID EQUAL expression SEMICOLON ;
 
     variable_declaration    →   VAR type ID SEMICOLON
                             |   VAR type ID EQUAL expression SEMICOLON ;
