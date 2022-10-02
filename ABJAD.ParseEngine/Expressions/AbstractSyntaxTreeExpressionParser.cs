@@ -194,32 +194,35 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
             return new PrimitiveExpression(primitive);
         }
 
-        if (TryConsume(TokenType.DOT))
+        if (consumer.CanConsume(TokenType.DOT))
         {
+            consumer.Consume(TokenType.DOT);
+            var identifiers = new List<IdentifierPrimitive> { parentIdentifier };
             var firstLevelChild = GetPrimitive();
-            if (firstLevelChild is not IdentifierPrimitive)
+            if (firstLevelChild is not IdentifierPrimitive firstLevelChildIdentifier)
             {
                 throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
             }
 
-            var childIdentifiers = new List<Primitive> { firstLevelChild };
+            identifiers.Add(firstLevelChildIdentifier);
             while (consumer.CanConsume(TokenType.DOT))
             {
                 consumer.Consume(TokenType.DOT);
                 var child = GetPrimitive();
-                if (child is not IdentifierPrimitive)
+                if (child is not IdentifierPrimitive childIdentifier)
                 {
                     throw new FailedToParseExpressionException(GetCurrentLine(), GetCurrentIndex());
                 }
 
-                childIdentifiers.Add(child);
+                identifiers.Add(childIdentifier);
             }
 
-            return ParseInstanceStateExpression(parentIdentifier, childIdentifiers);
+            return ParseInstanceStateExpression(identifiers);
         }
 
-        if (TryConsume(TokenType.OPEN_PAREN))
+        if (consumer.CanConsume(TokenType.OPEN_PAREN))
         {
+            consumer.Consume(TokenType.OPEN_PAREN);
             var arguments = ParseMethodCallArguments();
             consumer.Consume(TokenType.CLOSE_PAREN);
             return new CallExpression(new PrimitiveExpression(parentIdentifier), arguments);
@@ -247,26 +250,24 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
         return new InstantiationExpression(new PrimitiveExpression(@class), arguments);
     }
 
-    private Expression ParseInstanceStateExpression(IdentifierPrimitive parent, List<Primitive> children)
+    private Expression ParseInstanceStateExpression(List<IdentifierPrimitive> identifiers)
     {
-        var parentIdentifierExpression = new PrimitiveExpression(parent);
-        var childIdentifiersExpression = children.Select(child => new PrimitiveExpression(child));
+        var identifierExpressions = identifiers.Select(child => new PrimitiveExpression(child)).ToList();
         if (Match(TokenType.OPEN_PAREN))
         {
-            return ParseInstanceMethodCallExpression(parentIdentifierExpression, childIdentifiersExpression);
+            return ParseInstanceMethodCallExpression(identifierExpressions);
         }
 
-        return new InstanceFieldExpression(parentIdentifierExpression, childIdentifiersExpression);
+        return new InstanceFieldExpression(identifierExpressions.First(), identifierExpressions.Skip(1));
     }
 
-    private InstanceMethodCallExpression ParseInstanceMethodCallExpression(PrimitiveExpression parent,
-        IEnumerable<PrimitiveExpression> children)
+    private InstanceMethodCallExpression ParseInstanceMethodCallExpression(List<PrimitiveExpression> identifiers)
     {
         consumer.Consume(TokenType.OPEN_PAREN);
         var arguments = ParseMethodCallArguments();
 
         consumer.Consume(TokenType.CLOSE_PAREN);
-        return new InstanceMethodCallExpression(children.SkipLast(1).Prepend(parent), children.Last(), arguments);
+        return new InstanceMethodCallExpression(identifiers.SkipLast(1), identifiers.Last(), arguments);
     }
 
     private List<Expression> ParseMethodCallArguments()
@@ -292,17 +293,6 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
 
         var token = consumer.Consume();
         return PrimitiveFactory.Get(token);
-    }
-
-    private bool TryConsume(TokenType targetType)
-    {
-        if (!consumer.CanConsume() || GetCurrentToken().Type != targetType)
-        {
-            return false;
-        }
-
-        consumer.Consume();
-        return true;
     }
 
     private int GetCurrentIndex()
