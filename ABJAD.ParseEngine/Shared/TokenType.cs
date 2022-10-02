@@ -29,6 +29,7 @@ public enum TokenType
     OPEN_BRACE,
     OPEN_PAREN,
     SEMICOLON,
+    COLON,
 
     /* Keywords */
     BOOL,
@@ -49,6 +50,7 @@ public enum TokenType
     TRUE,
     WHILE,
     VAR,
+    VOID,
 
     /* Primitives */
     NUMBER_CONST,
@@ -56,5 +58,5 @@ public enum TokenType
     STRING_CONST,
 
     WHITE_SPACE,
-    COMMENT
+    COMMENT,
 }

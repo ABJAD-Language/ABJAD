@@ -8,19 +8,23 @@ public class ParseVariableDeclarationStrategy : ParseDeclarationStrategy
 {
     private readonly ITokenConsumer tokenConsumer;
     private readonly ExpressionParser expressionParser;
+    private readonly ITypeConsumer typeConsumer;
 
-    public ParseVariableDeclarationStrategy(ITokenConsumer tokenConsumer, ExpressionParser expressionParser)
+    public ParseVariableDeclarationStrategy(ITokenConsumer tokenConsumer, ExpressionParser expressionParser,
+        ITypeConsumer typeConsumer)
     {
         Guard.Against.Null(tokenConsumer);
         Guard.Against.Null(expressionParser);
+        Guard.Against.Null(typeConsumer);
         this.tokenConsumer = tokenConsumer;
         this.expressionParser = expressionParser;
+        this.typeConsumer = typeConsumer;
     }
 
     public Declaration Parse()
     {
         tokenConsumer.Consume(TokenType.VAR);
-        var type = ConsumeVariableType();
+        var type = typeConsumer.Consume();
         var name = tokenConsumer.Consume(TokenType.ID);
 
         Expression? value = null;
@@ -32,40 +36,5 @@ public class ParseVariableDeclarationStrategy : ParseDeclarationStrategy
         }
 
         return new VariableDeclaration(type, name.Content, value);
-    }
-
-    private string ConsumeVariableType()
-    {
-        if (IsTypeString())
-        {
-            return tokenConsumer.Consume(TokenType.STRING).Type.ToString();
-        }
-
-        if (IsTypeNumber())
-        {
-            return tokenConsumer.Consume(TokenType.NUMBER).Type.ToString();
-        }
-
-        if (IsTypeBool())
-        {
-            return tokenConsumer.Consume(TokenType.BOOL).Type.ToString();
-        }
-
-        return tokenConsumer.Consume(TokenType.ID).Content;
-    }
-
-    private bool IsTypeBool()
-    {
-        return tokenConsumer.CanConsume(TokenType.BOOL);
-    }
-
-    private bool IsTypeNumber()
-    {
-        return tokenConsumer.CanConsume(TokenType.NUMBER);
-    }
-
-    private bool IsTypeString()
-    {
-        return tokenConsumer.CanConsume(TokenType.STRING);
     }
 }

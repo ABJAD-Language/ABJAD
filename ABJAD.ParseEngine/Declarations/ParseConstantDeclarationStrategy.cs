@@ -8,19 +8,23 @@ public class ParseConstantDeclarationStrategy : ParseDeclarationStrategy
 {
     private readonly ITokenConsumer tokenConsumer;
     private readonly ExpressionParser expressionParser;
+    private readonly ITypeConsumer typeConsumer;
 
-    public ParseConstantDeclarationStrategy(ITokenConsumer tokenConsumer, ExpressionParser expressionParser)
+    public ParseConstantDeclarationStrategy(ITokenConsumer tokenConsumer, ExpressionParser expressionParser,
+        ITypeConsumer typeConsumer)
     {
         Guard.Against.Null(tokenConsumer);
         Guard.Against.Null(expressionParser);
+        Guard.Against.Null(typeConsumer);
         this.tokenConsumer = tokenConsumer;
         this.expressionParser = expressionParser;
+        this.typeConsumer = typeConsumer;
     }
 
     public Declaration Parse()
     {
         tokenConsumer.Consume(TokenType.CONST);
-        var type = ConsumeConstantType();
+        var type = typeConsumer.Consume();
         var name = tokenConsumer.Consume(TokenType.ID);
 
         tokenConsumer.Consume(TokenType.EQUAL);
@@ -28,40 +32,5 @@ public class ParseConstantDeclarationStrategy : ParseDeclarationStrategy
         tokenConsumer.Consume(TokenType.SEMICOLON);
 
         return new ConstantDeclaration(type, name.Content, value);
-    }
-
-    private string ConsumeConstantType()
-    {
-        if (IsTypeString())
-        {
-            return tokenConsumer.Consume(TokenType.STRING).Type.ToString();
-        }
-
-        if (IsTypeNumber())
-        {
-            return tokenConsumer.Consume(TokenType.NUMBER).Type.ToString();
-        }
-
-        if (IsTypeBool())
-        {
-            return tokenConsumer.Consume(TokenType.BOOL).Type.ToString();
-        }
-
-        return tokenConsumer.Consume(TokenType.ID).Content;
-    }
-
-    private bool IsTypeBool()
-    {
-        return tokenConsumer.CanConsume(TokenType.BOOL);
-    }
-
-    private bool IsTypeNumber()
-    {
-        return tokenConsumer.CanConsume(TokenType.NUMBER);
-    }
-
-    private bool IsTypeString()
-    {
-        return tokenConsumer.CanConsume(TokenType.STRING);
     }
 }

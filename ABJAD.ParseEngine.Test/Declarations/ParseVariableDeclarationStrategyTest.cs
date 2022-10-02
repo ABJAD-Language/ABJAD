@@ -11,6 +11,7 @@ public class ParseVariableDeclarationStrategyTest
 {
     private readonly Mock<ITokenConsumer> tokenConsumer = new();
     private readonly Mock<ExpressionParser> expressionParser = new();
+    private readonly Mock<ITypeConsumer> typeConsumer = new();
     private readonly Mock<Token> token = new();
 
     public ParseVariableDeclarationStrategyTest()
@@ -21,13 +22,22 @@ public class ParseVariableDeclarationStrategyTest
     [Fact]
     private void ThrowsExceptionIfTokenConsumerIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new ParseVariableDeclarationStrategy(null, expressionParser.Object));
+        Assert.Throws<ArgumentNullException>(() =>
+            new ParseVariableDeclarationStrategy(null, expressionParser.Object, typeConsumer.Object));
     }
 
     [Fact]
     private void ThrowsExceptionIfExpressionParserIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new ParseVariableDeclarationStrategy(tokenConsumer.Object, null));
+        Assert.Throws<ArgumentNullException>(() =>
+            new ParseVariableDeclarationStrategy(tokenConsumer.Object, null, typeConsumer.Object));
+    }
+
+    [Fact]
+    private void ThrowsExceptionIfTypeConsumerIsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() =>
+            new ParseVariableDeclarationStrategy(tokenConsumer.Object, expressionParser.Object, null));
     }
 
     [Fact]
@@ -39,65 +49,24 @@ public class ParseVariableDeclarationStrategyTest
     }
 
     [Fact]
-    private void ConsumesStringTokenWhenTypeIsString()
-    {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.STRING)).Returns(true);
-
-        GetStrategy().Parse();
-
-        tokenConsumer.Verify(c => c.Consume(TokenType.STRING));
-    }
-
-    [Fact]
-    private void ConsumesNumberWhenTypeIsNumber()
-    {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.NUMBER)).Returns(true);
-
-        GetStrategy().Parse();
-
-        tokenConsumer.Verify(c => c.Consume(TokenType.NUMBER));
-    }
-
-    [Fact]
-    private void ConsumesBoolWhenTypeIsBool()
-    {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.BOOL)).Returns(true);
-
-        GetStrategy().Parse();
-
-        tokenConsumer.Verify(c => c.Consume(TokenType.BOOL));
-    }
-
-    [Fact]
-    private void ConsumesIdWhenTypeIsCustom()
+    private void ConsumesVariableType()
     {
         GetStrategy().Parse();
-
-        tokenConsumer.Verify(c => c.Consume(TokenType.ID));
-    }
-
-    [Fact]
-    private void ThrowsExceptionIfFailsToConsumeIdWhenTypeIsId()
-    {
-        tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Throws<Exception>();
-        Assert.Throws<Exception>(() => GetStrategy().Parse());
+        typeConsumer.Verify(c => c.Consume());
     }
 
     [Fact]
     private void ShouldConsumeVariableNameId()
     {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.STRING)).Returns(true);
-
         GetStrategy().Parse();
 
-        tokenConsumer.Verify(c => c.Consume(TokenType.STRING));
         tokenConsumer.Verify(c => c.Consume(TokenType.ID));
     }
 
     [Fact]
     private void ReturnsVariableDeclarationWithoutValueIfNotProvided()
     {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.STRING)).Returns(true);
+        typeConsumer.Setup(c => c.Consume()).Returns("type");
         tokenConsumer.Setup(c => c.CanConsume(TokenType.EQUAL)).Returns(false);
         tokenConsumer.Setup(c => c.Consume(TokenType.STRING)).Returns(new Token { Type = TokenType.STRING });
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "id" });
@@ -106,7 +75,7 @@ public class ParseVariableDeclarationStrategyTest
         Assert.True(declaration is VariableDeclaration);
 
         var variableDeclaration = declaration as VariableDeclaration;
-        Assert.Equal(TokenType.STRING.ToString(), variableDeclaration.Type);
+        Assert.Equal("type", variableDeclaration.Type);
         Assert.Equal("id", variableDeclaration.Name);
         Assert.Null(variableDeclaration.Value);
     }
@@ -147,7 +116,7 @@ public class ParseVariableDeclarationStrategyTest
     [Fact]
     private void ReturnsVariableDeclarationWithValueExpressionWhenFound()
     {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.STRING)).Returns(true);
+        typeConsumer.Setup(c => c.Consume()).Returns("type");
         tokenConsumer.Setup(c => c.CanConsume(TokenType.EQUAL)).Returns(true);
         tokenConsumer.Setup(c => c.Consume(TokenType.STRING)).Returns(new Token { Type = TokenType.STRING });
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "id" });
@@ -158,13 +127,13 @@ public class ParseVariableDeclarationStrategyTest
         Assert.True(declaration is VariableDeclaration);
 
         var variableDeclaration = declaration as VariableDeclaration;
-        Assert.Equal(TokenType.STRING.ToString(), variableDeclaration.Type);
+        Assert.Equal("type", variableDeclaration.Type);
         Assert.Equal("id", variableDeclaration.Name);
         Assert.Equal(valueExpression.Object, variableDeclaration.Value);
     }
 
     private ParseVariableDeclarationStrategy GetStrategy()
     {
-        return new ParseVariableDeclarationStrategy(tokenConsumer.Object, expressionParser.Object);
+        return new ParseVariableDeclarationStrategy(tokenConsumer.Object, expressionParser.Object, typeConsumer.Object);
     }
 }

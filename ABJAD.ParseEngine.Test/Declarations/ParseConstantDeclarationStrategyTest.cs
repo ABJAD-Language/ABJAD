@@ -11,6 +11,7 @@ public class ParseConstantDeclarationStrategyTest
 {
     private readonly Mock<ExpressionParser> expressionParser = new();
     private readonly Mock<ITokenConsumer> tokenConsumer = new();
+    private readonly Mock<ITypeConsumer> typeConsumer = new();
     private readonly Mock<Token> token = new();
 
     public ParseConstantDeclarationStrategyTest()
@@ -21,13 +22,22 @@ public class ParseConstantDeclarationStrategyTest
     [Fact]
     private void ThrowsExceptionIfTokenConsumerIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new ParseConstantDeclarationStrategy(null, expressionParser.Object));
+        Assert.Throws<ArgumentNullException>(() =>
+            new ParseConstantDeclarationStrategy(null, expressionParser.Object, typeConsumer.Object));
     }
 
     [Fact]
     private void ThrowsExceptionIfExpressionParserIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new ParseConstantDeclarationStrategy(tokenConsumer.Object, null));
+        Assert.Throws<ArgumentNullException>(() =>
+            new ParseConstantDeclarationStrategy(tokenConsumer.Object, null, typeConsumer.Object));
+    }
+
+    [Fact]
+    private void ThrowsExceptionIfTypeConsumerIsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() =>
+            new ParseConstantDeclarationStrategy(tokenConsumer.Object, expressionParser.Object, null));
     }
 
     [Fact]
@@ -39,33 +49,10 @@ public class ParseConstantDeclarationStrategyTest
     }
 
     [Fact]
-    private void ConsumesStringTokenWhenTypeIsString()
+    private void ConsumesConstantType()
     {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.STRING)).Returns(true);
-
         GetStrategy().Parse();
-
-        tokenConsumer.Verify(c => c.Consume(TokenType.STRING));
-    }
-
-    [Fact]
-    private void ConsumesNumberWhenTypeIsNumber()
-    {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.NUMBER)).Returns(true);
-
-        GetStrategy().Parse();
-
-        tokenConsumer.Verify(c => c.Consume(TokenType.NUMBER));
-    }
-
-    [Fact]
-    private void ConsumesBoolWhenTypeIsBool()
-    {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.BOOL)).Returns(true);
-
-        GetStrategy().Parse();
-
-        tokenConsumer.Verify(c => c.Consume(TokenType.BOOL));
+        typeConsumer.Verify(c => c.Consume());
     }
 
     [Fact]
@@ -77,20 +64,10 @@ public class ParseConstantDeclarationStrategyTest
     }
 
     [Fact]
-    private void ThrowsExceptionIfFailsToConsumeIdWhenTypeIsId()
-    {
-        tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Throws<Exception>();
-        Assert.Throws<Exception>(() => GetStrategy().Parse());
-    }
-
-    [Fact]
     private void ShouldConsumeConstantNameId()
     {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.STRING)).Returns(true);
-
         GetStrategy().Parse();
 
-        tokenConsumer.Verify(c => c.Consume(TokenType.STRING));
         tokenConsumer.Verify(c => c.Consume(TokenType.ID));
     }
 
@@ -126,7 +103,7 @@ public class ParseConstantDeclarationStrategyTest
     [Fact]
     private void ReturnsVariableDeclarationWithValueExpressionWhenFound()
     {
-        tokenConsumer.Setup(c => c.CanConsume(TokenType.STRING)).Returns(true);
+        typeConsumer.Setup(c => c.Consume()).Returns("type");
         tokenConsumer.Setup(c => c.Consume(TokenType.STRING)).Returns(new Token { Type = TokenType.STRING });
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "id" });
         var valueExpression = new Mock<Expression>();
@@ -136,13 +113,13 @@ public class ParseConstantDeclarationStrategyTest
         Assert.True(declaration is ConstantDeclaration);
 
         var constantDeclaration = declaration as ConstantDeclaration;
-        Assert.Equal(TokenType.STRING.ToString(), constantDeclaration.Type);
+        Assert.Equal("type", constantDeclaration.Type);
         Assert.Equal("id", constantDeclaration.Name);
         Assert.Equal(valueExpression.Object, constantDeclaration.Value);
     }
 
     private ParseConstantDeclarationStrategy GetStrategy()
     {
-        return new ParseConstantDeclarationStrategy(tokenConsumer.Object, expressionParser.Object);
+        return new ParseConstantDeclarationStrategy(tokenConsumer.Object, expressionParser.Object, typeConsumer.Object);
     }
 }
