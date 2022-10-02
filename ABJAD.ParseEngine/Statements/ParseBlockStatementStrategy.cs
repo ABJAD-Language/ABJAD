@@ -2,7 +2,7 @@ namespace ABJAD.ParseEngine.Statements;
 
 public class ParseBlockStatementStrategy : ParseStatementStrategy
 {
-    public Statement Parse()
+    public virtual Statement Parse()
     {
         throw new NotImplementedException();
     }
