@@ -26,29 +26,22 @@ public class ParseConstructorDeclarationStrategyTest
     [Fact]
     private void ThrowsExceptionIfTokenConsumerIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new ParseConstructorDeclarationStrategy(null,
-            typeConsumer.Object, parameterListConsumer.Object, blockStatementParser.Object));
-    }
-
-    [Fact]
-    private void ThrowsExceptionIfTypeConsumerIsNull()
-    {
-        Assert.Throws<ArgumentNullException>(() => new ParseConstructorDeclarationStrategy(tokenConsumer.Object,
-            null, parameterListConsumer.Object, blockStatementParser.Object));
+        Assert.Throws<ArgumentNullException>(() =>
+            new ParseConstructorDeclarationStrategy(null, blockStatementParser.Object, parameterListConsumer.Object));
     }
 
     [Fact]
     private void ThrowsExceptionIfParameterListConsumerIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new ParseConstructorDeclarationStrategy(tokenConsumer.Object,
-            typeConsumer.Object, null, blockStatementParser.Object));
+        Assert.Throws<ArgumentNullException>(() =>
+            new ParseConstructorDeclarationStrategy(tokenConsumer.Object, blockStatementParser.Object, null));
     }
 
     [Fact]
     private void ThrowsExceptionIfBlockStatementParserIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => new ParseConstructorDeclarationStrategy(tokenConsumer.Object,
-            typeConsumer.Object, parameterListConsumer.Object, null));
+        Assert.Throws<ArgumentNullException>(() =>
+            new ParseConstructorDeclarationStrategy(tokenConsumer.Object, null, parameterListConsumer.Object));
     }
 
     [Fact]
@@ -125,7 +118,7 @@ public class ParseConstructorDeclarationStrategyTest
 
     private ParseConstructorDeclarationStrategy GetStrategy()
     {
-        return new ParseConstructorDeclarationStrategy(tokenConsumer.Object, typeConsumer.Object,
-            parameterListConsumer.Object, blockStatementParser.Object);
+        return new ParseConstructorDeclarationStrategy(tokenConsumer.Object, blockStatementParser.Object,
+            parameterListConsumer.Object);
     }
 }

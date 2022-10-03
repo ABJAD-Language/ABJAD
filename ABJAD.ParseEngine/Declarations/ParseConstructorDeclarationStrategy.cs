@@ -7,20 +7,18 @@ namespace ABJAD.ParseEngine.Declarations;
 public class ParseConstructorDeclarationStrategy : ParseDeclarationStrategy
 {
     private readonly ITokenConsumer tokenConsumer;
-    private readonly ITypeConsumer typeConsumer;
     private readonly IParameterListConsumer parameterListConsumer;
     private readonly ParseBlockStatementStrategy blockStatementParser;
 
-    public ParseConstructorDeclarationStrategy(ITokenConsumer tokenConsumer, ITypeConsumer typeConsumer,
-        IParameterListConsumer parameterListConsumer, ParseBlockStatementStrategy blockStatementParser)
+    public ParseConstructorDeclarationStrategy(ITokenConsumer tokenConsumer,
+        ParseBlockStatementStrategy blockStatementParser,
+        IParameterListConsumer parameterListConsumer)
     {
         Guard.Against.Null(tokenConsumer);
-        Guard.Against.Null(typeConsumer);
         Guard.Against.Null(parameterListConsumer);
         Guard.Against.Null(blockStatementParser);
 
         this.tokenConsumer = tokenConsumer;
-        this.typeConsumer = typeConsumer;
         this.parameterListConsumer = parameterListConsumer;
         this.blockStatementParser = blockStatementParser;
     }
