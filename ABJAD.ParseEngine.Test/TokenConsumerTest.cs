@@ -206,6 +206,35 @@ public class TokenConsumerTest
         }
     }
 
+    public class LookAheadTest
+    {
+        [Fact]
+        private void ShouldReturnTheHeadTokenWhenOffsetIsZero()
+        {
+            var token = new Token { Type = TokenType.ID, Line = 10, Index = 13, Content = "ب" };
+            var tokenConsumer = new TokenConsumer(new List<Token> { token }, 0);
+            Assert.Equal(token, tokenConsumer.LookAhead(0));
+        }
+
+        [Fact]
+        private void ShouldReturnTokenAfterHeadWhenOffsetIsOne()
+        {
+            var token1 = new Token { Type = TokenType.ID, Line = 10, Index = 13, Content = "ب" };
+            var token2 = new Token { Type = TokenType.NUMBER, Line = 4, Index = 2, Content = "3" };
+            var tokenConsumer = new TokenConsumer(new List<Token> { token1, token2 }, 0);
+            Assert.Equal(token2, tokenConsumer.LookAhead(1));
+        }
+
+        [Fact]
+        private void ShouldThrowExceptionIfOffsetIsNegative()
+        {
+            var token1 = new Token { Type = TokenType.ID, Line = 10, Index = 13, Content = "ب" };
+            var token2 = new Token { Type = TokenType.NUMBER, Line = 4, Index = 2, Content = "3" };
+            var tokenConsumer = new TokenConsumer(new List<Token> { token1, token2 }, 1);
+            Assert.Throws<ArgumentException>(() => tokenConsumer.LookAhead(-1));
+        }
+    }
+
     public class GetCurrentLineTest
     {
         [Fact]

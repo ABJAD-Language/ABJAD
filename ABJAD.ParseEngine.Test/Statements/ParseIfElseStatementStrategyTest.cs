@@ -13,23 +13,29 @@ public class ParseIfElseStatementStrategyTest
     private readonly Mock<ITokenConsumer> tokenConsumerMock = new();
     private readonly Mock<ExpressionParser> expressionParserMock = new();
     private readonly Mock<ParseStatementStrategy> statementParserMock = new();
+    private readonly Mock<IStatementStrategyFactory> statementStrategyFactoryMock = new();
+
+    public ParseIfElseStatementStrategyTest()
+    {
+        statementStrategyFactoryMock.Setup(f => f.Get()).Returns(statementParserMock.Object);
+    }
 
     [Fact]
     private void ThrowsExceptionIfTokenConsumerIsNull()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            new ParseIfElseStatementStrategy(null, expressionParserMock.Object, statementParserMock.Object));
+            new ParseIfElseStatementStrategy(null, expressionParserMock.Object, statementStrategyFactoryMock.Object));
     }
 
     [Fact]
     private void ThrowsExceptionIfExpressionParserIsNull()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            new ParseIfElseStatementStrategy(tokenConsumerMock.Object, null, statementParserMock.Object));
+            new ParseIfElseStatementStrategy(tokenConsumerMock.Object, null, statementStrategyFactoryMock.Object));
     }
 
     [Fact]
-    private void ThrowsExceptionIfStatementParserIsNull()
+    private void ThrowsExceptionIfStatementStrategyFactoryIsNull()
     {
         Assert.Throws<ArgumentNullException>(() =>
             new ParseIfElseStatementStrategy(tokenConsumerMock.Object, expressionParserMock.Object, null));
@@ -233,6 +239,6 @@ public class ParseIfElseStatementStrategyTest
     private ParseIfElseStatementStrategy GetStrategy()
     {
         return new ParseIfElseStatementStrategy(tokenConsumerMock.Object, expressionParserMock.Object,
-            statementParserMock.Object);
+            statementStrategyFactoryMock.Object);
     }
 }

@@ -12,19 +12,25 @@ public class ParseWhileStatementStrategyTest
     private readonly Mock<ITokenConsumer> tokenConsumerMock = new();
     private readonly Mock<ExpressionParser> expressionParserMock = new();
     private readonly Mock<ParseStatementStrategy> parseStatementStrategyMock = new();
+    private readonly Mock<IStatementStrategyFactory> statementStrategyFactoryMock = new();
+
+    public ParseWhileStatementStrategyTest()
+    {
+        statementStrategyFactoryMock.Setup(f => f.Get()).Returns(parseStatementStrategyMock.Object);
+    }
 
     [Fact]
     private void ThrowsExceptionTokenConsumerIsNull()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            new ParseWhileStatementStrategy(null, expressionParserMock.Object, parseStatementStrategyMock.Object));
+            new ParseWhileStatementStrategy(null, expressionParserMock.Object, statementStrategyFactoryMock.Object));
     }
 
     [Fact]
     private void ThrowsExceptionIfExpressionParserIsNull()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            new ParseWhileStatementStrategy(tokenConsumerMock.Object, null, parseStatementStrategyMock.Object));
+            new ParseWhileStatementStrategy(tokenConsumerMock.Object, null, statementStrategyFactoryMock.Object));
     }
 
     [Fact]
@@ -146,6 +152,6 @@ public class ParseWhileStatementStrategyTest
     private ParseWhileStatementStrategy GetStrategy()
     {
         return new ParseWhileStatementStrategy(tokenConsumerMock.Object, expressionParserMock.Object,
-            parseStatementStrategyMock.Object);
+            statementStrategyFactoryMock.Object);
     }
 }

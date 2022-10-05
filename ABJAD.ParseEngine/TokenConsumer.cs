@@ -45,6 +45,12 @@ public class TokenConsumer : ITokenConsumer
         return GetHeadToken();
     }
 
+    public Token LookAhead(int offset)
+    {
+        Guard.Against.Negative(offset);
+        return tokens[headIndex + offset];
+    }
+
     public bool CanConsume(TokenType targetType)
     {
         return CanConsume() && GetHeadToken().Type == targetType;

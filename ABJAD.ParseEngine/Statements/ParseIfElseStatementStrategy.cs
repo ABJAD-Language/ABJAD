@@ -8,17 +8,17 @@ public class ParseIfElseStatementStrategy : ParseStatementStrategy
 {
     private readonly ITokenConsumer tokenConsumer;
     private readonly ExpressionParser expressionParser;
-    private readonly ParseStatementStrategy statementParser;
+    private readonly IStatementStrategyFactory statementStrategyFactory;
 
     public ParseIfElseStatementStrategy(ITokenConsumer tokenConsumer, ExpressionParser expressionParser,
-        ParseStatementStrategy statementParser)
+        IStatementStrategyFactory statementStrategyFactory)
     {
         Guard.Against.Null(tokenConsumer);
         Guard.Against.Null(expressionParser);
-        Guard.Against.Null(statementParser);
+        Guard.Against.Null(statementStrategyFactory);
         this.tokenConsumer = tokenConsumer;
         this.expressionParser = expressionParser;
-        this.statementParser = statementParser;
+        this.statementStrategyFactory = statementStrategyFactory;
     }
 
     public Statement Parse()
@@ -42,7 +42,7 @@ public class ParseIfElseStatementStrategy : ParseStatementStrategy
             }
         }
 
-        var elseBody = statementParser.Parse();
+        var elseBody = GetStatementStrategy().Parse();
         return new IfElseStatement(primaryIfStatement, minorIfStatements, elseBody);
     }
 
@@ -52,8 +52,13 @@ public class ParseIfElseStatementStrategy : ParseStatementStrategy
         tokenConsumer.Consume(TokenType.OPEN_PAREN);
         var condition = expressionParser.Parse();
         tokenConsumer.Consume(TokenType.CLOSE_PAREN);
-        var body = statementParser.Parse();
+        var body = GetStatementStrategy().Parse();
 
         return new IfStatement(condition, body);
+    }
+
+    private ParseStatementStrategy GetStatementStrategy()
+    {
+        return statementStrategyFactory.Get();
     }
 }

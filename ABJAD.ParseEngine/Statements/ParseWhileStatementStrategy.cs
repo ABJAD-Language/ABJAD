@@ -8,17 +8,17 @@ public class ParseWhileStatementStrategy : ParseStatementStrategy
 {
     private readonly ITokenConsumer tokenConsumer;
     private readonly ExpressionParser expressionParser;
-    private readonly ParseStatementStrategy parseStatementStrategy;
+    private readonly IStatementStrategyFactory statementStrategyFactory;
 
     public ParseWhileStatementStrategy(ITokenConsumer tokenConsumer, ExpressionParser expressionParser,
-        ParseStatementStrategy parseStatementStrategy)
+        IStatementStrategyFactory statementStrategyFactory)
     {
         Guard.Against.Null(tokenConsumer);
         Guard.Against.Null(expressionParser);
-        Guard.Against.Null(parseStatementStrategy);
+        Guard.Against.Null(statementStrategyFactory);
         this.tokenConsumer = tokenConsumer;
         this.expressionParser = expressionParser;
-        this.parseStatementStrategy = parseStatementStrategy;
+        this.statementStrategyFactory = statementStrategyFactory;
     }
 
     public Statement Parse()
@@ -29,7 +29,7 @@ public class ParseWhileStatementStrategy : ParseStatementStrategy
         var condition = expressionParser.Parse();
         tokenConsumer.Consume(TokenType.CLOSE_PAREN);
 
-        var body = parseStatementStrategy.Parse();
+        var body = statementStrategyFactory.Get().Parse();
 
         return new WhileStatement(condition, body);
     }
