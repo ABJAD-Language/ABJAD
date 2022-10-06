@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ABJAD.ParseEngine.Bindings;
 using ABJAD.ParseEngine.Declarations;
 using ABJAD.ParseEngine.Shared;
 using ABJAD.ParseEngine.Statements;
@@ -11,11 +12,11 @@ namespace ABJAD.ParseEngine.Test.Declarations;
 public class ParseFunctionDeclarationStrategyTest
 {
     private readonly Mock<ITokenConsumer> tokenConsumer = new();
-    private readonly Mock<ParseBlockStatementStrategy> blockStatementParser = new();
+    private readonly Mock<BlockStatementParser> blockStatementParser = new();
     private readonly Mock<ITypeConsumer> typeConsumer = new();
     private readonly Mock<IParameterListConsumer> parameterListConsumer = new();
     private readonly Mock<List<FunctionParameter>> parameters = new();
-    private readonly Mock<BlockStatement> body = new();
+    private readonly BlockStatement body = new(new List<Binding>());
 
     public ParseFunctionDeclarationStrategyTest()
     {
@@ -23,7 +24,7 @@ public class ParseFunctionDeclarationStrategyTest
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" });
         parameterListConsumer.Setup(c => c.Consume()).Returns(parameters.Object);
         typeConsumer.Setup(c => c.ConsumeTypeOrVoid()).Returns("functionReturnType");
-        blockStatementParser.Setup(p => p.Parse()).Returns(body.Object);
+        blockStatementParser.Setup(p => p.Parse()).Returns(body);
     }
 
     [Fact]
@@ -152,7 +153,7 @@ public class ParseFunctionDeclarationStrategyTest
         parameterListConsumer.Setup(c => c.Consume()).Returns(parameters.Object)
             .Callback(() => Assert.Equal(4, order++));
         tokenConsumer.Setup(c => c.Consume(TokenType.CLOSE_PAREN)).Callback(() => Assert.Equal(5, order++));
-        blockStatementParser.Setup(c => c.Parse()).Returns(body.Object).Callback(() => Assert.Equal(6, order++));
+        blockStatementParser.Setup(c => c.Parse()).Returns(body).Callback(() => Assert.Equal(6, order++));
 
         GetStrategy().Parse();
         blockStatementParser.Verify(c => c.Parse());
@@ -164,7 +165,7 @@ public class ParseFunctionDeclarationStrategyTest
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" });
         parameterListConsumer.Setup(c => c.Consume()).Returns(parameters.Object);
         typeConsumer.Setup(c => c.ConsumeTypeOrVoid()).Returns("functionReturnType");
-        blockStatementParser.Setup(p => p.Parse()).Returns(body.Object);
+        blockStatementParser.Setup(p => p.Parse()).Returns(body);
 
         var declaration = GetStrategy().Parse();
         Assert.True(declaration is FunctionDeclaration);
@@ -173,7 +174,7 @@ public class ParseFunctionDeclarationStrategyTest
         Assert.Equal("className", functionDeclaration.Name);
         Assert.Equal(parameters.Object, functionDeclaration.Parameters);
         Assert.Equal("functionReturnType", functionDeclaration.ReturnType);
-        Assert.Equal(body.Object, functionDeclaration.Body);
+        Assert.Equal(body, functionDeclaration.Body);
     }
 
     private ParseFunctionDeclarationStrategy GetStrategy()

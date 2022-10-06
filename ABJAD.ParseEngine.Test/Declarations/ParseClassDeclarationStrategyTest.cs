@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using ABJAD.ParseEngine.Bindings;
 using ABJAD.ParseEngine.Declarations;
 using ABJAD.ParseEngine.Shared;
 using ABJAD.ParseEngine.Statements;
@@ -10,12 +12,12 @@ namespace ABJAD.ParseEngine.Test.Declarations;
 public class ParseClassDeclarationStrategyTest
 {
     private readonly Mock<ITokenConsumer> tokenConsumer = new();
-    private readonly Mock<ParseBlockStatementStrategy> blockStatementParser = new();
+    private readonly Mock<BlockStatementParser> blockStatementParser = new();
 
     public ParseClassDeclarationStrategyTest()
     {
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" });
-        blockStatementParser.Setup(p => p.Parse()).Returns(new Mock<BlockStatement>().Object);
+        blockStatementParser.Setup(p => p.Parse()).Returns(new BlockStatement(new List<Binding>()));
     }
 
     [Fact]
@@ -59,7 +61,7 @@ public class ParseClassDeclarationStrategyTest
         tokenConsumer.Setup(c => c.Consume(TokenType.CLASS)).Callback(() => Assert.Equal(1, order++));
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" })
             .Callback(() => Assert.Equal(2, order++));
-        blockStatementParser.Setup(c => c.Parse()).Returns(new Mock<BlockStatement>().Object)
+        blockStatementParser.Setup(c => c.Parse()).Returns(new BlockStatement(new List<Binding>()))
             .Callback(() => Assert.Equal(3, order++));
 
         GetStrategy().Parse();
@@ -69,8 +71,8 @@ public class ParseClassDeclarationStrategyTest
     [Fact]
     private void ReturnsClassDeclarationOnHappyPath()
     {
-        var blockStatement = new Mock<BlockStatement>();
-        blockStatementParser.Setup(p => p.Parse()).Returns(blockStatement.Object);
+        var blockStatement = new BlockStatement(new List<Binding>());
+        blockStatementParser.Setup(p => p.Parse()).Returns(blockStatement);
 
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" });
 
@@ -79,7 +81,7 @@ public class ParseClassDeclarationStrategyTest
 
         var classDeclaration = declaration as ClassDeclaration;
         Assert.Equal("className", classDeclaration.Name);
-        Assert.Equal(blockStatement.Object, classDeclaration.Body);
+        Assert.Equal(blockStatement, classDeclaration.Body);
     }
 
     private ParseClassDeclarationStrategy GetStrategy()

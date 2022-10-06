@@ -1,3 +1,5 @@
+using ABJAD.ParseEngine.Bindings;
+using ABJAD.ParseEngine.Declarations;
 using ABJAD.ParseEngine.Expressions;
 using ABJAD.ParseEngine.Shared;
 using Ardalis.GuardClauses;
@@ -51,9 +53,10 @@ public class StatementStrategyFactory : IStatementStrategyFactory
         return new ParseForStatementStrategy();
     }
 
-    private static ParseBlockStatementStrategy GetParseBlockStatementStrategy()
+    private ParseBlockStatementStrategy GetParseBlockStatementStrategy()
     {
-        return new ParseBlockStatementStrategy();
+        return new ParseBlockStatementStrategy(tokenConsumer,
+            new BindingFactory(tokenConsumer, new DeclarationStrategyFactory(tokenConsumer), this));
     }
 
     private ParseReturnStatementStrategy GetParseReturnStatementStrategy()

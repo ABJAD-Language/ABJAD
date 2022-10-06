@@ -4,7 +4,7 @@ using Ardalis.GuardClauses;
 
 namespace ABJAD.ParseEngine.Bindings;
 
-public class BindingFactory
+public class BindingFactory : IBindingFactory
 {
     private readonly ITokenConsumer tokenConsumer;
     private readonly IDeclarationStrategyFactory declarationStrategyFactory;

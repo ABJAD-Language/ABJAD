@@ -7,9 +7,9 @@ namespace ABJAD.ParseEngine.Declarations;
 public class ParseClassDeclarationStrategy : ParseDeclarationStrategy
 {
     private readonly ITokenConsumer tokenConsumer;
-    private readonly ParseBlockStatementStrategy blockStatementParser;
+    private readonly BlockStatementParser blockStatementParser;
 
-    public ParseClassDeclarationStrategy(ITokenConsumer tokenConsumer, ParseBlockStatementStrategy blockStatementParser)
+    public ParseClassDeclarationStrategy(ITokenConsumer tokenConsumer, BlockStatementParser blockStatementParser)
     {
         Guard.Against.Null(tokenConsumer);
         Guard.Against.Null(blockStatementParser);

@@ -7,12 +7,12 @@ namespace ABJAD.ParseEngine.Declarations;
 public class ParseFunctionDeclarationStrategy : ParseDeclarationStrategy
 {
     private readonly ITokenConsumer tokenConsumer;
-    private readonly ParseBlockStatementStrategy blockStatementParser;
+    private readonly BlockStatementParser blockStatementParser;
     private readonly ITypeConsumer typeConsumer;
     private readonly IParameterListConsumer parameterListConsumer;
 
     public ParseFunctionDeclarationStrategy(ITokenConsumer tokenConsumer,
-        ParseBlockStatementStrategy blockStatementParser, ITypeConsumer typeConsumer,
+        BlockStatementParser blockStatementParser, ITypeConsumer typeConsumer,
         IParameterListConsumer parameterListConsumer)
     {
         Guard.Against.Null(tokenConsumer);

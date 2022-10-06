@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ABJAD.ParseEngine.Bindings;
 using ABJAD.ParseEngine.Declarations;
 using ABJAD.ParseEngine.Shared;
 using ABJAD.ParseEngine.Statements;
@@ -13,14 +14,14 @@ public class ParseConstructorDeclarationStrategyTest
     private readonly Mock<ITokenConsumer> tokenConsumer = new();
     private readonly Mock<ITypeConsumer> typeConsumer = new();
     private readonly Mock<IParameterListConsumer> parameterListConsumer = new();
-    private readonly Mock<ParseBlockStatementStrategy> blockStatementParser = new();
+    private readonly Mock<BlockStatementParser> blockStatementParser = new();
     private readonly Mock<List<FunctionParameter>> parameterList = new();
-    private readonly Mock<BlockStatement> blockStatement = new();
+    private readonly BlockStatement blockStatement = new(new List<Binding>());
 
     public ParseConstructorDeclarationStrategyTest()
     {
         parameterListConsumer.Setup(c => c.Consume()).Returns(parameterList.Object);
-        blockStatementParser.Setup(p => p.Parse()).Returns(blockStatement.Object);
+        blockStatementParser.Setup(p => p.Parse()).Returns(blockStatement);
     }
 
     [Fact]
@@ -98,7 +99,7 @@ public class ParseConstructorDeclarationStrategyTest
         parameterListConsumer.Setup(c => c.Consume()).Returns(parameterList.Object)
             .Callback(() => Assert.Equal(3, order++));
         tokenConsumer.Setup(c => c.Consume(TokenType.CLOSE_PAREN)).Callback(() => Assert.Equal(4, order++));
-        blockStatementParser.Setup(c => c.Parse()).Returns(blockStatement.Object)
+        blockStatementParser.Setup(c => c.Parse()).Returns(blockStatement)
             .Callback(() => Assert.Equal(5, order++));
 
         GetStrategy().Parse();
@@ -113,7 +114,7 @@ public class ParseConstructorDeclarationStrategyTest
 
         var constructorDeclaration = declaration as ConstructorDeclaration;
         Assert.Equal(parameterList.Object, constructorDeclaration.Parameters);
-        Assert.Equal(blockStatement.Object, constructorDeclaration.Body);
+        Assert.Equal(blockStatement, constructorDeclaration.Body);
     }
 
     private ParseConstructorDeclarationStrategy GetStrategy()

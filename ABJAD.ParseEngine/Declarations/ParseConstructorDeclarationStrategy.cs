@@ -8,10 +8,10 @@ public class ParseConstructorDeclarationStrategy : ParseDeclarationStrategy
 {
     private readonly ITokenConsumer tokenConsumer;
     private readonly IParameterListConsumer parameterListConsumer;
-    private readonly ParseBlockStatementStrategy blockStatementParser;
+    private readonly BlockStatementParser blockStatementParser;
 
     public ParseConstructorDeclarationStrategy(ITokenConsumer tokenConsumer,
-        ParseBlockStatementStrategy blockStatementParser,
+        BlockStatementParser blockStatementParser,
         IParameterListConsumer parameterListConsumer)
     {
         Guard.Against.Null(tokenConsumer);
