@@ -1,3 +1,4 @@
+using ABJAD.ParseEngine.Bindings;
 using ABJAD.ParseEngine.Expressions;
 using ABJAD.ParseEngine.Shared;
 using ABJAD.ParseEngine.Statements;
@@ -34,18 +35,18 @@ public class DeclarationStrategyFactory : IDeclarationStrategyFactory
 
     private ParseClassDeclarationStrategy GetClassStrategy()
     {
-        return new ParseClassDeclarationStrategy(tokenConsumer, new ParseBlockStatementStrategy());
+        return new ParseClassDeclarationStrategy(tokenConsumer, GetBlockStatementParser());
     }
 
     private ParseConstructorDeclarationStrategy GetConstructorStrategy()
     {
-        return new ParseConstructorDeclarationStrategy(tokenConsumer, new ParseBlockStatementStrategy(),
+        return new ParseConstructorDeclarationStrategy(tokenConsumer, GetBlockStatementParser(),
             new ParameterListConsumer(tokenConsumer, new TypeConsumer(tokenConsumer)));
     }
 
     private ParseFunctionDeclarationStrategy GetFunctionStrategy()
     {
-        return new ParseFunctionDeclarationStrategy(tokenConsumer, new ParseBlockStatementStrategy(),
+        return new ParseFunctionDeclarationStrategy(tokenConsumer, GetBlockStatementParser(),
             new TypeConsumer(tokenConsumer), new ParameterListConsumer(tokenConsumer, new TypeConsumer(tokenConsumer)));
     }
 
@@ -59,5 +60,11 @@ public class DeclarationStrategyFactory : IDeclarationStrategyFactory
     {
         return new ParseVariableDeclarationStrategy(tokenConsumer, ExpressionParserFactory.Get(tokenConsumer),
             new TypeConsumer(tokenConsumer));
+    }
+
+    private ParseBlockStatementStrategy GetBlockStatementParser()
+    {
+        return new ParseBlockStatementStrategy(tokenConsumer,
+            new BindingFactory(tokenConsumer, this, new StatementStrategyFactory(tokenConsumer)));
     }
 }

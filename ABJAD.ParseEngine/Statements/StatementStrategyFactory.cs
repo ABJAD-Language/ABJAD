@@ -44,19 +44,18 @@ public class StatementStrategyFactory : IStatementStrategyFactory
 
     private ParseWhileStatementStrategy GetParseWhileStatementStrategy()
     {
-        return new ParseWhileStatementStrategy(tokenConsumer, ExpressionParserFactory.Get(tokenConsumer),
-            new StatementStrategyFactory(tokenConsumer));
+        return new ParseWhileStatementStrategy(tokenConsumer, ExpressionParserFactory.Get(tokenConsumer), this);
     }
 
-    private static ParseForStatementStrategy GetParseForStatementStrategy()
+    private ParseForStatementStrategy GetParseForStatementStrategy()
     {
-        return new ParseForStatementStrategy();
+        return new ParseForStatementStrategy(tokenConsumer, ExpressionParserFactory.Get(tokenConsumer),
+            GetBindingFactory(), this);
     }
 
     private ParseBlockStatementStrategy GetParseBlockStatementStrategy()
     {
-        return new ParseBlockStatementStrategy(tokenConsumer,
-            new BindingFactory(tokenConsumer, new DeclarationStrategyFactory(tokenConsumer), this));
+        return new ParseBlockStatementStrategy(tokenConsumer, GetBindingFactory());
     }
 
     private ParseReturnStatementStrategy GetParseReturnStatementStrategy()
@@ -67,6 +66,11 @@ public class StatementStrategyFactory : IStatementStrategyFactory
     private ParsePrintStatementStrategy GetParsePrintStatementStrategy()
     {
         return new ParsePrintStatementStrategy(tokenConsumer, ExpressionParserFactory.Get(tokenConsumer));
+    }
+
+    private BindingFactory GetBindingFactory()
+    {
+        return new BindingFactory(tokenConsumer, new DeclarationStrategyFactory(tokenConsumer), this);
     }
 
     private ParseStatementStrategy GetAssignmentOrExpressionStatementStrategy()
