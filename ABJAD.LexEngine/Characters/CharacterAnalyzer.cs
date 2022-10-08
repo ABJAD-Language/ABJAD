@@ -12,6 +12,7 @@ public class CharacterAnalyzer
             '{'  => CharacterType.RIGHT_BRACE,
             '.'  => CharacterType.DOT,
             '؛'  => CharacterType.SEMICOLON,
+            ':'  => CharacterType.COLON,
             '،'  => CharacterType.COMMA,
             '-'  => CharacterType.DASH,
             '+'  => CharacterType.PLUS,

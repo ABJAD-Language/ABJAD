@@ -10,6 +10,11 @@ public class ScanDashStrategy : ScanningStrategy
         {
             return ScanDoubleDashToken(current, line, lineIndex);
         }
+        
+        if (code.Length > current && code[current] == '=')
+        {
+            return ScanDashEqualToken(current, line, lineIndex);
+        }
 
         return ScanSingleDashToken(current, line, lineIndex);
     }
@@ -29,6 +34,15 @@ public class ScanDashStrategy : ScanningStrategy
         {
             StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex,
             EndLineIndex = lineIndex + 1, Type = TokenType.DASH_DASH, Label = "--"
+        };
+    }
+
+    private static Token ScanDashEqualToken(int current, int line, int lineIndex)
+    {
+        return new Token
+        {
+            StartIndex = current, EndIndex = current + 1, StartLine = line, StartLineIndex = lineIndex,
+            EndLineIndex = lineIndex + 1, Type = TokenType.DASH_EQUAL, Label = "-="
         };
     }
 }

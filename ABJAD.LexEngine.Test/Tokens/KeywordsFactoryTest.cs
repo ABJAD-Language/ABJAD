@@ -25,6 +25,8 @@ public class KeywordsFactoryTest
     [InlineData("نوع", TokenType.TYPEOF)]
     [InlineData("طالما", TokenType.WHILE)]
     [InlineData("متغير", TokenType.VAR)]
+    [InlineData("لاشيء", TokenType.VOID)]
+    [InlineData("منشئ", TokenType.CONSTRUCTOR)]
     private void TokensCheck(string label, TokenType type)
     {
         Assert.Equal(type, KeywordsFactory.GetToken(label));

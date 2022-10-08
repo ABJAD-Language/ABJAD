@@ -12,6 +12,7 @@ public class CharacterAnalyzerTest
     [InlineData('{', CharacterType.RIGHT_BRACE)]
     [InlineData('.', CharacterType.DOT)]
     [InlineData('؛', CharacterType.SEMICOLON)]
+    [InlineData(':', CharacterType.COLON)]
     [InlineData('،', CharacterType.COMMA)]
     [InlineData('-', CharacterType.DASH)]
     [InlineData('+', CharacterType.PLUS)]

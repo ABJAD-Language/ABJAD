@@ -3,6 +3,7 @@ namespace ABJAD.LexEngine.Characters;
 public enum CharacterType
 {
     AMPERSAND,
+    COLON,
     COMMA,
     DASH,
     DOT,

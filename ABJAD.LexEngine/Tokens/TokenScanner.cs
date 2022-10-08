@@ -20,6 +20,7 @@ public static class TokenScanner
             CharacterType.RIGHT_BRACE        => new ScanOpenBraceStrategy(),
             CharacterType.LEFT_BRACE         => new ScanCloseBraceStrategy(),
             CharacterType.SEMICOLON          => new ScanSemicolonStrategy(),
+            CharacterType.COLON              => new ScanColonStrategy(),
             CharacterType.COMMA              => new ScanCommaStrategy(),
             CharacterType.DOT                => new ScanDotStrategy(),
             CharacterType.PERCENTAGE         => new ScanModuloStrategy(),

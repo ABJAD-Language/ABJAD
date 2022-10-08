@@ -22,6 +22,8 @@ public class KeywordsFactory
         { "نوع", TokenType.TYPEOF },
         { "طالما", TokenType.WHILE },
         { "متغير", TokenType.VAR },
+        { "لاشيء", TokenType.VOID },
+        { "منشئ", TokenType.CONSTRUCTOR },
     };
 
     public static bool IsKeyword(string label)
