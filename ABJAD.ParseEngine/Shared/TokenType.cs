@@ -7,6 +7,7 @@ public enum TokenType
     BANG,
     BANG_EQUAL,
     SLASH,
+    SLASH_EQUAL,
     EQUAL,
     EQUAL_EQUAL,
     GREATER_EQUAL,
@@ -15,11 +16,14 @@ public enum TokenType
     LESS_THAN,
     DASH,
     DASH_DASH,
+    DASH_EQUAL,
     MODULO,
     OR,
     PLUS,
     PLUS_PLUS,
+    PLUS_EQUAL,
     STAR,
+    STAR_EQUAL,
 
     /* Other graphic characters */
     CLOSE_BRACE,

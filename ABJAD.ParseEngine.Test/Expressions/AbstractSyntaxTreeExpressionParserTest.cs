@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ABJAD.ParseEngine.Expressions;
+using ABJAD.ParseEngine.Expressions.Assignments;
 using ABJAD.ParseEngine.Expressions.Binary;
 using ABJAD.ParseEngine.Expressions.Unary;
 using ABJAD.ParseEngine.Expressions.Unary.Postfix;
@@ -661,6 +662,93 @@ public class AbstractSyntaxTreeExpressionParserTest
         };
 
         AssertFails<InvalidPostfixExpressionException>(tokens);
+    }
+
+    /// <summary>
+    /// parsing expression a += 3
+    /// </summary>
+    [Fact]
+    private void ParsingAdditionAssignmentExpressionReturnsCorrectExpressionOnHappyPath()
+    {
+        var tokens = new List<Token>
+        {
+            new() { Type = TokenType.ID, Content = "a" },
+            new() { Type = TokenType.PLUS_EQUAL },
+            new() { Type = TokenType.NUMBER_CONST, Content = "3" },
+        };
+
+        var expectedExpression = new AdditionAssignmentExpression(
+            IdentifierPrimitive.From("a"),
+            new PrimitiveExpression(NumberPrimitive.From("3"))
+        );
+
+        ParseAndAssertResult(tokens, expectedExpression);
+    }
+
+    /// <summary>
+    /// parsing expression a -= b
+    /// </summary>
+    [Fact]
+    private void ParsingSubtractionAssignmentExpressionReturnsCorrectExpressionOnHappyPath()
+    {
+        var tokens = new List<Token>
+        {
+            new() { Type = TokenType.ID, Content = "a" },
+            new() { Type = TokenType.DASH_EQUAL },
+            new() { Type = TokenType.ID, Content = "b" },
+        };
+
+        var expectedExpression = new SubtractionAssignmentExpression(
+            IdentifierPrimitive.From("a"),
+            new PrimitiveExpression(IdentifierPrimitive.From("b"))
+        );
+
+        ParseAndAssertResult(tokens, expectedExpression);
+    }
+
+    /// <summary>
+    /// parsing expression a *= -1
+    /// </summary>
+    [Fact]
+    private void ParsingMultiplicationAssignmentExpressionReturnsCorrectExpressionOnHappyPath()
+    {
+        var tokens = new List<Token>
+        {
+            new() { Type = TokenType.ID, Content = "a" },
+            new() { Type = TokenType.STAR_EQUAL },
+            new() { Type = TokenType.DASH },
+            new() { Type = TokenType.NUMBER_CONST, Content = "1" },
+        };
+
+        var expectedExpression = new MultiplicationAssignmentExpression(
+            IdentifierPrimitive.From("a"),
+            new NegativeExpression(
+                new PrimitiveExpression(NumberPrimitive.From("1"))
+            )
+        );
+
+        ParseAndAssertResult(tokens, expectedExpression);
+    }
+
+    /// <summary>
+    /// parsing expression a \= 2
+    /// </summary>
+    [Fact]
+    private void ParsingDivisionAssignmentExpressionReturnsCorrectExpressionOnHappyPath()
+    {
+        var tokens = new List<Token>
+        {
+            new() { Type = TokenType.ID, Content = "a" },
+            new() { Type = TokenType.SLASH_EQUAL },
+            new() { Type = TokenType.NUMBER_CONST, Content = "2" },
+        };
+
+        var expectedExpression = new DivisionAssignmentExpression(
+            IdentifierPrimitive.From("a"),
+            new PrimitiveExpression(NumberPrimitive.From("2"))
+        );
+
+        ParseAndAssertResult(tokens, expectedExpression);
     }
 
     /// <summary>

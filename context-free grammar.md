@@ -96,10 +96,14 @@
     
     type_stmt               →   TYPEOF OPEN_PAREN expression CLOSE_PAREN SEMICOLON ;
     
-    oper_expr               →   expression PLUS expression
-                            |   expression MINUS expression
-                            |   expression TIMES expression
-                            |   expression DIVIDED_BY expression
+    oper_expr               →   binary_expr
+                            |   unary_expr
+                            |   assignment_expr ;
+
+    binary_expr             →   expression PLUS expression
+                            |   expression DASH expression
+                            |   expression STAR expression
+                            |   expression SLASH expression
                             |   expression AND expression
                             |   expression OR expression
                             |   expression EQUAL_EQUAL expression
@@ -107,9 +111,19 @@
                             |   expression GREATER_EQUAL expression
                             |   expression LESS_THAN expression
                             |   expression LESS_EQUAL expression
-                            |   expression BANG_EQUAL expression
-                            |   BANG expression
-                            |   MINUS expression ;
+                            |   expression BANG_EQUAL expression ;
+
+    unary_expr              →   BANG expression
+                            |   DASH expression
+                            |   ID PLUS_PLUS
+                            |   ID DASH_DASH
+                            |   PLUS_PLUS ID
+                            |   DASH_DASH ID ;
+    
+    assignment_expr         →   ID PLUS_EQUAL expression
+                            |   ID DASH_EQUAL expression
+                            |   ID STAR_EQUAL expression
+                            |   ID SLASH_EQUAL expression ;
     
     primitive               →   NUMBER_CONST
                             |   STRING_CONST

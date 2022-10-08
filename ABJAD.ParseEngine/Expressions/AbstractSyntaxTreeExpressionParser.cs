@@ -1,3 +1,4 @@
+using ABJAD.ParseEngine.Expressions.Assignments;
 using ABJAD.ParseEngine.Expressions.Binary;
 using ABJAD.ParseEngine.Expressions.Unary;
 using ABJAD.ParseEngine.Expressions.Unary.Postfix;
@@ -152,7 +153,35 @@ public class AbstractSyntaxTreeExpressionParser : ExpressionParser
             return ParsePostfixExpression(expression);
         }
 
+        if (Match(TokenType.PLUS_EQUAL, TokenType.DASH_EQUAL, TokenType.STAR_EQUAL, TokenType.SLASH_EQUAL))
+        {
+            return ParseAssignmentExpression(expression);
+        }
+
         return expression;
+    }
+
+    private Expression ParseAssignmentExpression(Expression expression)
+    {
+        var @operator = consumer.Consume();
+        var value = Parse();
+        return BuildAssignmentExpression(expression, @operator, value);
+    }
+
+    private Expression BuildAssignmentExpression(Expression expression, Token @operator, Expression value)
+    {
+        if (expression is not PrimitiveExpression { Primitive: IdentifierPrimitive identifierPrimitive })
+        {
+            throw new InvalidPostfixExpressionException(GetCurrentLine(), GetCurrentIndex());
+        }
+
+        return @operator.Type switch
+        {
+            TokenType.PLUS_EQUAL  => new AdditionAssignmentExpression(identifierPrimitive, value),
+            TokenType.DASH_EQUAL  => new SubtractionAssignmentExpression(identifierPrimitive, value),
+            TokenType.STAR_EQUAL  => new MultiplicationAssignmentExpression(identifierPrimitive, value),
+            TokenType.SLASH_EQUAL => new DivisionAssignmentExpression(identifierPrimitive, value),
+        };
     }
 
     private Expression ParsePostfixExpression(Expression expression)
