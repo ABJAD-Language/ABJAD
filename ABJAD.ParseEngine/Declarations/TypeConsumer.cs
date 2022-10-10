@@ -1,4 +1,5 @@
 using ABJAD.ParseEngine.Shared;
+using ABJAD.ParseEngine.Types;
 using Ardalis.GuardClauses;
 
 namespace ABJAD.ParseEngine.Declarations;
@@ -13,49 +14,58 @@ public class TypeConsumer : ITypeConsumer
         this.tokenConsumer = tokenConsumer;
     }
 
-    public string Consume()
+    public DataType Consume()
     {
         if (IsTypeString())
         {
-            return tokenConsumer.Consume(TokenType.STRING).Type.ToString();
+            tokenConsumer.Consume(TokenType.STRING);
+            return DataType.String();
         }
 
         if (IsTypeNumber())
         {
-            return tokenConsumer.Consume(TokenType.NUMBER).Type.ToString();
+            tokenConsumer.Consume(TokenType.NUMBER);
+            return DataType.Number();
         }
 
         if (IsTypeBool())
         {
-            return tokenConsumer.Consume(TokenType.BOOL).Type.ToString();
+            tokenConsumer.Consume(TokenType.BOOL);
+            return DataType.Bool();
         }
 
-        return tokenConsumer.Consume(TokenType.ID).Content;
+        var customType = tokenConsumer.Consume(TokenType.ID).Content;
+        return DataType.Custom(customType);
     }
 
-    public string ConsumeTypeOrVoid()
+    public DataType ConsumeTypeOrVoid()
     {
         if (IsTypeString())
         {
-            return tokenConsumer.Consume(TokenType.STRING).Type.ToString();
+            tokenConsumer.Consume(TokenType.STRING);
+            return DataType.String();
         }
 
         if (IsTypeNumber())
         {
-            return tokenConsumer.Consume(TokenType.NUMBER).Type.ToString();
+            tokenConsumer.Consume(TokenType.NUMBER);
+            return DataType.Number();
         }
 
         if (IsTypeBool())
         {
-            return tokenConsumer.Consume(TokenType.BOOL).Type.ToString();
+            tokenConsumer.Consume(TokenType.BOOL);
+            return DataType.Bool();
         }
 
         if (IsTypeVoid())
         {
-            return tokenConsumer.Consume(TokenType.VOID).Type.ToString();
+            tokenConsumer.Consume(TokenType.VOID);
+            return DataType.Void();
         }
 
-        return tokenConsumer.Consume(TokenType.ID).Content;
+        var customType = tokenConsumer.Consume(TokenType.ID).Content;
+        return DataType.Custom(customType);
     }
 
     private bool IsTypeVoid()

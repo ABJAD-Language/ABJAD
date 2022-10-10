@@ -24,7 +24,7 @@ public class ParameterListConsumer : IParameterListConsumer
             var paramType = typeConsumer.Consume();
             var paramName = tokenConsumer.Consume(TokenType.ID).Content;
 
-            parameters.Add(new FunctionParameter(paramType, paramName));
+            parameters.Add(new FunctionParameter(paramType.GetValue(), paramName));
 
             if (!tokenConsumer.CanConsume(TokenType.COMMA))
             {

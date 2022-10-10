@@ -4,6 +4,7 @@ using ABJAD.ParseEngine.Bindings;
 using ABJAD.ParseEngine.Declarations;
 using ABJAD.ParseEngine.Shared;
 using ABJAD.ParseEngine.Statements;
+using ABJAD.ParseEngine.Types;
 using Moq;
 using Xunit;
 
@@ -23,7 +24,7 @@ public class ParseFunctionDeclarationStrategyTest
         tokenConsumer.Setup(c => c.CanConsume(TokenType.CLOSE_PAREN)).Returns(true);
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" });
         parameterListConsumer.Setup(c => c.Consume()).Returns(parameters.Object);
-        typeConsumer.Setup(c => c.ConsumeTypeOrVoid()).Returns("functionReturnType");
+        typeConsumer.Setup(c => c.ConsumeTypeOrVoid()).Returns(DataType.Custom("functionReturnType"));
         blockStatementParser.Setup(p => p.Parse()).Returns(body);
     }
 
@@ -134,7 +135,7 @@ public class ParseFunctionDeclarationStrategyTest
             .Callback(() => Assert.Equal(4, order++));
         tokenConsumer.Setup(c => c.Consume(TokenType.CLOSE_PAREN)).Callback(() => Assert.Equal(5, order++));
         tokenConsumer.Setup(c => c.Consume(TokenType.COLON)).Callback(() => Assert.Equal(6, order++));
-        typeConsumer.Setup(c => c.ConsumeTypeOrVoid()).Returns("functionReturnType")
+        typeConsumer.Setup(c => c.ConsumeTypeOrVoid()).Returns(DataType.Custom("functionReturnType"))
             .Callback(() => Assert.Equal(7, order++));
 
         GetStrategy().Parse();
@@ -164,7 +165,7 @@ public class ParseFunctionDeclarationStrategyTest
     {
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" });
         parameterListConsumer.Setup(c => c.Consume()).Returns(parameters.Object);
-        typeConsumer.Setup(c => c.ConsumeTypeOrVoid()).Returns("functionReturnType");
+        typeConsumer.Setup(c => c.ConsumeTypeOrVoid()).Returns(DataType.Custom("functionReturnType"));
         blockStatementParser.Setup(p => p.Parse()).Returns(body);
 
         var declaration = GetStrategy().Parse();

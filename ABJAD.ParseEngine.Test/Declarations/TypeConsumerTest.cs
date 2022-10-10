@@ -1,6 +1,7 @@
 using System;
 using ABJAD.ParseEngine.Declarations;
 using ABJAD.ParseEngine.Shared;
+using ABJAD.ParseEngine.Types;
 using Moq;
 using Xunit;
 
@@ -25,7 +26,7 @@ public class TypeConsumerTest
         var type = GetConsumer().Consume();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.STRING));
-        Assert.Equal(TokenType.STRING.ToString(), type);
+        Assert.Equal("STRING", type.GetValue());
     }
 
     [Fact]
@@ -37,7 +38,7 @@ public class TypeConsumerTest
         var type = GetConsumer().Consume();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.NUMBER));
-        Assert.Equal(TokenType.NUMBER.ToString(), type);
+        Assert.Equal("NUMBER", type.GetValue());
     }
 
     [Fact]
@@ -49,7 +50,7 @@ public class TypeConsumerTest
         var type = GetConsumer().Consume();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.BOOL));
-        Assert.Equal(TokenType.BOOL.ToString(), type);
+        Assert.Equal("BOOL", type.GetValue());
     }
 
     [Fact]
@@ -60,7 +61,7 @@ public class TypeConsumerTest
         var type = GetConsumer().Consume();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.ID));
-        Assert.Equal("customType", type);
+        Assert.Equal("customType", type.GetValue());
     }
 
     [Fact]
@@ -72,7 +73,7 @@ public class TypeConsumerTest
         var type = GetConsumer().ConsumeTypeOrVoid();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.STRING));
-        Assert.Equal(TokenType.STRING.ToString(), type);
+        Assert.Equal("STRING", type.GetValue());
     }
 
     [Fact]
@@ -84,7 +85,7 @@ public class TypeConsumerTest
         var type = GetConsumer().ConsumeTypeOrVoid();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.NUMBER));
-        Assert.Equal(TokenType.NUMBER.ToString(), type);
+        Assert.Equal("NUMBER", type.GetValue());
     }
 
     [Fact]
@@ -96,7 +97,7 @@ public class TypeConsumerTest
         var type = GetConsumer().ConsumeTypeOrVoid();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.BOOL));
-        Assert.Equal(TokenType.BOOL.ToString(), type);
+        Assert.Equal("BOOL", type.GetValue());
     }
 
     [Fact]
@@ -108,7 +109,7 @@ public class TypeConsumerTest
         var type = GetConsumer().ConsumeTypeOrVoid();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.VOID));
-        Assert.Equal(TokenType.VOID.ToString(), type);
+        Assert.Equal("VOID", type.GetValue());
     }
 
     [Fact]
@@ -119,7 +120,7 @@ public class TypeConsumerTest
         var type = GetConsumer().ConsumeTypeOrVoid();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.ID));
-        Assert.Equal("customType", type);
+        Assert.Equal("customType", type.GetValue());
     }
 
     private TypeConsumer GetConsumer()

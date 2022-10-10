@@ -2,6 +2,7 @@ using System;
 using ABJAD.ParseEngine.Declarations;
 using ABJAD.ParseEngine.Expressions;
 using ABJAD.ParseEngine.Shared;
+using ABJAD.ParseEngine.Types;
 using Moq;
 using Xunit;
 
@@ -16,6 +17,7 @@ public class ParseVariableDeclarationStrategyTest
 
     public ParseVariableDeclarationStrategyTest()
     {
+        typeConsumer.Setup(c => c.Consume()).Returns(DataType.String());
         tokenConsumer.Setup(c => c.Consume(It.IsAny<TokenType>())).Returns(token.Object);
     }
 
@@ -66,7 +68,7 @@ public class ParseVariableDeclarationStrategyTest
     [Fact]
     private void ReturnsVariableDeclarationWithoutValueIfNotProvided()
     {
-        typeConsumer.Setup(c => c.Consume()).Returns("type");
+        typeConsumer.Setup(c => c.Consume()).Returns(DataType.Custom("type"));
         tokenConsumer.Setup(c => c.CanConsume(TokenType.EQUAL)).Returns(false);
         tokenConsumer.Setup(c => c.Consume(TokenType.STRING)).Returns(new Token { Type = TokenType.STRING });
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "id" });
@@ -116,7 +118,7 @@ public class ParseVariableDeclarationStrategyTest
     [Fact]
     private void ReturnsVariableDeclarationWithValueExpressionWhenFound()
     {
-        typeConsumer.Setup(c => c.Consume()).Returns("type");
+        typeConsumer.Setup(c => c.Consume()).Returns(DataType.Custom("type"));
         tokenConsumer.Setup(c => c.CanConsume(TokenType.EQUAL)).Returns(true);
         tokenConsumer.Setup(c => c.Consume(TokenType.STRING)).Returns(new Token { Type = TokenType.STRING });
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "id" });

@@ -10,8 +10,7 @@ public class ParseVariableDeclarationStrategy : ParseDeclarationStrategy
     private readonly ExpressionParser expressionParser;
     private readonly ITypeConsumer typeConsumer;
 
-    public ParseVariableDeclarationStrategy(ITokenConsumer tokenConsumer, ExpressionParser expressionParser,
-        ITypeConsumer typeConsumer)
+    public ParseVariableDeclarationStrategy(ITokenConsumer tokenConsumer, ExpressionParser expressionParser, ITypeConsumer typeConsumer)
     {
         Guard.Against.Null(tokenConsumer);
         Guard.Against.Null(expressionParser);
@@ -35,6 +34,6 @@ public class ParseVariableDeclarationStrategy : ParseDeclarationStrategy
             tokenConsumer.Consume(TokenType.SEMICOLON);
         }
 
-        return new VariableDeclaration(type, name.Content, value);
+        return new VariableDeclaration(type.GetValue(), name.Content, value);
     }
 }

@@ -2,6 +2,7 @@ using System;
 using ABJAD.ParseEngine.Declarations;
 using ABJAD.ParseEngine.Expressions;
 using ABJAD.ParseEngine.Shared;
+using ABJAD.ParseEngine.Types;
 using Moq;
 using Xunit;
 
@@ -16,6 +17,7 @@ public class ParseConstantDeclarationStrategyTest
 
     public ParseConstantDeclarationStrategyTest()
     {
+        typeConsumer.Setup(c => c.Consume()).Returns(DataType.Number());
         tokenConsumer.Setup(c => c.Consume(It.IsAny<TokenType>())).Returns(token.Object);
     }
 
@@ -103,7 +105,7 @@ public class ParseConstantDeclarationStrategyTest
     [Fact]
     private void ReturnsVariableDeclarationWithValueExpressionWhenFound()
     {
-        typeConsumer.Setup(c => c.Consume()).Returns("type");
+        typeConsumer.Setup(c => c.Consume()).Returns(DataType.Custom("type"));
         tokenConsumer.Setup(c => c.Consume(TokenType.STRING)).Returns(new Token { Type = TokenType.STRING });
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "id" });
         var valueExpression = new Mock<Expression>();

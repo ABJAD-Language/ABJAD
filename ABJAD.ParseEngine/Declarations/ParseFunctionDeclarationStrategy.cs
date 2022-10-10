@@ -40,6 +40,6 @@ public class ParseFunctionDeclarationStrategy : ParseDeclarationStrategy
 
         var body = blockStatementParser.Parse();
 
-        return new FunctionDeclaration(name, returnType, parameters, body as BlockStatement);
+        return new FunctionDeclaration(name, returnType.GetValue(), parameters, body as BlockStatement);
     }
 }

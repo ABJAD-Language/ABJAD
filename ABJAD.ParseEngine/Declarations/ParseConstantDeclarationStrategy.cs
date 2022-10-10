@@ -31,6 +31,6 @@ public class ParseConstantDeclarationStrategy : ParseDeclarationStrategy
         var value = expressionParser.Parse();
         tokenConsumer.Consume(TokenType.SEMICOLON);
 
-        return new ConstantDeclaration(type, name.Content, value);
+        return new ConstantDeclaration(type.GetValue(), name.Content, value);
     }
 }

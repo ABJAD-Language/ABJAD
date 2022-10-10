@@ -1,7 +1,10 @@
+
+using ABJAD.ParseEngine.Types;
+
 namespace ABJAD.ParseEngine.Declarations;
 
 public interface ITypeConsumer
 {
-    string Consume();
-    string ConsumeTypeOrVoid();
+    DataType Consume();
+    DataType ConsumeTypeOrVoid();
 }

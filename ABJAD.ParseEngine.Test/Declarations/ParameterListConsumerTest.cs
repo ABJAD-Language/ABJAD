@@ -1,6 +1,7 @@
 using System;
 using ABJAD.ParseEngine.Declarations;
 using ABJAD.ParseEngine.Shared;
+using ABJAD.ParseEngine.Types;
 using Moq;
 using Xunit;
 
@@ -36,7 +37,7 @@ public class ParameterListConsumerTest
     {
         tokenConsumer.SetupSequence(c => c.CanConsume(TokenType.CLOSE_PAREN)).Returns(false).Returns(true);
 
-        typeConsumer.Setup(c => c.Consume()).Returns("type");
+        typeConsumer.Setup(c => c.Consume()).Returns(DataType.Custom("type"));
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "name" });
 
         var functionParameters = GetConsumer().Consume();
@@ -54,7 +55,7 @@ public class ParameterListConsumerTest
         tokenConsumer.SetupSequence(c => c.CanConsume(TokenType.COMMA)).Returns(true).Returns(false);
 
 
-        typeConsumer.SetupSequence(c => c.Consume()).Returns("type1").Returns("type2");
+        typeConsumer.SetupSequence(c => c.Consume()).Returns(DataType.Custom("type1")).Returns(DataType.Custom("type2"));
         tokenConsumer.SetupSequence(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "name1" })
             .Returns(new Token { Content = "name2" });
 
