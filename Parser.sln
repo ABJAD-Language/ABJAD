@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{E38AB9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.ParseEngine.Test", "ABJAD.ParseEngine.Test\ABJAD.ParseEngine.Test.csproj", "{B96E746A-DBEF-4163-8EA9-0253C21F78BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.ParseEngine.Service", "ABJAD.ParseEngine.Service\ABJAD.ParseEngine.Service.csproj", "{8AD5D525-05D6-4F25-A246-92CC7536FD73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.ParseEngine.Service.Test", "ABJAD.ParseEngine.Service.Test\ABJAD.ParseEngine.Service.Test.csproj", "{F45B05C3-7927-4FE9-90D2-93EFC1D02FD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,5 +30,13 @@ Global
 		{B96E746A-DBEF-4163-8EA9-0253C21F78BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B96E746A-DBEF-4163-8EA9-0253C21F78BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B96E746A-DBEF-4163-8EA9-0253C21F78BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AD5D525-05D6-4F25-A246-92CC7536FD73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AD5D525-05D6-4F25-A246-92CC7536FD73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AD5D525-05D6-4F25-A246-92CC7536FD73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AD5D525-05D6-4F25-A246-92CC7536FD73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F45B05C3-7927-4FE9-90D2-93EFC1D02FD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F45B05C3-7927-4FE9-90D2-93EFC1D02FD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F45B05C3-7927-4FE9-90D2-93EFC1D02FD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F45B05C3-7927-4FE9-90D2-93EFC1D02FD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -5,7 +5,7 @@ using ABJAD.ParseEngine.Statements;
 
 namespace ABJAD.ParseEngine;
 
-public class Parser
+public class Parser : IParser
 {
     private readonly TokenConsumer tokenConsumer;
     private readonly BindingFactory bindingFactory;
