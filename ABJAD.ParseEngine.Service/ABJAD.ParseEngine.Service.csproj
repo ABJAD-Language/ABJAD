@@ -15,4 +15,8 @@
       <ProjectReference Include="..\ABJAD.ParseEngine\ABJAD.ParseEngine.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Expressions\Unary" />
+    </ItemGroup>
+
 </Project>
