@@ -1,5 +1,6 @@
 ﻿using ABJAD.ParseEngine.Service.Expressions;
 using ABJAD.ParseEngine.Service.Expressions.Assignments;
+using ABJAD.ParseEngine.Service.Expressions.Binary;
 using ABJAD.ParseEngine.Service.Expressions.Unary;
 using ABJAD.ParseEngine.Service.Primitives;
 using Moq;
@@ -134,5 +135,83 @@ public class ExpressionApiModelTest
     public void typeof_expression_api_model_returns_correct_type()
     {
         Assert.Equal("expression.typeof", new TypeofExpressionApiModel(new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "addition expression api model returns correct type")]
+    public void addition_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.addition", new AdditionExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "and operation expression api model returns correct type")]
+    public void and_operation_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.and", new AndOperationExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "division expression api model returns correct type")]
+    public void division_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.division", new DivisionExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "equality check expression api model returns correct type")]
+    public void equality_check_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.equalityCheck", new EqualityCheckExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "greater check expression api model returns correct type")]
+    public void greater_check_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.greaterCheck", new GreaterCheckExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "greater or equal check expression api model returns correct type")]
+    public void greater_or_equal_check_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.greaterOrEqualCheck", new GreaterOrEqualCheckExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "less check expression api model returns correct type")]
+    public void less_check_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.lessCheck", new LessCheckExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "less check or equal expression api model returns correct type")]
+    public void less_or_equal_check_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.lessOrEqualCheck", new LessOrEqualCheckExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "inequality check expression api model returns correct type")]
+    public void inequality_check_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.inequalityCheck", new InequalityCheckExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "modulo expression api model returns correct type")]
+    public void modulo_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.modulo", new ModuloExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "multiplication expression api model returns correct type")]
+    public void multiplication_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.multiplication", new MultiplicationExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "subtraction expression api model returns correct type")]
+    public void subtraction_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.subtraction", new SubtractionExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "or operation expression api model returns correct type")]
+    public void or_operation_expression_api_model_returns_correct_type()
+    {
+        Assert.Equal("expression.or", new OrOperationExpressionApiModel(new Mock<ExpressionApiModel>().Object, new Mock<ExpressionApiModel>().Object).Type);
     }
 }
