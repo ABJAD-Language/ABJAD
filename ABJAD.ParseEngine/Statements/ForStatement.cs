@@ -14,7 +14,7 @@ public class ForStatement : Statement
     }
 
     public Binding TargetDefinition { get; }
-    public Statement Condition { get; }
+    public Statement Condition { get; } // TODO refactor to ExpressionStatement
     public Expression TargetCallback { get; }
     public Statement Body { get; }
 }

@@ -1,4 +1,5 @@
-﻿using ABJAD.ParseEngine.Service.Expressions;
+﻿using ABJAD.ParseEngine.Service.Bindings;
+using ABJAD.ParseEngine.Service.Expressions;
 using ABJAD.ParseEngine.Statements;
 
 namespace ABJAD.ParseEngine.Service.Statements;
@@ -15,8 +16,22 @@ public static class StatementApiModelMapper
             IfElseStatement ifElseStatement => Map(ifElseStatement),
             PrintStatement printStatement => Map(printStatement),
             ReturnStatement returnStatement => Map(returnStatement),
-            WhileStatement whileStatement => Map(whileStatement)
+            WhileStatement whileStatement => Map(whileStatement),
+            ForStatement forStatement => Map(forStatement),
+            BlockStatement blockStatement => Map(blockStatement)
         };
+    }
+
+    private static BlockStatementApiModel Map(BlockStatement blockStatement)
+    {
+        return new BlockStatementApiModel(blockStatement.Bindings.Select(BindingApiModelMapper.Map).ToList());
+    }
+
+    private static ForStatementApiModel Map(ForStatement forStatement)
+    {
+        return new ForStatementApiModel(BindingApiModelMapper.Map(forStatement.TargetDefinition),
+            Map(forStatement.Condition), ExpressionApiModelMapper.Map(forStatement.TargetCallback),
+            Map(forStatement.Body));
     }
 
     private static WhileStatementApiModel Map(WhileStatement whileStatement)

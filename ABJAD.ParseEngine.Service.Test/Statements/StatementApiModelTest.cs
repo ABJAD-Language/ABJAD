@@ -1,4 +1,9 @@
-﻿using ABJAD.ParseEngine.Service.Expressions;
+﻿using ABJAD.ParseEngine.Service.Bindings;
+using ABJAD.ParseEngine.Service.Declarations;
+using ABJAD.ParseEngine.Service.Expressions;
+using ABJAD.ParseEngine.Service.Expressions.Assignments;
+using ABJAD.ParseEngine.Service.Expressions.Binary;
+using ABJAD.ParseEngine.Service.Primitives;
 using ABJAD.ParseEngine.Service.Statements;
 using Moq;
 
@@ -47,5 +52,22 @@ public class StatementApiModelTest
     public void while_statement_returns_correct_type()
     {
         Assert.Equal("statement.while", new WhileStatementApiModel(new Mock<ExpressionApiModel>().Object, new Mock<StatementApiModel>().Object).Type);
+    }
+
+    [Fact(DisplayName = "for statement returns correct type")]
+    public void for_statement_returns_correct_type()
+    {
+        var target = new VariableDeclarationApiModel("int", "i");
+        var condition = new ExpressionStatementApiModel(new PrimitiveExpressionApiModel(new BoolPrimitiveApiModel(true)));
+        var callback = new AdditionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel("i"),
+            new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(1)));
+        var body = new PrintStatementApiModel(new PrimitiveExpressionApiModel(new StringPrimitiveApiModel("hello")));
+        Assert.Equal("statement.for", new ForStatementApiModel(target, condition, callback, body).Type);
+    }
+
+    [Fact(DisplayName = "block statement returns correct type")]
+    public void block_statement_returns_correct_type()
+    {
+        Assert.Equal("statement.block", new BlockStatementApiModel(new List<BindingApiModel>()).Type);
     }
 }
