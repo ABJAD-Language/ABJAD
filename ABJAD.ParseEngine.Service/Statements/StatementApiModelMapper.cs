@@ -22,7 +22,7 @@ public static class StatementApiModelMapper
         };
     }
 
-    private static BlockStatementApiModel Map(BlockStatement blockStatement)
+    public static BlockStatementApiModel Map(BlockStatement blockStatement)
     {
         return new BlockStatementApiModel(blockStatement.Bindings.Select(BindingApiModelMapper.Map).ToList());
     }
