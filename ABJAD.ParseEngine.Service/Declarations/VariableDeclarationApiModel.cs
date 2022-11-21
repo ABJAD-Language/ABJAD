@@ -8,11 +8,15 @@ public class VariableDeclarationApiModel : DeclarationApiModel
     public string Name { get; }
     public ExpressionApiModel? Value { get; }
 
-    public VariableDeclarationApiModel(string variableType, string name, ExpressionApiModel? value)
+    public VariableDeclarationApiModel(string variableType, string name, ExpressionApiModel? value) : this(variableType, name)
+    {
+        Value = value;
+    }
+
+    public VariableDeclarationApiModel(string variableType, string name)
     {
         VariableType = variableType;
         Name = name;
-        Value = value;
         Type = "declaration.variable";
     }
 }

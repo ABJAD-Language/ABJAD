@@ -1,5 +1,7 @@
-﻿namespace ABJAD.ParseEngine.Service.Statements;
+﻿using ABJAD.ParseEngine.Service.Bindings;
 
-public abstract class StatementApiModel : ApiModel
+namespace ABJAD.ParseEngine.Service.Statements;
+
+public abstract class StatementApiModel : ApiModel, BindingApiModel
 {
 }
