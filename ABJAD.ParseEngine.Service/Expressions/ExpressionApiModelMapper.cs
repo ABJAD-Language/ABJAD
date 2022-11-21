@@ -46,7 +46,8 @@ public static class ExpressionApiModelMapper
             GreaterCheckExpression greaterCheckExpression => Map(greaterCheckExpression),
             GreaterOrEqualCheckExpression greaterOrEqualCheckExpression => Map(greaterOrEqualCheckExpression),
             LessCheckExpression lessCheckExpression => Map(lessCheckExpression),
-            LessOrEqualCheckExpression lessOrEqualCheckExpression => Map(lessOrEqualCheckExpression)
+            LessOrEqualCheckExpression lessOrEqualCheckExpression => Map(lessOrEqualCheckExpression),
+            GroupExpression groupExpression => Map(groupExpression.Target)
         };
     }
 
