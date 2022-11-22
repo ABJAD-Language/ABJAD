@@ -1,0 +1,103 @@
+[
+  {
+    "name": "انسان",
+    "body": {
+      "bindings": [
+        {
+          "variableType": "STRING",
+          "name": "الاسم",
+          "value": null,
+          "type": "declaration.variable"
+        },
+        {
+          "variableType": "NUMBER",
+          "name": "العمر",
+          "value": null,
+          "type": "declaration.variable"
+        },
+        {
+          "parameters": [
+            {
+              "name": "اسم",
+              "type": "STRING"
+            },
+            {
+              "name": "عمر",
+              "type": "NUMBER"
+            }
+          ],
+          "body": {
+            "bindings": [
+              {
+                "target": "الاسم",
+                "value": {
+                  "value": "اسم",
+                  "type": "primitive.identifier"
+                },
+                "type": "statement.assignment"
+              },
+              {
+                "target": "العمر",
+                "value": {
+                  "value": "عمر",
+                  "type": "primitive.identifier"
+                },
+                "type": "statement.assignment"
+              }
+            ],
+            "type": "statement.block"
+          },
+          "type": "declaration.constructor"
+        },
+        {
+          "name": "تعريف",
+          "returnType": "VOID",
+          "parameters": [],
+          "body": {
+            "bindings": [
+              {
+                "target": {
+                  "firstOperand": {
+                    "firstOperand": {
+                      "firstOperand": {
+                        "firstOperand": {
+                          "value": "انسان[الاسم: ",
+                          "type": "primitive.string"
+                        },
+                        "secondOperand": {
+                          "value": "الاسم",
+                          "type": "primitive.identifier"
+                        },
+                        "type": "expression.addition"
+                      },
+                      "secondOperand": {
+                        "value": "العمر: ",
+                        "type": "primitive.string"
+                      },
+                      "type": "expression.addition"
+                    },
+                    "secondOperand": {
+                      "value": "العمر",
+                      "type": "primitive.identifier"
+                    },
+                    "type": "expression.addition"
+                  },
+                  "secondOperand": {
+                    "value": "]",
+                    "type": "primitive.string"
+                  },
+                  "type": "expression.addition"
+                },
+                "type": "statement.print"
+              }
+            ],
+            "type": "statement.block"
+          },
+          "type": "declaration.function"
+        }
+      ],
+      "type": "statement.block"
+    },
+    "type": "declaration.class"
+  }
+]

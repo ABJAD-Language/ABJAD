@@ -3,26 +3,26 @@
     {
       "line": 1,
       "index": 1,
-      "type": "FOR",
-      "content": "كرر"
+      "type": "FUNC",
+      "content": "دالة"
     },
     {
       "line": 1,
-      "index": 4,
+      "index": 5,
       "type": "WHITE_SPACE",
       "content": " "
     },
     {
       "line": 1,
-      "index": 5,
-      "type": "OPEN_PAREN",
-      "content": "("
+      "index": 6,
+      "type": "ID",
+      "content": "احسب"
     },
     {
       "line": 1,
-      "index": 6,
-      "type": "VAR",
-      "content": "متغير"
+      "index": 10,
+      "type": "OPEN_PAREN",
+      "content": "("
     },
     {
       "line": 1,
@@ -40,37 +40,25 @@
       "line": 1,
       "index": 15,
       "type": "ID",
-      "content": "ا"
+      "content": "ع"
     },
     {
       "line": 1,
       "index": 16,
-      "type": "WHITE_SPACE",
-      "content": " "
+      "type": "COMMA",
+      "content": "،"
     },
     {
       "line": 1,
       "index": 17,
-      "type": "EQUAL",
-      "content": "="
+      "type": "WHITE_SPACE",
+      "content": " "
     },
     {
       "line": 1,
       "index": 18,
-      "type": "WHITE_SPACE",
-      "content": " "
-    },
-    {
-      "line": 1,
-      "index": 19,
-      "type": "NUMBER_CONST",
-      "content": "0"
-    },
-    {
-      "line": 1,
-      "index": 20,
-      "type": "SEMICOLON",
-      "content": "؛"
+      "type": "NUMBER",
+      "content": "رقم"
     },
     {
       "line": 1,
@@ -82,107 +70,107 @@
       "line": 1,
       "index": 22,
       "type": "ID",
-      "content": "ا"
+      "content": "س"
     },
     {
       "line": 1,
       "index": 23,
-      "type": "WHITE_SPACE",
-      "content": " "
+      "type": "CLOSE_PAREN",
+      "content": ")"
     },
     {
       "line": 1,
       "index": 24,
-      "type": "LESS_THAN",
-      "content": "<"
+      "type": "WHITE_SPACE",
+      "content": " "
     },
     {
       "line": 1,
       "index": 25,
-      "type": "WHITE_SPACE",
-      "content": " "
+      "type": "COLON",
+      "content": ":"
     },
     {
       "line": 1,
       "index": 26,
-      "type": "NUMBER_CONST",
-      "content": "10"
-    },
-    {
-      "line": 1,
-      "index": 28,
-      "type": "SEMICOLON",
-      "content": "؛"
-    },
-    {
-      "line": 1,
-      "index": 29,
-      "type": "ID",
-      "content": "ا"
-    },
-    {
-      "line": 1,
-      "index": 30,
-      "type": "PLUS_PLUS",
-      "content": "++"
-    },
-    {
-      "line": 1,
-      "index": 32,
-      "type": "CLOSE_PAREN",
-      "content": ")"
-    },
-    {
-      "line": 1,
-      "index": 33,
       "type": "WHITE_SPACE",
       "content": " "
     },
     {
       "line": 1,
-      "index": 34,
-      "type": "OPEN_BRACE",
-      "content": " {"
+      "index": 27,
+      "type": "NUMBER",
+      "content": "رقم"
     },
     {
       "line": 1,
-      "index": 35,
+      "index": 30,
       "type": "WHITE_SPACE",
-      "content": "\n\t"
+      "content": " "
+    },
+    {
+      "line": 1,
+      "index": 31,
+      "type": "OPEN_BRACE",
+      "content": "{"
+    },
+    {
+      "line": 1,
+      "index": 32,
+      "type": "WHITE_SPACE",
+      "content": "\n    "
     },
     {
       "line": 2,
-      "index": 2,
-      "type": "PRINT",
-      "content": "اكتب"
+      "index": 1,
+      "type": "RETURN",
+      "content": "ارجع"
+    },
+    {
+      "line": 2,
+      "index": 5,
+      "type": "WHITE_SPACE",
+      "content": " "
     },
     {
       "line": 2,
       "index": 6,
-      "type": "OPEN_PAREN",
-      "content": "("
+      "type": "ID",
+      "content": "ع"
     },
     {
       "line": 2,
       "index": 7,
-      "type": "STRING_CONST",
-      "content": "مرحبا بالعالم!"
+      "type": "WHITE_SPACE",
+      "content": " "
     },
     {
       "line": 2,
-      "index": 21,
-      "type": "CLOSE_PAREN",
-      "content": ")"
+      "index": 8,
+      "type": "PLUS",
+      "content": "+"
     },
     {
       "line": 2,
-      "index": 22,
+      "index": 9,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 2,
+      "index": 10,
+      "type": "ID",
+      "content": "س"
+    },
+    {
+      "line": 2,
+      "index": 11,
       "type": "SEMICOLON",
       "content": "؛"
     },
     {
       "line": 2,
-      "index": 23,
+      "index": 12,
       "type": "WHITE_SPACE",
       "content": "\n"
     },

@@ -1,0 +1,36 @@
+[
+  {
+    "name": "احسب",
+    "returnType": "NUMBER",
+    "parameters": [
+      {
+        "name": "ع",
+        "type": "NUMBER"
+      },
+      {
+        "name": "س",
+        "type": "NUMBER"
+      }
+    ],
+    "body": {
+      "bindings": [
+        {
+          "target": {
+            "firstOperand": {
+              "value": "ع",
+              "type": "primitive.identifier"
+            },
+            "secondOperand": {
+              "value": "س",
+              "type": "primitive.identifier"
+            },
+            "type": "expression.addition"
+          },
+          "type": "statement.return"
+        }
+      ],
+      "type": "statement.block"
+    },
+    "type": "declaration.function"
+  }
+]

@@ -16,8 +16,8 @@ public class ParserControllerIntegrationTest
         client = appFactory.CreateClient();
     }
 
-    [Fact(DisplayName = "parsing returns correct structure on happy path")]
-    public async Task parsing_returns_correct_structure_on_happy_path()
+    [Fact(DisplayName = "parsing for statement returns correct result")]
+    public async Task parsing_for_statement_returns_correct_result()
     {
         var request = ReadFile("Requests/for_statement.json");
         var body = new StringContent(request, Encoding.UTF8, MediaTypeNames.Application.Json);
@@ -25,6 +25,28 @@ public class ParserControllerIntegrationTest
         var content = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal(RemoveWhiteSpaces(ReadFile("Responses/for_statement.json")), content);
+    }
+
+    [Fact(DisplayName = "parsing function declaration returns correct result")]
+    public async Task parsing_function_declaration_returns_correct_result()
+    {
+        var request = ReadFile("Requests/function_declaration.json");
+        var body = new StringContent(request, Encoding.UTF8, MediaTypeNames.Application.Json);
+        var response = await client.PostAsync("/", body);
+        var content = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(RemoveWhiteSpaces(ReadFile("Responses/function_declaration.json")), content);
+    }
+
+    [Fact(DisplayName = "parsing class declaration returns correct result")]
+    public async Task parsing_class_declaration_returns_correct_result()
+    {
+        var request = ReadFile("Requests/class_declaration.json");
+        var body = new StringContent(request, Encoding.UTF8, MediaTypeNames.Application.Json);
+        var response = await client.PostAsync("/", body);
+        var content = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(RemoveWhiteSpaces(ReadFile("Responses/class_declaration.json")), content);
     }
     
     private static string ReadFile(string fileName)

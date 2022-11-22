@@ -83,6 +83,7 @@ public class ParserTest
             new() { Type = TokenType.VAR },
             new() { Type = TokenType.NUMBER },
             new() { Type = TokenType.ID, Content = "field" },
+            new() { Type = TokenType.SEMICOLON },
             new() { Type = TokenType.CONSTRUCTOR },
             new() { Type = TokenType.OPEN_PAREN },
             new() { Type = TokenType.STRING },
