@@ -1,6 +1,6 @@
 ﻿namespace ABJAD.ParseEngine.Service.Primitives;
 
-public class NullPrimitiveApiModel : PrimitiveApiModel
+public class NullPrimitiveApiModel : PrimitiveExpressionApiModel
 {
     public NullPrimitiveApiModel()
     {

@@ -26,7 +26,7 @@ public class BindingApiModelMapperTest
     public void maps_statement_binding_correctly()
     {
         var bindingApiModel = BindingApiModelMapper.Map(new StatementBinding(new ExpressionStatement(new PrimitiveExpression(StringPrimitive.From("value")))));
-        var expectedApiModel = new ExpressionStatementApiModel(new PrimitiveExpressionApiModel(new StringPrimitiveApiModel("value")));
+        var expectedApiModel = new ExpressionStatementApiModel(new StringPrimitiveApiModel("value"));
         bindingApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 }

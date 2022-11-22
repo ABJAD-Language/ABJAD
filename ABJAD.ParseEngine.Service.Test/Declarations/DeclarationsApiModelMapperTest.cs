@@ -20,8 +20,7 @@ public class DeclarationsApiModelMapperTest
     {
         var declarationApiModel = Map(new ConstantDeclaration("type", "name",
             new PrimitiveExpression(StringPrimitive.From("value"))));
-        var expectedApiModel = new ConstantDeclarationApiModel("type", "name",
-            new PrimitiveExpressionApiModel(new StringPrimitiveApiModel("value")));
+        var expectedApiModel = new ConstantDeclarationApiModel("type", "name", new StringPrimitiveApiModel("value"));
         declarationApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
     
@@ -31,7 +30,7 @@ public class DeclarationsApiModelMapperTest
         var declarationApiModel = Map(new VariableDeclaration("type", "name",
             new PrimitiveExpression(StringPrimitive.From("value"))));
         var expectedApiModel = new VariableDeclarationApiModel("type", "name",
-            new PrimitiveExpressionApiModel(new StringPrimitiveApiModel("value")));
+            new StringPrimitiveApiModel("value"));
         declarationApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 

@@ -1,6 +1,6 @@
 ﻿namespace ABJAD.ParseEngine.Service.Primitives;
 
-public class NumberPrimitiveApiModel : PrimitiveApiModel
+public class NumberPrimitiveApiModel : PrimitiveExpressionApiModel
 {
     public double Value { get; }
 

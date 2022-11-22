@@ -21,8 +21,7 @@ public class ExpressionApiModelMapperTest
         var expressionApiModel = Map(new CallExpression(new PrimitiveExpression(BoolPrimitive.True()),
             new List<Expression>()));
         var expectedApiModel =
-            new CallExpressionApiModel(new PrimitiveExpressionApiModel(new BoolPrimitiveApiModel(true)),
-                new List<ExpressionApiModel>());
+            new CallExpressionApiModel(new BoolPrimitiveApiModel(true), new List<ExpressionApiModel>());
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -33,9 +32,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("instance")),
             new List<PrimitiveExpression> { new(IdentifierPrimitive.From("field")) }));
         var expectedApiModel = new InstanceFieldExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("instance")),
-            new List<PrimitiveExpressionApiModel>()
-                { new(new IdentifierPrimitiveApiModel("field")) });
+            new IdentifierPrimitiveApiModel("instance"),
+            new List<PrimitiveExpressionApiModel> { new IdentifierPrimitiveApiModel("field") });
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -46,9 +44,8 @@ public class ExpressionApiModelMapperTest
             new List<PrimitiveExpression> { new(IdentifierPrimitive.From("instance")) },
             new PrimitiveExpression(IdentifierPrimitive.From("method")), new List<Expression>()));
         var expectedApiModel = new InstanceMethodCallExpressionApiModel(
-            new List<PrimitiveExpressionApiModel>
-                { new(new IdentifierPrimitiveApiModel("instance")) },
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("method")), new List<ExpressionApiModel>());
+            new List<PrimitiveExpressionApiModel> { new IdentifierPrimitiveApiModel("instance") },
+            new IdentifierPrimitiveApiModel("method"), new List<ExpressionApiModel>());
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -57,8 +54,7 @@ public class ExpressionApiModelMapperTest
     {
         var expressionApiModel = Map(
             new InstantiationExpression(new PrimitiveExpression(IdentifierPrimitive.From("class")), new List<Expression>()));
-        var expectedApiModel = new InstantiationExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("class")), new List<ExpressionApiModel>());
+        var expectedApiModel = new InstantiationExpressionApiModel(new IdentifierPrimitiveApiModel("class"), new List<ExpressionApiModel>());
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -66,7 +62,7 @@ public class ExpressionApiModelMapperTest
     public void maps_primitive_expression_correctly()
     {
         var expressionApiModel = Map(new PrimitiveExpression(NumberPrimitive.From("2")));
-        var expectedApiModel = new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(2));
+        var expectedApiModel = new NumberPrimitiveApiModel(2);
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -75,7 +71,7 @@ public class ExpressionApiModelMapperTest
     {
         var expressionApiModel = Map(new AdditionAssignmentExpression(IdentifierPrimitive.From("target"),
             new PrimitiveExpression(NumberPrimitive.From("3"))));
-        var expectedApiModel = new AdditionAssignmentExpressionApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
+        var expectedApiModel = new AdditionAssignmentExpressionApiModel("target", new NumberPrimitiveApiModel(3));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -84,7 +80,7 @@ public class ExpressionApiModelMapperTest
     {
         var expressionApiModel = Map(new SubtractionAssignmentExpression(IdentifierPrimitive.From("target"),
             new PrimitiveExpression(NumberPrimitive.From("3"))));
-        var expectedApiModel = new SubtractionAssignmentExpressionApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
+        var expectedApiModel = new SubtractionAssignmentExpressionApiModel("target", new NumberPrimitiveApiModel(3));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -93,7 +89,7 @@ public class ExpressionApiModelMapperTest
     {
         var expressionApiModel = Map(new MultiplicationAssignmentExpression(IdentifierPrimitive.From("target"),
             new PrimitiveExpression(NumberPrimitive.From("3"))));
-        var expectedApiModel = new MultiplicationAssignmentExpressionApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
+        var expectedApiModel = new MultiplicationAssignmentExpressionApiModel("target", new NumberPrimitiveApiModel(3));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -102,7 +98,7 @@ public class ExpressionApiModelMapperTest
     {
         var expressionApiModel = Map(new DivisionAssignmentExpression(IdentifierPrimitive.From("target"),
             new PrimitiveExpression(NumberPrimitive.From("3"))));
-        var expectedApiModel = new DivisionAssignmentExpressionApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
+        var expectedApiModel = new DivisionAssignmentExpressionApiModel("target", new NumberPrimitiveApiModel(3));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -110,7 +106,7 @@ public class ExpressionApiModelMapperTest
     public void maps_negation_expression_correctly()
     {
         var expressionApiModel = Map(new NegationExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new NegationExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new NegationExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -118,7 +114,7 @@ public class ExpressionApiModelMapperTest
     public void maps_negative_expression_correctly()
     {
         var expressionApiModel = Map(new NegativeExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new NegativeExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new NegativeExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -126,7 +122,7 @@ public class ExpressionApiModelMapperTest
     public void maps_postfix_addition_expression_correctly()
     {
         var expressionApiModel = Map(new PostfixAdditionExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new PostfixAdditionExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new PostfixAdditionExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -134,7 +130,7 @@ public class ExpressionApiModelMapperTest
     public void maps_postfix_subtraction_expression_correctly()
     {
         var expressionApiModel = Map(new PostfixSubtractionExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new PostfixSubtractionExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new PostfixSubtractionExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -142,7 +138,7 @@ public class ExpressionApiModelMapperTest
     public void maps_prefix_addition_expression_correctly()
     {
         var expressionApiModel = Map(new PrefixAdditionExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new PrefixAdditionExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new PrefixAdditionExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -150,7 +146,7 @@ public class ExpressionApiModelMapperTest
     public void maps_prefix_subtraction_expression_correctly()
     {
         var expressionApiModel = Map(new PrefixSubtractionExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new PrefixSubtractionExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new PrefixSubtractionExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -158,7 +154,7 @@ public class ExpressionApiModelMapperTest
     public void maps_to_bool_expression_correctly()
     {
         var expressionApiModel = Map(new ToBoolExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new ToBoolExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new ToBoolExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -166,7 +162,7 @@ public class ExpressionApiModelMapperTest
     public void maps_to_number_expression_correctly()
     {
         var expressionApiModel = Map(new ToNumberExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new ToNumberExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new ToNumberExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -174,7 +170,7 @@ public class ExpressionApiModelMapperTest
     public void maps_to_string_expression_correctly()
     {
         var expressionApiModel = Map(new ToStringExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new ToStringExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new ToStringExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -182,7 +178,7 @@ public class ExpressionApiModelMapperTest
     public void maps_typeof_expression_correctly()
     {
         var expressionApiModel = Map(new TypeOfExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new TypeofExpressionApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new TypeofExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -193,8 +189,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new AdditionExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -205,8 +201,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new SubtractionExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -217,8 +213,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new MultiplicationExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -229,8 +225,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new DivisionExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -241,8 +237,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new ModuloExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -253,8 +249,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new AndOperationExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -265,8 +261,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new OrOperationExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -277,8 +273,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new EqualityCheckExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -289,8 +285,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new InequalityCheckExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -301,8 +297,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new GreaterCheckExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -313,8 +309,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new GreaterOrEqualCheckExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -325,8 +321,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new LessCheckExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -337,8 +333,8 @@ public class ExpressionApiModelMapperTest
             new PrimitiveExpression(IdentifierPrimitive.From("operand1")),
             new PrimitiveExpression(IdentifierPrimitive.From("operand2"))));
         var expectedApiModel = new LessOrEqualCheckExpressionApiModel(
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand1")),
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("operand2")));
+            new IdentifierPrimitiveApiModel("operand1"),
+            new IdentifierPrimitiveApiModel("operand2"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -346,7 +342,7 @@ public class ExpressionApiModelMapperTest
     public void maps_group_expression_correctly()
     {
         var expressionApiModel = Map(new GroupExpression(new PrimitiveExpression(IdentifierPrimitive.From("id"))));
-        var expectedApiModel = new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("id"));
+        var expectedApiModel = new IdentifierPrimitiveApiModel("id");
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 }

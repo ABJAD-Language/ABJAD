@@ -19,7 +19,7 @@ public static class ExpressionApiModelMapper
             CallExpression callExpression => Map(callExpression),
             InstanceFieldExpression instanceFieldExpression => Map(instanceFieldExpression),
             InstantiationExpression instantiationExpression => Map(instantiationExpression),
-            PrimitiveExpression primitiveExpression => Map(primitiveExpression),
+            PrimitiveExpression primitiveExpression => PrimitiveApiModelMapper.Map(primitiveExpression.Primitive),
             AdditionAssignmentExpression additionAssignmentExpression => Map(additionAssignmentExpression),
             SubtractionAssignmentExpression subtractionAssignmentExpression => Map(subtractionAssignmentExpression),
             MultiplicationAssignmentExpression multiplicationAssignmentExpression => Map(multiplicationAssignmentExpression),
@@ -188,27 +188,22 @@ public static class ExpressionApiModelMapper
 
     private static InstantiationExpressionApiModel Map(InstantiationExpression instantiationExpression)
     {
-        return new InstantiationExpressionApiModel(Map(instantiationExpression.Class), instantiationExpression.Arguments.Select(Map).ToList());
+        return new InstantiationExpressionApiModel(PrimitiveApiModelMapper.Map(instantiationExpression.Class.Primitive), instantiationExpression.Arguments.Select(Map).ToList());
     }
 
     private static InstanceMethodCallExpressionApiModel Map(InstanceMethodCallExpression instanceMethodCallExpression)
     {
-        return new InstanceMethodCallExpressionApiModel(instanceMethodCallExpression.Instances.Select(Map).ToList(),
-            Map(instanceMethodCallExpression.Method), instanceMethodCallExpression.Arguments.Select(Map).ToList());
+        return new InstanceMethodCallExpressionApiModel(instanceMethodCallExpression.Instances.Select(primitiveExpression => PrimitiveApiModelMapper.Map(primitiveExpression.Primitive)).ToList(),
+            PrimitiveApiModelMapper.Map(instanceMethodCallExpression.Method.Primitive), instanceMethodCallExpression.Arguments.Select(Map).ToList());
     }
 
     private static InstanceFieldExpressionApiModel Map(InstanceFieldExpression instanceFieldExpression)
     {
-        return new InstanceFieldExpressionApiModel(Map(instanceFieldExpression.Instance), instanceFieldExpression.Fields.Select(Map).ToList());
+        return new InstanceFieldExpressionApiModel(PrimitiveApiModelMapper.Map(instanceFieldExpression.Instance.Primitive), instanceFieldExpression.Fields.Select(primitiveExpression => PrimitiveApiModelMapper.Map(primitiveExpression.Primitive)).ToList());
     }
 
     private static CallExpressionApiModel Map(CallExpression callExpression)
     {
-        return new CallExpressionApiModel(Map(callExpression.Method), callExpression.Arguments.Select(Map).ToList());
-    }
-
-    private static PrimitiveExpressionApiModel Map(PrimitiveExpression primitiveExpression)
-    {
-        return new PrimitiveExpressionApiModel(PrimitiveApiModelMapper.Map(primitiveExpression.Primitive));
+        return new CallExpressionApiModel(PrimitiveApiModelMapper.Map(callExpression.Method.Primitive), callExpression.Arguments.Select(Map).ToList());
     }
 }

@@ -4,7 +4,7 @@ namespace ABJAD.ParseEngine.Service.Primitives;
 
 public static class PrimitiveApiModelMapper
 {
-    public static PrimitiveApiModel Map(Primitive primitive)
+    public static PrimitiveExpressionApiModel Map(Primitive primitive)
     {
         return primitive switch
         {

@@ -5,7 +5,6 @@ using ABJAD.ParseEngine.Expressions.Assignments;
 using ABJAD.ParseEngine.Primitives;
 using ABJAD.ParseEngine.Service.Bindings;
 using ABJAD.ParseEngine.Service.Declarations;
-using ABJAD.ParseEngine.Service.Expressions;
 using ABJAD.ParseEngine.Service.Expressions.Assignments;
 using ABJAD.ParseEngine.Service.Primitives;
 using ABJAD.ParseEngine.Service.Statements;
@@ -23,7 +22,7 @@ public class StatementApiModelMapperTest
         var statementApiModel = Map(new AssignmentStatement("target",
             new PrimitiveExpression(IdentifierPrimitive.From("value"))));
         var expectedApiModel = new AssignmentStatementApiModel("target",
-            new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("value")));
+            new IdentifierPrimitiveApiModel("value"));
         statementApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -31,7 +30,7 @@ public class StatementApiModelMapperTest
     public void maps_expression_statement_correctly()
     {
         var statementApiModel = Map(new ExpressionStatement(new PrimitiveExpression(NumberPrimitive.From("2"))));
-        var expectedApiModel = new ExpressionStatementApiModel(new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(2)));
+        var expectedApiModel = new ExpressionStatementApiModel(new NumberPrimitiveApiModel(2));
         statementApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -42,8 +41,8 @@ public class StatementApiModelMapperTest
         var ifStatement = new IfStatement(new PrimitiveExpression(BoolPrimitive.True()), assignmentStatement);
         var statementApiModel = Map(ifStatement);
 
-        var assignmentStatementApiModel = new AssignmentStatementApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(4)));
-        var expectedApiModel = new IfStatementApiModel(new PrimitiveExpressionApiModel(new BoolPrimitiveApiModel(true)), assignmentStatementApiModel);
+        var assignmentStatementApiModel = new AssignmentStatementApiModel("target", new NumberPrimitiveApiModel(4));
+        var expectedApiModel = new IfStatementApiModel(new BoolPrimitiveApiModel(true), assignmentStatementApiModel);
         statementApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -55,8 +54,8 @@ public class StatementApiModelMapperTest
         var ifElseStatement = new IfElseStatement(ifStatement, new List<IfStatement> { ifStatement }, assignmentStatement);
         var statementApiModel = Map(ifElseStatement);
 
-        var assignmentStatementApiModel = new AssignmentStatementApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(4)));
-        var ifStatementApiModel = new IfStatementApiModel(new PrimitiveExpressionApiModel(new BoolPrimitiveApiModel(true)), assignmentStatementApiModel);
+        var assignmentStatementApiModel = new AssignmentStatementApiModel("target", new NumberPrimitiveApiModel(4));
+        var ifStatementApiModel = new IfStatementApiModel(new BoolPrimitiveApiModel(true), assignmentStatementApiModel);
         var expectedApiModel = new IfElseStatementApiModel(ifStatementApiModel,
             new List<IfStatementApiModel> { ifStatementApiModel }, assignmentStatementApiModel);
         statementApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
@@ -66,7 +65,7 @@ public class StatementApiModelMapperTest
     public void maps_print_statement_correctly()
     {
         var statementApiModel = Map(new PrintStatement(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new PrintStatementApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new PrintStatementApiModel(new IdentifierPrimitiveApiModel("target"));
         statementApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -74,7 +73,7 @@ public class StatementApiModelMapperTest
     public void maps_return_statement_correctly()
     {
         var statementApiModel = Map(new ReturnStatement(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new ReturnStatementApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target")));
+        var expectedApiModel = new ReturnStatementApiModel(new IdentifierPrimitiveApiModel("target"));
         statementApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -83,9 +82,8 @@ public class StatementApiModelMapperTest
     {
         var statementApiModel = Map(new WhileStatement(new PrimitiveExpression(BoolPrimitive.True()),
             new PrintStatement(new PrimitiveExpression(IdentifierPrimitive.From("target")))));
-        var expectedApiModel = new WhileStatementApiModel(
-            new PrimitiveExpressionApiModel(new BoolPrimitiveApiModel(true)),
-            new PrintStatementApiModel(new PrimitiveExpressionApiModel(new IdentifierPrimitiveApiModel("target"))));
+        var expectedApiModel = new WhileStatementApiModel(new BoolPrimitiveApiModel(true),
+            new PrintStatementApiModel(new IdentifierPrimitiveApiModel("target")));
         statementApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -99,9 +97,9 @@ public class StatementApiModelMapperTest
         var statementApiModel = Map(new ForStatement(target, condition, callback, body));
 
         var expectedTarget = new VariableDeclarationApiModel("int", "i");
-        var expectedCondition = new ExpressionStatementApiModel(new PrimitiveExpressionApiModel(new BoolPrimitiveApiModel(true)));
-        var expectedCallback = new AdditionAssignmentExpressionApiModel("i", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(1)));
-        var expectedBody = new PrintStatementApiModel(new PrimitiveExpressionApiModel(new StringPrimitiveApiModel("hello")));
+        var expectedCondition = new ExpressionStatementApiModel(new BoolPrimitiveApiModel(true));
+        var expectedCallback = new AdditionAssignmentExpressionApiModel("i", new NumberPrimitiveApiModel(1));
+        var expectedBody = new PrintStatementApiModel(new StringPrimitiveApiModel("hello"));
         var expectedApiModel = new ForStatementApiModel(expectedTarget, expectedCondition, expectedCallback, expectedBody);
         
         statementApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());

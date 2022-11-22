@@ -1,6 +1,6 @@
 ﻿namespace ABJAD.ParseEngine.Service.Primitives;
 
-public class IdentifierPrimitiveApiModel : PrimitiveApiModel
+public class IdentifierPrimitiveApiModel : PrimitiveExpressionApiModel
 {
     public String Value { get; }
 

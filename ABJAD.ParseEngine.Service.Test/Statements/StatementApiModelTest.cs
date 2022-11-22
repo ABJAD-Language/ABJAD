@@ -58,9 +58,9 @@ public class StatementApiModelTest
     public void for_statement_returns_correct_type()
     {
         var target = new VariableDeclarationApiModel("int", "i");
-        var condition = new ExpressionStatementApiModel(new PrimitiveExpressionApiModel(new BoolPrimitiveApiModel(true)));
-        var callback = new AdditionAssignmentExpressionApiModel("i", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(1)));
-        var body = new PrintStatementApiModel(new PrimitiveExpressionApiModel(new StringPrimitiveApiModel("hello")));
+        var condition = new ExpressionStatementApiModel(new BoolPrimitiveApiModel(true));
+        var callback = new AdditionAssignmentExpressionApiModel("i", new NumberPrimitiveApiModel(1));
+        var body = new PrintStatementApiModel(new StringPrimitiveApiModel("hello"));
         Assert.Equal("statement.for", new ForStatementApiModel(target, condition, callback, body).Type);
     }
 

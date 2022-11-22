@@ -1,6 +1,6 @@
 ﻿namespace ABJAD.ParseEngine.Service.Primitives;
 
-public class BoolPrimitiveApiModel : PrimitiveApiModel
+public class BoolPrimitiveApiModel : PrimitiveExpressionApiModel
 {
     public bool Value { get; }
 

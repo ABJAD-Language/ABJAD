@@ -1,4 +1,6 @@
-﻿namespace ABJAD.ParseEngine.Service.Expressions;
+﻿using ABJAD.ParseEngine.Service.Primitives;
+
+namespace ABJAD.ParseEngine.Service.Expressions;
 
 public class InstanceMethodCallExpressionApiModel : ExpressionApiModel
 {
