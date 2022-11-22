@@ -31,8 +31,9 @@ public class ParseVariableDeclarationStrategy : ParseDeclarationStrategy
         {
             tokenConsumer.Consume(TokenType.EQUAL);
             value = expressionParser.Parse();
-            tokenConsumer.Consume(TokenType.SEMICOLON);
         }
+        
+        tokenConsumer.Consume(TokenType.SEMICOLON);
 
         return new VariableDeclaration(type.GetValue(), name.Content, value);
     }

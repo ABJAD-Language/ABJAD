@@ -80,6 +80,8 @@ public class ParseVariableDeclarationStrategyTest
         Assert.Equal("type", variableDeclaration.Type);
         Assert.Equal("id", variableDeclaration.Name);
         Assert.Null(variableDeclaration.Value);
+        
+        tokenConsumer.Verify(c => c.Consume(TokenType.SEMICOLON));
     }
 
     [Fact]
