@@ -8,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{E38AB9
 		LICENSE = LICENSE
 		README.md = README.md
 		context-free grammar.md = context-free grammar.md
+		Dockerfile = Dockerfile
+		.github\workflows\ci.yml = .github\workflows\ci.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.ParseEngine.Test", "ABJAD.ParseEngine.Test\ABJAD.ParseEngine.Test.csproj", "{B96E746A-DBEF-4163-8EA9-0253C21F78BB}"
