@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.8.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.8" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
         <PackageReference Include="Moq" Version="4.18.2" />
         <PackageReference Include="xunit" Version="2.4.1" />
@@ -28,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Core" />
+      <None Include="Api\Requests\for_statement.json" />
     </ItemGroup>
 
 </Project>

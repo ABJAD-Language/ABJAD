@@ -1,0 +1,62 @@
+[
+  {
+    "target": {
+      "variableType": "NUMBER",
+      "name": "ا",
+      "value": {
+        "primitive": {
+          "value": 0.0,
+          "type": "primitive.number"
+        },
+        "type": "expression.primitive"
+      },
+      "type": "declaration.variable"
+    },
+    "condition": {
+      "expression": {
+        "firstOperand": {
+          "primitive": {
+            "value": "ا",
+            "type": "primitive.identifier"
+          },
+          "type": "expression.primitive"
+        },
+        "secondOperand": {
+          "primitive": {
+            "value": 10.0,
+            "type": "primitive.number"
+          },
+          "type": "expression.primitive"
+        },
+        "type": "expression.lessCheck"
+      },
+      "type": "statement.expression"
+    },
+    "targetCallback": {
+      "target": {
+        "primitive": {
+          "value": "ا",
+          "type": "primitive.identifier"
+        },
+        "type": "expression.primitive"
+      },
+      "type": "expression.postfix.addition"
+    },
+    "body": {
+      "bindings": [
+        {
+          "target": {
+            "primitive": {
+              "value": "مرحبا بالعالم!",
+              "type": "primitive.string"
+            },
+            "type": "expression.primitive"
+          },
+          "type": "statement.print"
+        }
+      ],
+      "type": "statement.block"
+    },
+    "type": "statement.for"
+  }
+]
