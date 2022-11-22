@@ -100,8 +100,7 @@ public class StatementApiModelMapperTest
 
         var expectedTarget = new VariableDeclarationApiModel("int", "i");
         var expectedCondition = new ExpressionStatementApiModel(new PrimitiveExpressionApiModel(new BoolPrimitiveApiModel(true)));
-        var expectedCallback = new AdditionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel("i"),
-            new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(1)));
+        var expectedCallback = new AdditionAssignmentExpressionApiModel("i", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(1)));
         var expectedBody = new PrintStatementApiModel(new PrimitiveExpressionApiModel(new StringPrimitiveApiModel("hello")));
         var expectedApiModel = new ForStatementApiModel(expectedTarget, expectedCondition, expectedCallback, expectedBody);
         

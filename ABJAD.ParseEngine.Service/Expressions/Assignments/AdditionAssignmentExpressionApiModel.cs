@@ -1,13 +1,11 @@
-﻿using ABJAD.ParseEngine.Service.Primitives;
-
-namespace ABJAD.ParseEngine.Service.Expressions.Assignments;
+﻿namespace ABJAD.ParseEngine.Service.Expressions.Assignments;
 
 public class AdditionAssignmentExpressionApiModel : ExpressionApiModel
 {
-    public IdentifierPrimitiveApiModel Target { get; }
+    public string Target { get; }
     public ExpressionApiModel Value { get; }
 
-    public AdditionAssignmentExpressionApiModel(IdentifierPrimitiveApiModel target, ExpressionApiModel value)
+    public AdditionAssignmentExpressionApiModel(string target, ExpressionApiModel value)
     {
         Target = target;
         Value = value;

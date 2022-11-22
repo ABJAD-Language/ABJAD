@@ -49,32 +49,28 @@ public class ExpressionApiModelTest
     public void addition_assignment_expression_api_model_returns_correct_type()
     {
         Assert.Equal("expression.assignment.addition",
-            new AdditionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel(""),
-                new Mock<ExpressionApiModel>().Object).Type);
+            new AdditionAssignmentExpressionApiModel("", new Mock<ExpressionApiModel>().Object).Type);
     }
 
     [Fact(DisplayName = "division assignment expression api model returns correct type")]
     public void division_assignment_expression_api_model_returns_correct_type()
     {
         Assert.Equal("expression.assignment.division",
-            new DivisionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel(""),
-                new Mock<ExpressionApiModel>().Object).Type);
+            new DivisionAssignmentExpressionApiModel("", new Mock<ExpressionApiModel>().Object).Type);
     }
 
     [Fact(DisplayName = "multiplication assignment expression api model returns correct type")]
     public void multiplication_assignment_expression_api_model_returns_correct_type()
     {
         Assert.Equal("expression.assignment.multiplication",
-            new MultiplicationAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel(""),
-                new Mock<ExpressionApiModel>().Object).Type);
+            new MultiplicationAssignmentExpressionApiModel("", new Mock<ExpressionApiModel>().Object).Type);
     }
 
     [Fact(DisplayName = "subtraction assignment expression api model returns correct type")]
     public void subtraction_assignment_expression_api_model_returns_correct_type()
     {
         Assert.Equal("expression.assignment.subtraction",
-            new SubtractionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel(""),
-                new Mock<ExpressionApiModel>().Object).Type);
+            new SubtractionAssignmentExpressionApiModel("", new Mock<ExpressionApiModel>().Object).Type);
     }
 
     [Fact(DisplayName = "negation expression api model returns correct type")]

@@ -168,22 +168,22 @@ public static class ExpressionApiModelMapper
 
     private static DivisionAssignmentExpressionApiModel Map(DivisionAssignmentExpression divisionAssignmentExpression)
     {
-        return new DivisionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel(divisionAssignmentExpression.Target.Value), Map(divisionAssignmentExpression.Value));
+        return new DivisionAssignmentExpressionApiModel(divisionAssignmentExpression.Target.Value, Map(divisionAssignmentExpression.Value));
     }
 
     private static MultiplicationAssignmentExpressionApiModel Map(MultiplicationAssignmentExpression multiplicationAssignmentExpression)
     {
-        return new MultiplicationAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel(multiplicationAssignmentExpression.Target.Value), Map(multiplicationAssignmentExpression.Value));
+        return new MultiplicationAssignmentExpressionApiModel(multiplicationAssignmentExpression.Target.Value, Map(multiplicationAssignmentExpression.Value));
     }
 
     private static SubtractionAssignmentExpressionApiModel Map(SubtractionAssignmentExpression subtractionAssignmentExpression)
     {
-        return new SubtractionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel(subtractionAssignmentExpression.Target.Value), Map(subtractionAssignmentExpression.Value));
+        return new SubtractionAssignmentExpressionApiModel(subtractionAssignmentExpression.Target.Value, Map(subtractionAssignmentExpression.Value));
     }
 
     private static AdditionAssignmentExpressionApiModel Map(AdditionAssignmentExpression additionAssignmentExpression)
     {
-        return new AdditionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel(additionAssignmentExpression.Target.Value), Map(additionAssignmentExpression.Value));
+        return new AdditionAssignmentExpressionApiModel(additionAssignmentExpression.Target.Value, Map(additionAssignmentExpression.Value));
     }
 
     private static InstantiationExpressionApiModel Map(InstantiationExpression instantiationExpression)

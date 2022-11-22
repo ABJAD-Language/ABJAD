@@ -4,7 +4,7 @@ namespace ABJAD.ParseEngine.Service.Statements;
 
 public class ExpressionStatementApiModel : StatementApiModel
 {
-    public ExpressionApiModel Expression { get; }
+    public ExpressionApiModel Expression { get; } // TODO refactor this level out
     public ExpressionStatementApiModel(ExpressionApiModel expression)
     {
         Expression = expression;

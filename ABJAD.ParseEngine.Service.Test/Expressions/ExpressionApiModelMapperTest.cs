@@ -75,8 +75,7 @@ public class ExpressionApiModelMapperTest
     {
         var expressionApiModel = Map(new AdditionAssignmentExpression(IdentifierPrimitive.From("target"),
             new PrimitiveExpression(NumberPrimitive.From("3"))));
-        var expectedApiModel = new AdditionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel("target"),
-            new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
+        var expectedApiModel = new AdditionAssignmentExpressionApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -85,8 +84,7 @@ public class ExpressionApiModelMapperTest
     {
         var expressionApiModel = Map(new SubtractionAssignmentExpression(IdentifierPrimitive.From("target"),
             new PrimitiveExpression(NumberPrimitive.From("3"))));
-        var expectedApiModel = new SubtractionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel("target"),
-            new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
+        var expectedApiModel = new SubtractionAssignmentExpressionApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -95,8 +93,7 @@ public class ExpressionApiModelMapperTest
     {
         var expressionApiModel = Map(new MultiplicationAssignmentExpression(IdentifierPrimitive.From("target"),
             new PrimitiveExpression(NumberPrimitive.From("3"))));
-        var expectedApiModel = new MultiplicationAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel("target"),
-            new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
+        var expectedApiModel = new MultiplicationAssignmentExpressionApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
@@ -105,8 +102,7 @@ public class ExpressionApiModelMapperTest
     {
         var expressionApiModel = Map(new DivisionAssignmentExpression(IdentifierPrimitive.From("target"),
             new PrimitiveExpression(NumberPrimitive.From("3"))));
-        var expectedApiModel = new DivisionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel("target"),
-            new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
+        var expectedApiModel = new DivisionAssignmentExpressionApiModel("target", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(3)));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 

@@ -59,8 +59,7 @@ public class StatementApiModelTest
     {
         var target = new VariableDeclarationApiModel("int", "i");
         var condition = new ExpressionStatementApiModel(new PrimitiveExpressionApiModel(new BoolPrimitiveApiModel(true)));
-        var callback = new AdditionAssignmentExpressionApiModel(new IdentifierPrimitiveApiModel("i"),
-            new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(1)));
+        var callback = new AdditionAssignmentExpressionApiModel("i", new PrimitiveExpressionApiModel(new NumberPrimitiveApiModel(1)));
         var body = new PrintStatementApiModel(new PrimitiveExpressionApiModel(new StringPrimitiveApiModel("hello")));
         Assert.Equal("statement.for", new ForStatementApiModel(target, condition, callback, body).Type);
     }
