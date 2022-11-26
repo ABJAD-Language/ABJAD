@@ -1,0 +1,71 @@
+[
+  {
+    "mainIfStatement": {
+      "condition": {
+        "firstOperand": {
+          "value": "ب",
+          "type": "primitive.identifier"
+        },
+        "secondOperand": {
+          "value": 1.0,
+          "type": "primitive.number"
+        },
+        "type": "expression.equalityCheck"
+      },
+      "body": {
+        "bindings": [
+          {
+            "target": {
+              "value": " مزدوج",
+              "type": "primitive.string"
+            },
+            "type": "statement.print"
+          }
+        ],
+        "type": "statement.block"
+      },
+      "type": "statement.if"
+    },
+    "otherIfStatements": [
+      {
+        "condition": {
+          "firstOperand": {
+            "value": "ب",
+            "type": "primitive.identifier"
+          },
+          "secondOperand": {
+            "value": 0.0,
+            "type": "primitive.number"
+          },
+          "type": "expression.equalityCheck"
+        },
+        "body": {
+          "bindings": [
+            {
+              "target": {
+                "value": " مزدوج",
+                "type": "primitive.string"
+              },
+              "type": "statement.print"
+            }
+          ],
+          "type": "statement.block"
+        },
+        "type": "statement.if"
+      }
+    ],
+    "elseBody": {
+      "bindings": [
+        {
+          "target": {
+            "value": "قبيح",
+            "type": "primitive.string"
+          },
+          "type": "statement.print"
+        }
+      ],
+      "type": "statement.block"
+    },
+    "type": "statement.ifElse"
+  }
+]

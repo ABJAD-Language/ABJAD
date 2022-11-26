@@ -40,6 +40,8 @@ public class ParseIfElseStatementStrategy : ParseStatementStrategy
             {
                 break;
             }
+
+            tokenConsumer.Consume(TokenType.ELSE);
         }
 
         var elseBody = GetStatementStrategy().Parse();
