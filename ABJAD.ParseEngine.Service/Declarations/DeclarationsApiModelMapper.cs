@@ -31,7 +31,7 @@ public static class DeclarationsApiModelMapper
 
     private static FunctionParameterApiModel Map(FunctionParameter parameter)
     {
-        return new FunctionParameterApiModel() { Name = parameter.Name, Type = parameter.Type};
+        return new FunctionParameterApiModel() { Name = parameter.Name, ParameterType = parameter.Type};
     }
 
     private static ClassDeclarationApiModel Map(ClassDeclaration declaration)

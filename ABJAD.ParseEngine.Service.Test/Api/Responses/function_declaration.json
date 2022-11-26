@@ -5,11 +5,11 @@
     "parameters": [
       {
         "name": "ع",
-        "type": "NUMBER"
+        "parameterType": "NUMBER"
       },
       {
         "name": "س",
-        "type": "NUMBER"
+        "parameterType": "NUMBER"
       }
     ],
     "body": {

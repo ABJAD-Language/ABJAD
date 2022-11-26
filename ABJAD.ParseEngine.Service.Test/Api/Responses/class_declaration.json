@@ -19,11 +19,11 @@
           "parameters": [
             {
               "name": "اسم",
-              "type": "STRING"
+              "parameterType": "STRING"
             },
             {
               "name": "عمر",
-              "type": "NUMBER"
+              "parameterType": "NUMBER"
             }
           ],
           "body": {

@@ -58,7 +58,7 @@ public class DeclarationsApiModelMapperTest
         var declarationApiModel = Map(new FunctionDeclaration("name", "type",
             new List<FunctionParameter> { new("pType", "pName") }, new BlockStatement(new List<Binding>())));
         var expectedApiModel = new FunctionDeclarationApiModel("name", "type",
-            new List<FunctionParameterApiModel> { new() { Name = "pName", Type = "pType" } },
+            new List<FunctionParameterApiModel> { new() { Name = "pName", ParameterType = "pType" } },
             new BlockStatementApiModel(new List<BindingApiModel>()));
         declarationApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
@@ -68,7 +68,7 @@ public class DeclarationsApiModelMapperTest
     {
         var declarationApiModel = Map(new ConstructorDeclaration(new List<FunctionParameter> { new("pType", "pName") },
             new BlockStatement(new List<Binding>())));
-        var expectedApiModel = new ConstructorDeclarationApiModel(new List<FunctionParameterApiModel> { new() { Name = "pName", Type = "pType" } },
+        var expectedApiModel = new ConstructorDeclarationApiModel(new List<FunctionParameterApiModel> { new() { Name = "pName", ParameterType = "pType" } },
             new BlockStatementApiModel(new List<BindingApiModel>()));
         declarationApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
