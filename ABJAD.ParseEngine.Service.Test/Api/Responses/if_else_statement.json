@@ -4,54 +4,54 @@
       "condition": {
         "firstOperand": {
           "value": "ب",
-          "type": "primitive.identifier"
+          "_type": "primitive.identifier"
         },
         "secondOperand": {
           "value": 1.0,
-          "type": "primitive.number"
+          "_type": "primitive.number"
         },
-        "type": "expression.equalityCheck"
+        "_type": "expression.equalityCheck"
       },
       "body": {
         "bindings": [
           {
             "target": {
               "value": " مزدوج",
-              "type": "primitive.string"
+              "_type": "primitive.string"
             },
-            "type": "statement.print"
+            "_type": "statement.print"
           }
         ],
-        "type": "statement.block"
+        "_type": "statement.block"
       },
-      "type": "statement.if"
+      "_type": "statement.if"
     },
     "otherIfStatements": [
       {
         "condition": {
           "firstOperand": {
             "value": "ب",
-            "type": "primitive.identifier"
+            "_type": "primitive.identifier"
           },
           "secondOperand": {
             "value": 0.0,
-            "type": "primitive.number"
+            "_type": "primitive.number"
           },
-          "type": "expression.equalityCheck"
+          "_type": "expression.equalityCheck"
         },
         "body": {
           "bindings": [
             {
               "target": {
                 "value": " مزدوج",
-                "type": "primitive.string"
+                "_type": "primitive.string"
               },
-              "type": "statement.print"
+              "_type": "statement.print"
             }
           ],
-          "type": "statement.block"
+          "_type": "statement.block"
         },
-        "type": "statement.if"
+        "_type": "statement.if"
       }
     ],
     "elseBody": {
@@ -59,13 +59,13 @@
         {
           "target": {
             "value": "قبيح",
-            "type": "primitive.string"
+            "_type": "primitive.string"
           },
-          "type": "statement.print"
+          "_type": "statement.print"
         }
       ],
-      "type": "statement.block"
+      "_type": "statement.block"
     },
-    "type": "statement.ifElse"
+    "_type": "statement.ifElse"
   }
 ]

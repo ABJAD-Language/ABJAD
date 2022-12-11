@@ -1,9 +1,11 @@
 ﻿using ABJAD.ParseEngine.Service.Expressions;
+using Newtonsoft.Json;
 
 namespace ABJAD.ParseEngine.Service.Declarations;
 
 public class ConstantDeclarationApiModel : DeclarationApiModel
 {
+    [JsonProperty("type")]
     public string ConstantType { get; }
     public string Name { get; }
     public ExpressionApiModel Value { get; }

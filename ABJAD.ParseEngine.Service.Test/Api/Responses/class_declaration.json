@@ -4,26 +4,26 @@
     "body": {
       "bindings": [
         {
-          "variableType": "STRING",
+          "type": "STRING",
           "name": "الاسم",
           "value": null,
-          "type": "declaration.variable"
+          "_type": "declaration.variable"
         },
         {
-          "variableType": "NUMBER",
+          "type": "NUMBER",
           "name": "العمر",
           "value": null,
-          "type": "declaration.variable"
+          "_type": "declaration.variable"
         },
         {
           "parameters": [
             {
               "name": "اسم",
-              "parameterType": "STRING"
+              "type": "STRING"
             },
             {
               "name": "عمر",
-              "parameterType": "NUMBER"
+              "type": "NUMBER"
             }
           ],
           "body": {
@@ -32,22 +32,22 @@
                 "target": "الاسم",
                 "value": {
                   "value": "اسم",
-                  "type": "primitive.identifier"
+                  "_type": "primitive.identifier"
                 },
-                "type": "statement.assignment"
+                "_type": "statement.assignment"
               },
               {
                 "target": "العمر",
                 "value": {
                   "value": "عمر",
-                  "type": "primitive.identifier"
+                  "_type": "primitive.identifier"
                 },
-                "type": "statement.assignment"
+                "_type": "statement.assignment"
               }
             ],
-            "type": "statement.block"
+            "_type": "statement.block"
           },
-          "type": "declaration.constructor"
+          "_type": "declaration.constructor"
         },
         {
           "name": "تعريف",
@@ -62,42 +62,42 @@
                       "firstOperand": {
                         "firstOperand": {
                           "value": "انسان[الاسم: ",
-                          "type": "primitive.string"
+                          "_type": "primitive.string"
                         },
                         "secondOperand": {
                           "value": "الاسم",
-                          "type": "primitive.identifier"
+                          "_type": "primitive.identifier"
                         },
-                        "type": "expression.addition"
+                        "_type": "expression.addition"
                       },
                       "secondOperand": {
                         "value": "العمر: ",
-                        "type": "primitive.string"
+                        "_type": "primitive.string"
                       },
-                      "type": "expression.addition"
+                      "_type": "expression.addition"
                     },
                     "secondOperand": {
                       "value": "العمر",
-                      "type": "primitive.identifier"
+                      "_type": "primitive.identifier"
                     },
-                    "type": "expression.addition"
+                    "_type": "expression.addition"
                   },
                   "secondOperand": {
                     "value": "]",
-                    "type": "primitive.string"
+                    "_type": "primitive.string"
                   },
-                  "type": "expression.addition"
+                  "_type": "expression.addition"
                 },
-                "type": "statement.print"
+                "_type": "statement.print"
               }
             ],
-            "type": "statement.block"
+            "_type": "statement.block"
           },
-          "type": "declaration.function"
+          "_type": "declaration.function"
         }
       ],
-      "type": "statement.block"
+      "_type": "statement.block"
     },
-    "type": "declaration.class"
+    "_type": "declaration.class"
   }
 ]

@@ -1,47 +1,47 @@
 [
   {
     "target": {
-      "variableType": "NUMBER",
+      "type": "NUMBER",
       "name": "ا",
       "value": {
         "value": 0.0,
-        "type": "primitive.number"
+        "_type": "primitive.number"
       },
-      "type": "declaration.variable"
+      "_type": "declaration.variable"
     },
     "condition": {
       "expression": {
         "firstOperand": {
           "value": "ا",
-          "type": "primitive.identifier"
+          "_type": "primitive.identifier"
         },
         "secondOperand": {
           "value": 10.0,
-          "type": "primitive.number"
+          "_type": "primitive.number"
         },
-        "type": "expression.lessCheck"
+        "_type": "expression.lessCheck"
       },
-      "type": "statement.expression"
+      "_type": "statement.expression"
     },
     "targetCallback": {
       "target": {
         "value": "ا",
-        "type": "primitive.identifier"
+        "_type": "primitive.identifier"
       },
-      "type": "expression.postfix.addition"
+      "_type": "expression.postfix.addition"
     },
     "body": {
       "bindings": [
         {
           "target": {
             "value": "مرحبا بالعالم!",
-            "type": "primitive.string"
+            "_type": "primitive.string"
           },
-          "type": "statement.print"
+          "_type": "statement.print"
         }
       ],
-      "type": "statement.block"
+      "_type": "statement.block"
     },
-    "type": "statement.for"
+    "_type": "statement.for"
   }
 ]

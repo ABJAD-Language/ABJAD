@@ -5,11 +5,11 @@
     "parameters": [
       {
         "name": "ع",
-        "parameterType": "NUMBER"
+        "type": "NUMBER"
       },
       {
         "name": "س",
-        "parameterType": "NUMBER"
+        "type": "NUMBER"
       }
     ],
     "body": {
@@ -18,19 +18,19 @@
           "target": {
             "firstOperand": {
               "value": "ع",
-              "type": "primitive.identifier"
+              "_type": "primitive.identifier"
             },
             "secondOperand": {
               "value": "س",
-              "type": "primitive.identifier"
+              "_type": "primitive.identifier"
             },
-            "type": "expression.addition"
+            "_type": "expression.addition"
           },
-          "type": "statement.return"
+          "_type": "statement.return"
         }
       ],
-      "type": "statement.block"
+      "_type": "statement.block"
     },
-    "type": "declaration.function"
+    "_type": "declaration.function"
   }
 ]
