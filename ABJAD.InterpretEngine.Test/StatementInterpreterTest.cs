@@ -7,12 +7,12 @@ namespace ABJAD.InterpretEngine.Test;
 
 public class StatementInterpreterTest
 {
-    private readonly Interpreter<Expression> expressionInterpreter = Substitute.For<Interpreter<Expression>>();
+    private readonly Evaluater<Expression> expressionEvaluater = Substitute.For<Evaluater<Expression>>();
     private readonly StatementInterpreter statementInterpreter;
 
     public StatementInterpreterTest()
     {
-        statementInterpreter = new StatementInterpreter(expressionInterpreter);
+        statementInterpreter = new StatementInterpreter(expressionEvaluater);
     }
 
     [Fact(DisplayName = "delegates to the expression interpreter when the statement is an expression statement")]
@@ -21,6 +21,6 @@ public class StatementInterpreterTest
         var expression = Substitute.For<Expression>();
         var statement = new ExpressionStatement { Target = expression };
         statementInterpreter.Interpret(statement);
-        expressionInterpreter.Received(1).Interpret(expression);
+        expressionEvaluater.Received(1).Evaluate(expression);
     }
 }

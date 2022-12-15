@@ -2,9 +2,9 @@
 
 namespace ABJAD.InterpretEngine;
 
-public class ExpressionInterpreter : Interpreter<Expression>
+public class ExpressionEvaluater : Evaluater<Expression>
 {
-    public void Interpret(Expression target)
+    public object Evaluate(Expression target)
     {
         throw new NotImplementedException();
     }
