@@ -1,5 +1,4 @@
-﻿using ABJAD.InterpretEngine;
-using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 using NSubstitute;
 
@@ -7,12 +6,12 @@ namespace ABJAD.InterpretEngine.Test;
 
 public class StatementInterpreterTest
 {
-    private readonly Evaluater<Expression> expressionEvaluater = Substitute.For<Evaluater<Expression>>();
+    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
     private readonly StatementInterpreter statementInterpreter;
 
     public StatementInterpreterTest()
     {
-        statementInterpreter = new StatementInterpreter(expressionEvaluater);
+        statementInterpreter = new StatementInterpreter(expressionEvaluator);
     }
 
     [Fact(DisplayName = "delegates to the expression interpreter when the statement is an expression statement")]
@@ -21,6 +20,6 @@ public class StatementInterpreterTest
         var expression = Substitute.For<Expression>();
         var statement = new ExpressionStatement { Target = expression };
         statementInterpreter.Interpret(statement);
-        expressionEvaluater.Received(1).Evaluate(expression);
+        expressionEvaluator.Received(1).Evaluate(expression);
     }
 }

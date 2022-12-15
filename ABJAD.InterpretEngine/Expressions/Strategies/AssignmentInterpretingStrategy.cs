@@ -1,5 +1,6 @@
 ﻿using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Assignments;
+using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
 
@@ -7,31 +8,75 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
 {
     private readonly AssignmentExpression assignmentExpression;
     private readonly IScope scope;
-    private readonly Evaluater<Expression> expressionEvaluater;
+    private readonly Evaluator<Expression> expressionEvaluator;
 
-    public AssignmentInterpretingStrategy(AssignmentExpression assignmentExpression, IScope scope, Evaluater<Expression> expressionEvaluater)
+    public AssignmentInterpretingStrategy(AssignmentExpression assignmentExpression, IScope scope, Evaluator<Expression> expressionEvaluator)
     {
         this.assignmentExpression = assignmentExpression;
         this.scope = scope;
-        this.expressionEvaluater = expressionEvaluater;
+        this.expressionEvaluator = expressionEvaluator;
     }
 
     public object Apply()
     {
-        if (!scope.ReferenceExists(assignmentExpression.GetTarget()))
+        FailIfReferenceDoesNotExist();
+        FailIfTargetIsNotNumber();
+
+        var offset = EvaluateOffset();
+        var oldValue = GetTargetOldValue();
+        
+        return ApplyOperationAndStoreNewValue(oldValue, offset);
+    }
+
+    private double GetTargetOldValue()
+    {
+        return (double)scope.Get(assignmentExpression.Target);
+    }
+
+    private double ApplyOperationAndStoreNewValue(double oldValue, EvaluatedResult offset)
+    {
+        var newValue = EvaluateNewValue(oldValue, offset);
+        scope.Set(assignmentExpression.Target, newValue);
+        return newValue;
+    }
+
+    private double EvaluateNewValue(double oldValue, EvaluatedResult offset)
+    {
+        return assignmentExpression switch
         {
-            throw new ReferenceNameDoesNotExistException(assignmentExpression.GetTarget());
+            AdditionAssignment => oldValue + (double)offset.Value,
+            SubtractionAssignment => oldValue - (double)offset.Value,
+            MultiplicationAssignment => oldValue * (double)offset.Value,
+            DivisionAssignment => oldValue / (double)offset.Value,
+            _ => throw new ArgumentException()
+        };
+    }
+
+    private EvaluatedResult EvaluateOffset()
+    {
+        var offset = expressionEvaluator.Evaluate(assignmentExpression.Value);
+        if (!offset.Type.IsNumber())
+        {
+            throw new InvalidTypeException(DataType.Number(), offset.Type);
         }
 
-        var oldValue = scope.Get(assignmentExpression.GetTarget());
-        var offset = expressionEvaluater.Evaluate(assignmentExpression.GetValue());
+        return offset;
+    }
 
-        switch (assignmentExpression)
+    private void FailIfTargetIsNotNumber()
+    {
+        var targetType = scope.GetType(assignmentExpression.Target);
+        if (!targetType.IsNumber())
         {
-            case AdditionAssignment:
-                scope.Set(assignmentExpression.GetTarget(), (double)oldValue + (double)offset);
-                return (double)oldValue + (double)offset;
-            default: return null;
+            throw new InvalidTypeException(DataType.Number(), targetType);
+        }
+    }
+
+    private void FailIfReferenceDoesNotExist()
+    {
+        if (!scope.ReferenceExists(assignmentExpression.Target))
+        {
+            throw new ReferenceNameDoesNotExistException(assignmentExpression.Target);
         }
     }
 }

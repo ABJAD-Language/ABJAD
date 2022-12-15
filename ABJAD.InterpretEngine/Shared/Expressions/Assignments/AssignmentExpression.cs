@@ -1,7 +1,7 @@
 ﻿namespace ABJAD.InterpretEngine.Shared.Expressions.Assignments;
 
-public interface AssignmentExpression : Expression
+public abstract class AssignmentExpression : Expression
 {
-    string GetTarget();
-    Expression GetValue();
+    public string Target { get; init; }
+    public Expression Value { get; init; }
 }

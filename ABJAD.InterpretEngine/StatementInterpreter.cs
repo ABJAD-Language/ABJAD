@@ -5,18 +5,18 @@ namespace ABJAD.InterpretEngine;
 
 public class StatementInterpreter : Interpreter<Statement>
 {
-    private readonly Evaluater<Expression> expressionEvaluater;
+    private readonly Evaluator<Expression> expressionEvaluator;
 
-    public StatementInterpreter(Evaluater<Expression> expressionEvaluater)
+    public StatementInterpreter(Evaluator<Expression> expressionEvaluator)
     {
-        this.expressionEvaluater = expressionEvaluater;
+        this.expressionEvaluator = expressionEvaluator;
     }
 
     public void Interpret(Statement target)
     {
         if (target is ExpressionStatement expressionStatement)
         {
-            expressionEvaluater.Evaluate(expressionStatement.Target);
+            expressionEvaluator.Evaluate(expressionStatement.Target);
         }
     }
 }
