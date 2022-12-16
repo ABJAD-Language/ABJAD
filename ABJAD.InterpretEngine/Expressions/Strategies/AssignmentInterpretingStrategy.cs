@@ -57,7 +57,7 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
         var offset = expressionEvaluator.Evaluate(assignmentExpression.Value);
         if (!offset.Type.IsNumber())
         {
-            throw new InvalidTypeException(DataType.Number(), offset.Type);
+            throw new InvalidTypeException(offset.Type, DataType.Number());
         }
 
         return offset;
@@ -68,7 +68,7 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
         var targetType = scope.GetType(assignmentExpression.Target);
         if (!targetType.IsNumber())
         {
-            throw new InvalidTypeException(DataType.Number(), targetType);
+            throw new InvalidTypeException(targetType, DataType.Number());
         }
     }
 
