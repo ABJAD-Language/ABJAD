@@ -8,9 +8,19 @@ public interface DataType
     {
         return new NumberDataType();
     }
+
+    static DataType String()
+    {
+        return new StringDataType();
+    }
     
     bool IsNumber()
     {
         return this is NumberDataType;
+    }
+
+    bool IsString()
+    {
+        return this is StringDataType;
     }
 }
