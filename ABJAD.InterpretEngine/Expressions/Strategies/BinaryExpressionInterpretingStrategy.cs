@@ -8,6 +8,7 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
 {
     private readonly BinaryExpression expression;
     private readonly Evaluator<Expression> expressionEvaluator;
+    private static readonly double NumberComparisonTolerance = 10e-100;
 
     public BinaryExpressionInterpretingStrategy(BinaryExpression expression, Evaluator<Expression> expressionEvaluator)
     {
@@ -27,8 +28,134 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
             Multiplication => HandleMultiplication(firstOperandEvaluationResult, secondOperandEvaluationResult),
             Division => HandleDivision(firstOperandEvaluationResult, secondOperandEvaluationResult),
             Modulo => HandleModulo(firstOperandEvaluationResult, secondOperandEvaluationResult),
+            LogicalAnd => HandleLogicalAnd(firstOperandEvaluationResult, secondOperandEvaluationResult),
+            LogicalOr => HandleLogicalOr(firstOperandEvaluationResult, secondOperandEvaluationResult),
+            GreaterCheck => HandleGreaterCheck(firstOperandEvaluationResult, secondOperandEvaluationResult),
+            GreaterOrEqualCheck => HandleGreaterOrEqualCheck(firstOperandEvaluationResult, secondOperandEvaluationResult),
+            LessCheck => HandleLessCheck(firstOperandEvaluationResult, secondOperandEvaluationResult),
+            LessOrEqualCheck => HandleLessOrEqualCheck(firstOperandEvaluationResult, secondOperandEvaluationResult),
+            EqualityCheck => HandleEqualityCheck(firstOperandEvaluationResult, secondOperandEvaluationResult),
+            InequalityCheck => HandleInequalityCheck(firstOperandEvaluationResult, secondOperandEvaluationResult),
             _ => throw new ArgumentException()
         };
+    }
+
+    private static EvaluatedResult HandleInequalityCheck(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    {
+        if (!firstOperand.Type.Is(secondOperand.Type))
+        {
+            throw new IncompatibleTypesException(firstOperand.Type, secondOperand.Type);
+        }
+        
+        bool result;
+        if (firstOperand.Type.IsNumber())
+        {
+            result = Math.Abs((double)firstOperand.Value - (double)secondOperand.Value) > NumberComparisonTolerance;
+        }
+        else if (firstOperand.Type.IsString())
+        {
+            result = (string)firstOperand.Value != (string)secondOperand.Value;
+        }
+        else if (firstOperand.Type.IsBool())
+        {
+            result = (bool)firstOperand.Value != (bool)secondOperand.Value;
+        }
+        else
+        {
+            result = true;
+        }
+
+        return new EvaluatedResult { Type = DataType.Bool(), Value = result };
+    }
+
+    private static EvaluatedResult HandleEqualityCheck(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    {
+        if (!firstOperand.Type.Is(secondOperand.Type))
+        {
+            throw new IncompatibleTypesException(firstOperand.Type, secondOperand.Type);
+        }
+
+        bool result;
+        if (firstOperand.Type.IsNumber())
+        {
+            result = Math.Abs((double)firstOperand.Value - (double)secondOperand.Value) < NumberComparisonTolerance;
+        }
+        else if (firstOperand.Type.IsString())
+        {
+            result = (string)firstOperand.Value == (string)secondOperand.Value;
+        }
+        else if (firstOperand.Type.IsBool())
+        {
+            result = (bool)firstOperand.Value == (bool)secondOperand.Value;
+        }
+        else
+        {
+            result = false;
+        }
+
+        return new EvaluatedResult { Type = DataType.Bool(), Value = result };
+    }
+
+    private static EvaluatedResult HandleLessOrEqualCheck(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    {
+        ValidateOperandIsNumber(firstOperand);
+        ValidateOperandIsNumber(secondOperand);
+        
+        var value = (double)firstOperand.Value <= (double)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Bool(), Value = value };
+    }
+
+    private static EvaluatedResult HandleLessCheck(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    {
+        ValidateOperandIsNumber(firstOperand);
+        ValidateOperandIsNumber(secondOperand);
+        
+        var value = (double)firstOperand.Value < (double)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Bool(), Value = value };
+    }
+
+    private static EvaluatedResult HandleGreaterOrEqualCheck(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    {
+        ValidateOperandIsNumber(firstOperand);
+        ValidateOperandIsNumber(secondOperand);
+        
+        var value = (double)firstOperand.Value >= (double)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Bool(), Value = value };
+    }
+
+    private static EvaluatedResult HandleGreaterCheck(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    {
+        ValidateOperandIsNumber(firstOperand);
+        ValidateOperandIsNumber(secondOperand);
+
+        var value = (double)firstOperand.Value > (double)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Bool(), Value = value };
+    }
+
+    private static EvaluatedResult HandleLogicalOr(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    {
+        ValidateOperandIsBool(firstOperand);
+        ValidateOperandIsBool(secondOperand);
+        
+        var value = (bool)firstOperand.Value || (bool)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Bool(), Value = value };
+    }
+
+    private static EvaluatedResult HandleLogicalAnd(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    {
+        ValidateOperandIsBool(firstOperand);
+        ValidateOperandIsBool(secondOperand);
+
+        var value = (bool)firstOperand.Value && (bool)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Bool(), Value = value };
+    }
+
+    private static void ValidateOperandIsBool(EvaluatedResult operand)
+    {
+        if (!operand.Type.IsBool())
+        {
+            throw new InvalidTypeException(operand.Type, DataType.Bool());
+        }
     }
 
     private static EvaluatedResult HandleModulo(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
