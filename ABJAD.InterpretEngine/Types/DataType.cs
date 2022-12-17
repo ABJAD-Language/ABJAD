@@ -13,6 +13,16 @@ public interface DataType
     {
         return new StringDataType();
     }
+
+    static DataType Bool()
+    {
+        return new BoolDataType();
+    }
+
+    static DataType Undefined()
+    {
+        return new UndefinedDataType();
+    }
     
     bool IsNumber()
     {
@@ -22,5 +32,15 @@ public interface DataType
     bool IsString()
     {
         return this is StringDataType;
+    }
+
+    bool IsBool()
+    {
+        return this is BoolDataType;
+    }
+
+    bool IsUndefined()
+    {
+        return this is UndefinedDataType;
     }
 }

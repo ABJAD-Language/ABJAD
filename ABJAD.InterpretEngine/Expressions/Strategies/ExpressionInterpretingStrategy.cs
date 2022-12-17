@@ -2,5 +2,5 @@
 
 public interface ExpressionInterpretingStrategy
 {
-    object Apply();
+    EvaluatedResult Apply();
 }

@@ -1,9 +1,8 @@
-﻿using ABJAD.InterpretEngine;
-using ABJAD.InterpretEngine.Expressions;
+﻿using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.Expressions.Strategies;
 using ABJAD.InterpretEngine.Shared.Expressions.Primitives;
+using ABJAD.InterpretEngine.Types;
 using NSubstitute;
-using Xunit.Sdk;
 
 namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
@@ -20,16 +19,18 @@ public class PrimitiveInterpretingStrategyTest
     public void returns_the_value_of_the_bool_when_the_primitive_is_bool()
     {
         var strategy = new PrimitiveInterpretingStrategy(new BoolPrimitive { Value = true }, scope);
-        Assert.True(strategy.Apply() is bool);
-        Assert.True((bool)strategy.Apply());
+        var result = strategy.Apply();
+        Assert.True(result.Type.IsBool());
+        Assert.True((bool)result.Value);
     }
 
     [Fact(DisplayName = "returns the value of the number when the primitive is number")]
     public void returns_the_value_of_the_number_when_the_primitive_is_number()
     {
         var strategy = new PrimitiveInterpretingStrategy(new NumberPrimitive { Value = 3.0 }, scope);
-        Assert.True(strategy.Apply() is double);
-        Assert.Equal(3.0, strategy.Apply());
+        var result = strategy.Apply();
+        Assert.True(result.Type.IsNumber());
+        Assert.Equal(3.0, result.Value);
     }
 
     [Fact(DisplayName = "returns the value of the string when the primitive is string")]
@@ -37,15 +38,18 @@ public class PrimitiveInterpretingStrategyTest
     {
         var value = Guid.NewGuid().ToString();
         var strategy = new PrimitiveInterpretingStrategy(new StringPrimitive() { Value = value }, scope);
-        Assert.True(strategy.Apply() is string);
-        Assert.Equal(value, strategy.Apply());
+        var result = strategy.Apply();
+        Assert.True(result.Type.IsString());
+        Assert.Equal(value, result.Value);
     }
 
     [Fact(DisplayName = "returns null when the primitive is null")]
     public void returns_null_when_the_primitive_is_null()
     {
         var strategy = new PrimitiveInterpretingStrategy(new NullPrimitive(), scope);
-        Assert.Null(strategy.Apply());
+        var result = strategy.Apply();
+        Assert.True(result.Type.IsUndefined());
+        Assert.Null(result.Value);
     }
 
     [Fact(DisplayName = "returns the value of the identifier when the primitive is identifier")]
@@ -53,8 +57,11 @@ public class PrimitiveInterpretingStrategyTest
     {
         scope.ReferenceExists("id").Returns(true);
         scope.Get("id").Returns(2);
+        scope.GetType("id").Returns(DataType.Number());
         var strategy = new PrimitiveInterpretingStrategy(new IdentifierPrimitive { Value = "id" }, scope);
-        Assert.Equal(2, strategy.Apply());
+        var result = strategy.Apply();
+        Assert.True(result.Type.IsNumber());
+        Assert.Equal(2, result.Value);
     }
 
     [Fact(DisplayName = "throw error if failed to retrieve the value of an identifier")]

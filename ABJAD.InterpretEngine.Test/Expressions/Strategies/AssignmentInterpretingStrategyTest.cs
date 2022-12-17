@@ -72,7 +72,8 @@ public class AssignmentInterpretingStrategyTest
 
         scope.Received(1).Set("id", 5.0);
             
-        Assert.Equal(5.0, result);
+        Assert.True(result.Type.IsNumber());
+        Assert.Equal(5.0, result.Value);
     }
     
     [Fact(DisplayName = "updates the value of target correctly and return the result when the expression is subtraction assignment")]
@@ -92,7 +93,8 @@ public class AssignmentInterpretingStrategyTest
 
         scope.Received(1).Set("id", 3.0);
             
-        Assert.Equal(3.0, result);
+        Assert.True(result.Type.IsNumber());
+        Assert.Equal(3.0, result.Value);
     }
     
     [Fact(DisplayName = "updates the value of target correctly and return the result when the expression is multiplication assignment")]
@@ -112,7 +114,8 @@ public class AssignmentInterpretingStrategyTest
 
         scope.Received(1).Set("id", -8.0);
             
-        Assert.Equal(-8.0, result);
+        Assert.True(result.Type.IsNumber());
+        Assert.Equal(-8.0, result.Value);
     }
     
     [Fact(DisplayName = "updates the value of target correctly and return the result when the expression is division assignment")]
@@ -132,6 +135,7 @@ public class AssignmentInterpretingStrategyTest
 
         scope.Received(1).Set("id", 4.5);
             
-        Assert.Equal(4.5, result);
+        Assert.True(result.Type.IsNumber());
+        Assert.Equal(4.5, result.Value);
     }
 }
