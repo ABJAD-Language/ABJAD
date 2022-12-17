@@ -60,7 +60,9 @@ public class BinaryExpressionInterpretingStrategyTest
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
             var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
-            Assert.Equal(5.0, strategy.Apply());
+            var result = strategy.Apply();
+            Assert.True(result.Type.IsNumber());
+            Assert.Equal(5.0, result.Value);
         }
 
         [Fact(DisplayName = "returns the concatenation of the two strings when both operands are strings")]
@@ -74,7 +76,9 @@ public class BinaryExpressionInterpretingStrategyTest
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
             var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
-            Assert.Equal("hello world", strategy.Apply());
+            var result = strategy.Apply();
+            Assert.True(result.Type.IsString());
+            Assert.Equal("hello world", result.Value);
         }
 
         [Fact(DisplayName = "returns the string concatenation of the operands when the first one is number and the second is string")]
@@ -88,7 +92,9 @@ public class BinaryExpressionInterpretingStrategyTest
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
             var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
-            Assert.Equal("1 is the answer", strategy.Apply());
+            var result = strategy.Apply();
+            Assert.True(result.Type.IsString());
+            Assert.Equal("1 is the answer", result.Value);
         }
 
         [Fact(DisplayName = "returns the string concatenation of the operands when the first one is string and the second is number")]
@@ -102,7 +108,9 @@ public class BinaryExpressionInterpretingStrategyTest
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
             var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
-            Assert.Equal("the answer is 7", strategy.Apply());
+            var result = strategy.Apply();
+            Assert.True(result.Type.IsString());
+            Assert.Equal("the answer is 7", result.Value);
         }
     }
 
@@ -147,7 +155,9 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
             var strategy = new BinaryExpressionInterpretingStrategy(subtraction, expressionEvaluator);
-            Assert.Equal(-5.0, strategy.Apply());
+            var result = strategy.Apply();
+            Assert.True(result.Type.IsNumber());
+            Assert.Equal(-5.0, result.Value);
         }
     }
     
@@ -192,7 +202,9 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
             var strategy = new BinaryExpressionInterpretingStrategy(multiplication, expressionEvaluator);
-            Assert.Equal(-8.0, strategy.Apply());
+            var result = strategy.Apply();
+            Assert.True(result.Type.IsNumber());
+            Assert.Equal(-8.0, result.Value);
         }
     }
     
@@ -249,7 +261,9 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
             var strategy = new BinaryExpressionInterpretingStrategy(division, expressionEvaluator);
-            Assert.Equal(4.0, strategy.Apply());
+            var result = strategy.Apply();
+            Assert.True(result.Type.IsNumber());
+            Assert.Equal(4.0, result.Value);
         }
     }
     
@@ -294,7 +308,9 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
             var strategy = new BinaryExpressionInterpretingStrategy(modulo, expressionEvaluator);
-            Assert.Equal(1.0, strategy.Apply());
+            var result = strategy.Apply();
+            Assert.True(result.Type.IsNumber());
+            Assert.Equal(1.0, result.Value);
         }
     }
 }

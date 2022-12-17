@@ -15,7 +15,7 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
         this.expressionEvaluator = expressionEvaluator;
     }
 
-    public object Apply()
+    public EvaluatedResult Apply()
     {
         var firstOperandEvaluationResult = expressionEvaluator.Evaluate(expression.FirstOperand);
         var secondOperandEvaluationResult = expressionEvaluator.Evaluate(expression.SecondOperand);
@@ -31,15 +31,16 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
         };
     }
 
-    private static double HandleModulo(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    private static EvaluatedResult HandleModulo(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
     {
         ValidateOperandIsNumber(firstOperand);
         ValidateOperandIsNumber(secondOperand);
 
-        return (double)firstOperand.Value % (double)secondOperand.Value;
+        var value = (double)firstOperand.Value % (double)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Number(), Value = value };
     }
 
-    private static double HandleDivision(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    private static EvaluatedResult HandleDivision(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
     {
         ValidateOperandIsNumber(firstOperand);
         ValidateOperandIsNumber(secondOperand);
@@ -49,23 +50,26 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
             throw new DivisionByZeroException();
         }
 
-        return (double)firstOperand.Value / (double)secondOperand.Value;
+        var value = (double)firstOperand.Value / (double)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Number(), Value = value };
     }
 
-    private static double HandleMultiplication(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    private static EvaluatedResult HandleMultiplication(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
     {
         ValidateOperandIsNumber(firstOperand);
         ValidateOperandIsNumber(secondOperand);
         
-        return (double)firstOperand.Value * (double)secondOperand.Value;
+        var value = (double)firstOperand.Value * (double)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Number(), Value = value };
     }
 
-    private static double HandleSubtraction(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    private static EvaluatedResult HandleSubtraction(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
     {
         ValidateOperandIsNumber(firstOperand);
         ValidateOperandIsNumber(secondOperand);
 
-        return (double)firstOperand.Value - (double)secondOperand.Value;
+        var value = (double)firstOperand.Value - (double)secondOperand.Value;
+        return new EvaluatedResult { Type = DataType.Number(), Value = value };
     }
 
     private static void ValidateOperandIsNumber(EvaluatedResult operand)
@@ -76,18 +80,20 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
         }
     }
 
-    private static object HandleAddition(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
+    private static EvaluatedResult HandleAddition(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
     {
         if (firstOperand.Type.IsNumber())
         {
             if (secondOperand.Type.IsNumber())
             {
-                return (double)firstOperand.Value + (double)secondOperand.Value;
+                var value = (double)firstOperand.Value + (double)secondOperand.Value;
+                return new EvaluatedResult { Type = DataType.Number(), Value = value };
             }
 
             if (secondOperand.Type.IsString())
             {
-                return (double)firstOperand.Value + (string)secondOperand.Value;
+                var value = (double)firstOperand.Value + (string)secondOperand.Value;
+                return new EvaluatedResult { Type = DataType.String(), Value = value };
             }
             
             throw new InvalidTypeException(secondOperand.Type, DataType.Number(), DataType.String());
@@ -97,12 +103,14 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
         {
             if (secondOperand.Type.IsString())
             {
-                return (string)firstOperand.Value + (string)secondOperand.Value;
+                var value = (string)firstOperand.Value + (string)secondOperand.Value;
+                return new EvaluatedResult { Type = DataType.String(), Value = value };
             }
 
             if (secondOperand.Type.IsNumber())
             {
-                return (string)firstOperand.Value + (double)secondOperand.Value;
+                var value = (string)firstOperand.Value + (double)secondOperand.Value;
+                return new EvaluatedResult { Type = DataType.String(), Value = value };
             }
             
             throw new InvalidTypeException(secondOperand.Type, DataType.Number(), DataType.String());

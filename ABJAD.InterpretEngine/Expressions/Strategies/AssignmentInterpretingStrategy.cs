@@ -17,7 +17,7 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
         this.expressionEvaluator = expressionEvaluator;
     }
 
-    public object Apply()
+    public EvaluatedResult Apply()
     {
         FailIfReferenceDoesNotExist();
         FailIfTargetIsNotNumber();
@@ -33,11 +33,11 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
         return (double)scope.Get(assignmentExpression.Target);
     }
 
-    private double ApplyOperationAndStoreNewValue(double oldValue, EvaluatedResult offset)
+    private EvaluatedResult ApplyOperationAndStoreNewValue(double oldValue, EvaluatedResult offset)
     {
         var newValue = EvaluateNewValue(oldValue, offset);
         scope.Set(assignmentExpression.Target, newValue);
-        return newValue;
+        return new EvaluatedResult { Type = DataType.Number(), Value = newValue };
     }
 
     private double EvaluateNewValue(double oldValue, EvaluatedResult offset)
