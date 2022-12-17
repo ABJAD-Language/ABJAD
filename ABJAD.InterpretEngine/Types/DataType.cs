@@ -43,4 +43,14 @@ public interface DataType
     {
         return this is UndefinedDataType;
     }
+
+    bool Is(DataType type)
+    {
+        return GetValue() == type.GetValue();
+    }
+
+    bool Is(string type)
+    {
+        return GetValue() == type;
+    }
 }

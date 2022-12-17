@@ -1,6 +1,6 @@
 ﻿namespace ABJAD.InterpretEngine.Shared.Expressions.Binary;
 
-public class LogicalAnd : BinaryExpression
+public class LogicalOr : BinaryExpression
 {
     
 }
