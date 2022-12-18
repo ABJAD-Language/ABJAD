@@ -49,7 +49,7 @@ public class PrimitiveInterpretingStrategyTest
         var strategy = new PrimitiveInterpretingStrategy(new NullPrimitive(), scope);
         var result = strategy.Apply();
         Assert.True(result.Type.IsUndefined());
-        Assert.Null(result.Value);
+        Assert.Equal(SpecialValues.NULL, result.Value);
     }
 
     [Fact(DisplayName = "returns the value of the identifier when the primitive is identifier")]
