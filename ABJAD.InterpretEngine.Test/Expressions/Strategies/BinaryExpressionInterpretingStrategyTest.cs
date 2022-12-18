@@ -8,7 +8,34 @@ namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
 public class BinaryExpressionInterpretingStrategyTest
 {
+    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly Expression firstOperand = Substitute.For<Expression>();
+    private readonly Expression secondOperand = Substitute.For<Expression>();
+    
+    [Fact(DisplayName = "throws error if the value of the first operand is undefined")]
+    public void throws_error_if_the_value_of_the_first_operand_is_undefined()
+    {
+        expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Value = SpecialValues.UNDEFINED });
+        expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Value = new object() });
+            
+        var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
+        var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
 
+        Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
+    }
+    
+    [Fact(DisplayName = "throws error if the value of the second operand is undefined")]
+    public void throws_error_if_the_value_of_the_second_operand_is_undefined()
+    {
+        expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Value = new object() });
+        expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Value = SpecialValues.UNDEFINED });
+            
+        var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
+        var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
+
+        Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
+    }
+    
     public class AdditionInterpretingTest
     {
         private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
@@ -20,8 +47,8 @@ public class BinaryExpressionInterpretingStrategyTest
         [Fact(DisplayName = "throws error if the first operand is neither a number nor a string")]
         public void throws_error_if_the_first_operand_is_neither_a_number_nor_a_string()
         {
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
 
             firstOperandDataType.IsNumber().Returns(false);
             firstOperandDataType.IsString().Returns(false);
@@ -36,8 +63,8 @@ public class BinaryExpressionInterpretingStrategyTest
         [Fact(DisplayName = "throws error if the second operand is neither a number nor a string")]
         public void throws_error_if_the_second_operand_is_neither_a_number_nor_a_string()
         {
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
 
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
@@ -47,6 +74,51 @@ public class BinaryExpressionInterpretingStrategyTest
 
             var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
+        }
+
+        [Fact(DisplayName = "throws error if the first operand is null")]
+        public void throws_error_if_the_first_operand_is_null()
+        {
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = SpecialValues.NULL });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = "hello" });
+            
+            firstOperandDataType.IsString().Returns(true);
+            secondOperandDataType.IsString().Returns(true);
+
+            var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
+            var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
+
+            Assert.Throws<NullPointerException>(() => strategy.Apply());
+        }
+
+        [Fact(DisplayName = "throws error if the first operand is string and the second operand is null")]
+        public void throws_error_if_the_first_operand_is_string_and_the_second_operand_is_null()
+        {
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = "hey" });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = SpecialValues.NULL });
+            
+            firstOperandDataType.IsString().Returns(true);
+            secondOperandDataType.IsString().Returns(true);
+
+            var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
+            var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
+
+            Assert.Throws<NullPointerException>(() => strategy.Apply());
+        }
+
+        [Fact(DisplayName = "throws error if the first operand is number and the second operand is null")]
+        public void throws_error_if_the_first_operand_is_number_and_the_second_operand_is_null()
+        {
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = 3.0 });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = SpecialValues.NULL });
+            
+            firstOperandDataType.IsNumber().Returns(true);
+            secondOperandDataType.IsString().Returns(true);
+
+            var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
+            var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
+
+            Assert.Throws<NullPointerException>(() => strategy.Apply());
         }
 
         [Fact(DisplayName = "returns the sum of the two numbers when both operands are numbers")]
@@ -126,8 +198,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_first_operand_is_not_a_number()
         {
             var subtraction = new Subtraction { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
             var strategy = new BinaryExpressionInterpretingStrategy(subtraction, expressionEvaluator);
@@ -138,8 +210,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_second_operand_is_not_a_number()
         {
             var subtraction = new Subtraction { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
             var strategy = new BinaryExpressionInterpretingStrategy(subtraction, expressionEvaluator);
@@ -173,8 +245,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_first_operand_is_not_a_number()
         {
             var multiplication = new Multiplication { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
             var strategy = new BinaryExpressionInterpretingStrategy(multiplication, expressionEvaluator);
@@ -185,8 +257,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_second_operand_is_not_a_number()
         {
             var multiplication = new Multiplication { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
             var strategy = new BinaryExpressionInterpretingStrategy(multiplication, expressionEvaluator);
@@ -220,8 +292,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_first_operand_is_not_a_number()
         {
             var division = new Division { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
             var strategy = new BinaryExpressionInterpretingStrategy(division, expressionEvaluator);
@@ -232,8 +304,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_second_operand_is_not_a_number()
         {
             var division = new Division { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
             var strategy = new BinaryExpressionInterpretingStrategy(division, expressionEvaluator);
@@ -279,8 +351,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_first_operand_is_not_a_number()
         {
             var modulo = new Modulo { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
             var strategy = new BinaryExpressionInterpretingStrategy(modulo, expressionEvaluator);
@@ -291,8 +363,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_second_operand_is_not_a_number()
         {
             var modulo = new Modulo { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
             var strategy = new BinaryExpressionInterpretingStrategy(modulo, expressionEvaluator);
@@ -326,8 +398,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_first_operand_is_not_a_bool()
         {
             var logicalAnd = new LogicalAnd { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsBool().Returns(false);
             secondOperandDataType.IsBool().Returns(true);
 
@@ -339,8 +411,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_second_operand_is_not_a_bool()
         {
             var logicalAnd = new LogicalAnd { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(false);
 
@@ -421,8 +493,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_first_operand_is_not_a_bool()
         {
             var logicalOr = new LogicalOr { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsBool().Returns(false);
             secondOperandDataType.IsBool().Returns(true);
 
@@ -434,8 +506,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_second_operand_is_not_a_bool()
         {
             var logicalOr = new LogicalOr { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(false);
         
@@ -516,8 +588,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_when_the_first_operand_is_not_a_number()
         {
             var greaterCheck = new GreaterCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
 
@@ -529,8 +601,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_when_the_second_operand_is_not_a_number()
         {
             var greaterCheck = new GreaterCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
 
@@ -599,8 +671,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_when_the_first_operand_is_not_a_number()
         {
             var greaterOrEqualCheck = new GreaterOrEqualCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
 
@@ -612,8 +684,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_when_the_second_operand_is_not_a_number()
         {
             var greaterOrEqualCheck = new GreaterOrEqualCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
         
@@ -682,8 +754,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_when_the_first_operand_is_not_a_number()
         {
             var lessCheck = new LessCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
 
@@ -695,8 +767,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_when_the_second_operand_is_not_a_number()
         {
             var lessCheck = new LessCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
         
@@ -765,8 +837,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_when_the_first_operand_is_not_a_number()
         {
             var lessOrEqualCheck = new LessOrEqualCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
 
@@ -778,8 +850,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_when_the_second_operand_is_not_a_number()
         {
             var lessOrEqualCheck = new LessOrEqualCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
         
@@ -848,8 +920,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_operands_are_not_of_the_same_type()
         {
             var equalityCheck = new EqualityCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.Is(secondOperandDataType).Returns(false);
 
             var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
@@ -951,8 +1023,8 @@ public class BinaryExpressionInterpretingStrategyTest
         {
             // TODO revisit
             var equalityCheck = new EqualityCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
 
             var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
@@ -974,8 +1046,8 @@ public class BinaryExpressionInterpretingStrategyTest
         public void throws_error_if_the_operands_are_not_of_the_same_type()
         {
             var inequalityCheck = new InequalityCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.Is(secondOperandDataType).Returns(false);
 
             var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);
@@ -1077,8 +1149,8 @@ public class BinaryExpressionInterpretingStrategyTest
         {
             // TODO revisit
             var inequalityCheck = new InequalityCheck { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType });
-            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType });
+            expressionEvaluator.Evaluate(firstOperand).Returns(new EvaluatedResult { Type = firstOperandDataType, Value = new object() });
+            expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
         
             var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);

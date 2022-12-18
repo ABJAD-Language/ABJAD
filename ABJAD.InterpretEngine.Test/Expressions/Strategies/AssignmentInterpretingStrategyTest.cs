@@ -38,11 +38,24 @@ public class AssignmentInterpretingStrategyTest
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
 
+    [Fact(DisplayName = "throws error if the target value was undefined")]
+    public void throws_error_if_the_target_value_was_undefined()
+    {
+        scope.ReferenceExists("id").Returns(true);
+        var targetType = Substitute.For<DataType>();
+        targetType.IsNumber().Returns(true);
+        scope.GetType("id").Returns(targetType);
+        scope.Get("id").Returns(SpecialValues.UNDEFINED);
+        var strategy = new AssignmentInterpretingStrategy(new AdditionAssignment { Target = "id" }, scope, expressionEvaluator);
+        Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
+    }
+
     [Fact(DisplayName = "throws error if the offset was not of type number")]
     public void throws_error_if_the_offset_was_not_of_type_number()
     {
         scope.ReferenceExists("id").Returns(true);
         scope.GetType("id").Returns(DataType.Number());
+        scope.Get("id").Returns(1.0);
 
         var expression = Substitute.For<Expression>();
         var expressionType = Substitute.For<DataType>();

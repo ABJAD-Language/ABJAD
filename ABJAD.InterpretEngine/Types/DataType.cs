@@ -23,6 +23,11 @@ public interface DataType
     {
         return new UndefinedDataType();
     }
+
+    static DataType Custom(string value)
+    {
+        return new CustomDataType(value);
+    }
     
     bool IsNumber()
     {

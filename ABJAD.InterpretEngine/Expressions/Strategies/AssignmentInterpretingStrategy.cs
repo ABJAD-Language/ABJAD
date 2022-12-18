@@ -21,11 +21,20 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
     {
         FailIfReferenceDoesNotExist();
         FailIfTargetIsNotNumber();
-
+        FailIfTargetValueWasUndefined();
+        
         var offset = EvaluateOffset();
         var oldValue = GetTargetOldValue();
         
         return ApplyOperationAndStoreNewValue(oldValue, offset);
+    }
+
+    private void FailIfTargetValueWasUndefined()
+    {
+        if (scope.Get(assignmentExpression.Target).Equals(SpecialValues.UNDEFINED))
+        {
+            throw new OperationOnUndefinedValueException(assignmentExpression.Target);
+        }
     }
 
     private double GetTargetOldValue()

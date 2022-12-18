@@ -21,7 +21,7 @@ public class PrimitiveInterpretingStrategy : ExpressionInterpretingStrategy
             BoolPrimitive boolPrimitive => new EvaluatedResult { Type = DataType.Bool(), Value = boolPrimitive.Value },
             NumberPrimitive numberPrimitive => new EvaluatedResult { Type = DataType.Number(), Value = numberPrimitive.Value },
             StringPrimitive stringPrimitive => new EvaluatedResult { Type = DataType.String(), Value = stringPrimitive.Value },
-            NullPrimitive => new EvaluatedResult { Type = DataType.Undefined() },
+            NullPrimitive => new EvaluatedResult { Type = DataType.Undefined(), Value = SpecialValues.NULL },
             IdentifierPrimitive identifierPrimitive => GetIdentifierValueIfExists(identifierPrimitive)
         };
     }

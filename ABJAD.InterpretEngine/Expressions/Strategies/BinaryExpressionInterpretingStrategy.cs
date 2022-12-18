@@ -21,6 +21,9 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
         var firstOperandEvaluationResult = expressionEvaluator.Evaluate(expression.FirstOperand);
         var secondOperandEvaluationResult = expressionEvaluator.Evaluate(expression.SecondOperand);
 
+        ValidateOperandValueIsNotUndefined(firstOperandEvaluationResult);
+        ValidateOperandValueIsNotUndefined(secondOperandEvaluationResult);
+
         return expression switch
         {
             Addition => HandleAddition(firstOperandEvaluationResult, secondOperandEvaluationResult),
@@ -38,6 +41,14 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
             InequalityCheck => HandleInequalityCheck(firstOperandEvaluationResult, secondOperandEvaluationResult),
             _ => throw new ArgumentException()
         };
+    }
+
+    private static void ValidateOperandValueIsNotUndefined(EvaluatedResult firstOperandEvaluationResult)
+    {
+        if (firstOperandEvaluationResult.Value.Equals(SpecialValues.UNDEFINED))
+        {
+            throw new OperationOnUndefinedValueException();
+        }
     }
 
     private static EvaluatedResult HandleInequalityCheck(EvaluatedResult firstOperand, EvaluatedResult secondOperand)
@@ -219,6 +230,7 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
 
             if (secondOperand.Type.IsString())
             {
+                ValidateOperandIsNotNull(secondOperand);
                 var value = (double)firstOperand.Value + (string)secondOperand.Value;
                 return new EvaluatedResult { Type = DataType.String(), Value = value };
             }
@@ -228,8 +240,11 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
         
         if (firstOperand.Type.IsString())
         {
+            ValidateOperandIsNotNull(firstOperand);
+            
             if (secondOperand.Type.IsString())
             {
+                ValidateOperandIsNotNull(secondOperand);
                 var value = (string)firstOperand.Value + (string)secondOperand.Value;
                 return new EvaluatedResult { Type = DataType.String(), Value = value };
             }
@@ -244,5 +259,13 @@ public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrate
         }
 
         throw new InvalidTypeException(firstOperand.Type, DataType.Number(), DataType.String());
+    }
+
+    private static void ValidateOperandIsNotNull(EvaluatedResult firstOperand)
+    {
+        if (firstOperand.Value.Equals(SpecialValues.NULL))
+        {
+            throw new NullPointerException();
+        }
     }
 }
