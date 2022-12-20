@@ -1,6 +1,6 @@
 ﻿namespace ABJAD.InterpretEngine.Expressions.Strategies;
 
-public interface ExpressionInterpretingStrategy
+public interface ExpressionEvaluationStrategy
 {
     EvaluatedResult Apply();
 }

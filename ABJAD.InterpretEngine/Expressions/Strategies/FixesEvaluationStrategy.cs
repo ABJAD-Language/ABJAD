@@ -4,12 +4,12 @@ using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
 
-public class FixesInterpretingStrategy : ExpressionInterpretingStrategy
+public class FixesEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly FixExpression fixExpression;
     private readonly ScopeFacade scopeFacade;
 
-    public FixesInterpretingStrategy(FixExpression fixExpression, ScopeFacade scopeFacade)
+    public FixesEvaluationStrategy(FixExpression fixExpression, ScopeFacade scopeFacade)
     {
         this.fixExpression = fixExpression;
         this.scopeFacade = scopeFacade;

@@ -5,12 +5,12 @@ using _ToString =  ABJAD.InterpretEngine.Shared.Expressions.Unary.ToString;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
 
-public class UnaryExpressionInterpretingStrategy : ExpressionInterpretingStrategy
+public class UnaryExpressionEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly UnaryExpression unaryExpression;
     private readonly Evaluator<Expression> expressionEvaluator;
 
-    public UnaryExpressionInterpretingStrategy(UnaryExpression unaryExpression, Evaluator<Expression> expressionEvaluator)
+    public UnaryExpressionEvaluationStrategy(UnaryExpression unaryExpression, Evaluator<Expression> expressionEvaluator)
     {
         this.unaryExpression = unaryExpression;
         this.expressionEvaluator = expressionEvaluator;

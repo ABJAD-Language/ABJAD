@@ -5,13 +5,13 @@ using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
 
-public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
+public class AssignmentEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly AssignmentExpression assignmentExpression;
     private readonly ScopeFacade scopeFacade;
     private readonly Evaluator<Expression> expressionEvaluator;
 
-    public AssignmentInterpretingStrategy(AssignmentExpression assignmentExpression, ScopeFacade scopeFacade, Evaluator<Expression> expressionEvaluator)
+    public AssignmentEvaluationStrategy(AssignmentExpression assignmentExpression, ScopeFacade scopeFacade, Evaluator<Expression> expressionEvaluator)
     {
         this.assignmentExpression = assignmentExpression;
         this.scopeFacade = scopeFacade;

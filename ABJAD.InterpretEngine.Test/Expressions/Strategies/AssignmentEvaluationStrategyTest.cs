@@ -8,12 +8,12 @@ using NSubstitute;
 
 namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
-public class AssignmentInterpretingStrategyTest
+public class AssignmentEvaluationStrategyTest
 {
     private readonly ScopeFacade scopeFacade;
     private readonly Evaluator<Expression> expressionEvaluator;
 
-    public AssignmentInterpretingStrategyTest()
+    public AssignmentEvaluationStrategyTest()
     {
         scopeFacade = Substitute.For<ScopeFacade>();
         expressionEvaluator = Substitute.For<Evaluator<Expression>>();
@@ -23,7 +23,7 @@ public class AssignmentInterpretingStrategyTest
     public void throws_error_if_the_target_reference_did_not_exist()
     {
         scopeFacade.ReferenceExists("id").Returns(false);
-        var strategy = new AssignmentInterpretingStrategy(new AdditionAssignment { Target = "id" }, scopeFacade, expressionEvaluator);
+        var strategy = new AssignmentEvaluationStrategy(new AdditionAssignment { Target = "id" }, scopeFacade, expressionEvaluator);
         Assert.Throws<ReferenceNameDoesNotExistException>(() => strategy.Apply());
     }
 
@@ -35,7 +35,7 @@ public class AssignmentInterpretingStrategyTest
         targetType.IsNumber().Returns(false);
         targetType.GetValue().Returns("notNumber");
         scopeFacade.GetType("id").Returns(targetType);
-        var strategy = new AssignmentInterpretingStrategy(new AdditionAssignment { Target = "id" }, scopeFacade, expressionEvaluator);
+        var strategy = new AssignmentEvaluationStrategy(new AdditionAssignment { Target = "id" }, scopeFacade, expressionEvaluator);
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
 
@@ -47,7 +47,7 @@ public class AssignmentInterpretingStrategyTest
         targetType.IsNumber().Returns(true);
         scopeFacade.GetType("id").Returns(targetType);
         scopeFacade.Get("id").Returns(SpecialValues.UNDEFINED);
-        var strategy = new AssignmentInterpretingStrategy(new AdditionAssignment { Target = "id" }, scopeFacade, expressionEvaluator);
+        var strategy = new AssignmentEvaluationStrategy(new AdditionAssignment { Target = "id" }, scopeFacade, expressionEvaluator);
         Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
     }
 
@@ -64,7 +64,7 @@ public class AssignmentInterpretingStrategyTest
         expressionEvaluator.Evaluate(expression).Returns(new EvaluatedResult { Type = expressionType });
 
         var assignmentExpression = new AdditionAssignment { Target = "id", Value = expression };
-        var strategy = new AssignmentInterpretingStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
+        var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
 
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
@@ -81,7 +81,7 @@ public class AssignmentInterpretingStrategyTest
         expressionEvaluator.Evaluate(offset).Returns(new EvaluatedResult { Type = DataType.Number(), Value = 3.0});
 
         var assignmentExpression = new AdditionAssignment { Target = "id", Value = offset };
-        var strategy = new AssignmentInterpretingStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
+        var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
         scopeFacade.Received(1).Set("id", 5.0);
@@ -102,7 +102,7 @@ public class AssignmentInterpretingStrategyTest
         expressionEvaluator.Evaluate(offset).Returns(new EvaluatedResult { Type = DataType.Number(), Value = 4.0});
 
         var assignmentExpression = new SubtractionAssignment { Target = "id", Value = offset };
-        var strategy = new AssignmentInterpretingStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
+        var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
         scopeFacade.Received(1).Set("id", 3.0);
@@ -123,7 +123,7 @@ public class AssignmentInterpretingStrategyTest
         expressionEvaluator.Evaluate(offset).Returns(new EvaluatedResult { Type = DataType.Number(), Value = -1.0});
 
         var assignmentExpression = new MultiplicationAssignment { Target = "id", Value = offset };
-        var strategy = new AssignmentInterpretingStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
+        var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
         scopeFacade.Received(1).Set("id", -8.0);
@@ -144,7 +144,7 @@ public class AssignmentInterpretingStrategyTest
         expressionEvaluator.Evaluate(offset).Returns(new EvaluatedResult { Type = DataType.Number(), Value = 2.0});
 
         var assignmentExpression = new DivisionAssignment { Target = "id", Value = offset };
-        var strategy = new AssignmentInterpretingStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
+        var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
         scopeFacade.Received(1).Set("id", 4.5);

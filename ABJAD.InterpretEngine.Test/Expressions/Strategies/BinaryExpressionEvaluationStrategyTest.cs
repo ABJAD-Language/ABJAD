@@ -6,7 +6,7 @@ using NSubstitute;
 
 namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
-public class BinaryExpressionInterpretingStrategyTest
+public class BinaryExpressionEvaluationStrategyTest
 {
     private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
     private readonly Expression firstOperand = Substitute.For<Expression>();
@@ -19,7 +19,7 @@ public class BinaryExpressionInterpretingStrategyTest
         expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Value = new object() });
             
         var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
-        var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
+        var strategy = new BinaryExpressionEvaluationStrategy(addition, expressionEvaluator);
 
         Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
     }
@@ -31,7 +31,7 @@ public class BinaryExpressionInterpretingStrategyTest
         expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Value = SpecialValues.UNDEFINED });
             
         var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
-        var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
+        var strategy = new BinaryExpressionEvaluationStrategy(addition, expressionEvaluator);
 
         Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
     }
@@ -56,7 +56,7 @@ public class BinaryExpressionInterpretingStrategyTest
             
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
-            var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(binaryExpression, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -72,7 +72,7 @@ public class BinaryExpressionInterpretingStrategyTest
 
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
-            var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(binaryExpression, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -86,7 +86,7 @@ public class BinaryExpressionInterpretingStrategyTest
             secondOperandDataType.IsString().Returns(true);
 
             var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(addition, expressionEvaluator);
 
             Assert.Throws<NullPointerException>(() => strategy.Apply());
         }
@@ -101,7 +101,7 @@ public class BinaryExpressionInterpretingStrategyTest
             secondOperandDataType.IsString().Returns(true);
 
             var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(addition, expressionEvaluator);
 
             Assert.Throws<NullPointerException>(() => strategy.Apply());
         }
@@ -116,7 +116,7 @@ public class BinaryExpressionInterpretingStrategyTest
             secondOperandDataType.IsString().Returns(true);
 
             var addition = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
-            var strategy = new BinaryExpressionInterpretingStrategy(addition, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(addition, expressionEvaluator);
 
             Assert.Throws<NullPointerException>(() => strategy.Apply());
         }
@@ -131,7 +131,7 @@ public class BinaryExpressionInterpretingStrategyTest
             
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
-            var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(binaryExpression, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(5.0, result.Value);
@@ -147,7 +147,7 @@ public class BinaryExpressionInterpretingStrategyTest
             
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
-            var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(binaryExpression, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("hello world", result.Value);
@@ -163,7 +163,7 @@ public class BinaryExpressionInterpretingStrategyTest
 
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
-            var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(binaryExpression, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("1 is the answer", result.Value);
@@ -179,7 +179,7 @@ public class BinaryExpressionInterpretingStrategyTest
 
             var binaryExpression = new Addition { FirstOperand = firstOperand, SecondOperand = secondOperand };
 
-            var strategy = new BinaryExpressionInterpretingStrategy(binaryExpression, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(binaryExpression, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("the answer is 7", result.Value);
@@ -202,7 +202,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
-            var strategy = new BinaryExpressionInterpretingStrategy(subtraction, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(subtraction, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -214,7 +214,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
-            var strategy = new BinaryExpressionInterpretingStrategy(subtraction, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(subtraction, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -226,7 +226,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = 8.0 });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
-            var strategy = new BinaryExpressionInterpretingStrategy(subtraction, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(subtraction, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(-5.0, result.Value);
@@ -249,7 +249,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
-            var strategy = new BinaryExpressionInterpretingStrategy(multiplication, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(multiplication, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -261,7 +261,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
-            var strategy = new BinaryExpressionInterpretingStrategy(multiplication, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(multiplication, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -273,7 +273,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = 2.0 });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
-            var strategy = new BinaryExpressionInterpretingStrategy(multiplication, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(multiplication, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(-8.0, result.Value);
@@ -296,7 +296,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
-            var strategy = new BinaryExpressionInterpretingStrategy(division, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(division, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -308,7 +308,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
-            var strategy = new BinaryExpressionInterpretingStrategy(division, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(division, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -320,7 +320,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = 0.0 });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
-            var strategy = new BinaryExpressionInterpretingStrategy(division, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(division, expressionEvaluator);
             Assert.Throws<DivisionByZeroException>(() => strategy.Apply());
         }
         
@@ -332,7 +332,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = 3.0 });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
-            var strategy = new BinaryExpressionInterpretingStrategy(division, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(division, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(4.0, result.Value);
@@ -355,7 +355,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
-            var strategy = new BinaryExpressionInterpretingStrategy(modulo, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(modulo, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -367,7 +367,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
-            var strategy = new BinaryExpressionInterpretingStrategy(modulo, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(modulo, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
         
@@ -379,7 +379,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = 3.0 });
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
-            var strategy = new BinaryExpressionInterpretingStrategy(modulo, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(modulo, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(1.0, result.Value);
@@ -403,7 +403,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(false);
             secondOperandDataType.IsBool().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalAnd, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalAnd, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -416,7 +416,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(false);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalAnd, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalAnd, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -429,7 +429,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalAnd, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalAnd, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -444,7 +444,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalAnd, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalAnd, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -459,7 +459,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalAnd, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalAnd, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -474,7 +474,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalAnd, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalAnd, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -498,7 +498,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(false);
             secondOperandDataType.IsBool().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalOr, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalOr, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -511,7 +511,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(false);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalOr, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalOr, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
         
@@ -524,7 +524,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalOr, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalOr, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -539,7 +539,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalOr, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalOr, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -554,7 +554,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalOr, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalOr, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -569,7 +569,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsBool().Returns(true);
             secondOperandDataType.IsBool().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(logicalOr, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(logicalOr, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -593,7 +593,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterCheck, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -606,7 +606,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterCheck, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -619,7 +619,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -635,7 +635,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -651,7 +651,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -676,7 +676,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterOrEqualCheck, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
         
@@ -689,7 +689,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterOrEqualCheck, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
         
@@ -702,7 +702,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterOrEqualCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -718,7 +718,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterOrEqualCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -734,7 +734,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(greaterOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(greaterOrEqualCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -759,7 +759,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(lessCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessCheck, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
         
@@ -772,7 +772,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(lessCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessCheck, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
         
@@ -785,7 +785,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(lessCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -801,7 +801,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(lessCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -817,7 +817,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(lessCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -842,7 +842,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(false);
             secondOperandDataType.IsNumber().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(lessOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessOrEqualCheck, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
         
@@ -855,7 +855,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(false);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(lessOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessOrEqualCheck, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
         
@@ -868,7 +868,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(lessOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessOrEqualCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -884,7 +884,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(lessOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessOrEqualCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -900,7 +900,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.IsNumber().Returns(true);
             secondOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(lessOrEqualCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(lessOrEqualCheck, expressionEvaluator);
             var result = strategy.Apply();
             
             Assert.True(result.Type.IsBool());
@@ -924,7 +924,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.Is(secondOperandDataType).Returns(false);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(equalityCheck, expressionEvaluator);
             Assert.Throws<IncompatibleTypesException>(() => strategy.Apply());
         }
 
@@ -937,7 +937,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsNumber().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(equalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -952,7 +952,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsNumber().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(equalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -967,7 +967,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsString().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(equalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -982,7 +982,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsString().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(equalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -997,7 +997,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsBool().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(equalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -1012,7 +1012,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsBool().Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(equalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -1027,7 +1027,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(equalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(equalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -1050,7 +1050,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.Is(secondOperandDataType).Returns(false);
 
-            var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(inequalityCheck, expressionEvaluator);
             Assert.Throws<IncompatibleTypesException>(() => strategy.Apply());
         }
 
@@ -1063,7 +1063,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(inequalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -1078,7 +1078,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsNumber().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(inequalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -1093,7 +1093,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsString().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(inequalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -1108,7 +1108,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsString().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(inequalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -1123,7 +1123,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsBool().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(inequalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -1138,7 +1138,7 @@ public class BinaryExpressionInterpretingStrategyTest
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
             firstOperandDataType.IsBool().Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(inequalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -1153,7 +1153,7 @@ public class BinaryExpressionInterpretingStrategyTest
             expressionEvaluator.Evaluate(secondOperand).Returns(new EvaluatedResult { Type = secondOperandDataType, Value = new object() });
             firstOperandDataType.Is(secondOperandDataType).Returns(true);
         
-            var strategy = new BinaryExpressionInterpretingStrategy(inequalityCheck, expressionEvaluator);
+            var strategy = new BinaryExpressionEvaluationStrategy(inequalityCheck, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
