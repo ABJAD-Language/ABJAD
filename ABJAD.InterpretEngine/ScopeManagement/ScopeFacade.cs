@@ -9,4 +9,5 @@ public interface ScopeFacade
     object Get(string name);
     void Set(string name, object value);
     void Define(string name, DataType type, object value);
+    ScopeManager CloneScope();
 }

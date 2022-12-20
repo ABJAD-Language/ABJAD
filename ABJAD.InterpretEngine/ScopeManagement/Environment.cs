@@ -48,4 +48,9 @@ public class Environment : ScopeManager, ScopeFacade
     {
         scopes.Last().Define(name, type, value);
     }
+
+    public ScopeManager CloneScope()
+    {
+        return new Environment(scopes.Select(s => s.Clone()).ToList());
+    }
 }

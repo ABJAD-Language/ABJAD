@@ -82,4 +82,56 @@ public class EnvironmentTest
         Assert.True(environment.GetType("id").IsString());
         Assert.Equal("hello", environment.Get("id"));
     }
+
+    [Fact(DisplayName = "adding a new reference to a cloned environment does not add it to the original one")]
+    public void adding_a_new_reference_to_a_cloned_environment_does_not_add_it_to_the_original_one()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
+        var scopes = new List<IScope>() { scope };
+        var environment = new Environment(scopes);
+
+        var cloneEnvironment = (Environment) environment.CloneScope();
+        cloneEnvironment.Define("id2", DataType.String(), "hello");
+        Assert.True(cloneEnvironment.ReferenceExists("id2"));
+        Assert.False(environment.ReferenceExists("id2"));
+    }
+
+    [Fact(DisplayName = "defining a new reference in an environment does not add it to its clone")]
+    public void defining_a_new_reference_in_an_environment_does_not_add_it_to_its_clone()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
+        var scopes = new List<IScope>() { scope };
+        var environment = new Environment(scopes);
+        var cloneEnvironment = (Environment) environment.CloneScope();
+
+        environment.Define("id2", DataType.String(), "hello");
+        Assert.False(cloneEnvironment.ReferenceExists("id2"));
+        Assert.True(environment.ReferenceExists("id2"));
+    }
+
+    [Fact(DisplayName = "modifying the value of a reference in a cloned environment does not modify it in the original one")]
+    public void modifying_the_value_of_a_reference_in_a_cloned_environment_does_not_modify_it_in_the_original_one()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
+        var scopes = new List<IScope>() { scope };
+        var environment = new Environment(scopes);
+        var cloneEnvironment = (Environment) environment.CloneScope();
+
+        cloneEnvironment.Set("id", 2);
+        Assert.Equal(1, environment.Get("id"));
+        Assert.Equal(2, cloneEnvironment.Get("id"));
+    }
+
+    [Fact(DisplayName = "modifying the value of a reference in an environment does not modify it in its clone")]
+    public void modifying_the_value_of_a_reference_in_an_environment_does_not_modify_it_in_its_clone()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
+        var scopes = new List<IScope>() { scope };
+        var environment = new Environment(scopes);
+        var cloneEnvironment = (Environment) environment.CloneScope();
+
+        environment.Set("id", 2);
+        Assert.Equal(2, environment.Get("id"));
+        Assert.Equal(1, cloneEnvironment.Get("id"));
+    }
 }
