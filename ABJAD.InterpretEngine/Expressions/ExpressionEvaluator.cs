@@ -23,11 +23,11 @@ public class ExpressionEvaluator : Evaluator<Expression>
     {
         return target switch
         {
-            AssignmentExpression expression => expressionStrategyFactory.GetAssignmentInterpretingStrategy(expression, this, scopeFacade).Apply(),
-            BinaryExpression expression => expressionStrategyFactory.GetBinaryExpressionInterpretingStrategy(expression, this).Apply(),
-            FixExpression expression => expressionStrategyFactory.GetFixesInterpretingStrategy(expression, scopeFacade).Apply(),
-            UnaryExpression expression => expressionStrategyFactory.GetUnaryExpressionInterpretingStrategy(expression, this).Apply(),
-            Primitive primitive => expressionStrategyFactory.GetPrimitiveInterpretingStrategy(primitive, scopeFacade).Apply(),
+            AssignmentExpression expression => expressionStrategyFactory.GetAssignmentEvaluationStrategy(expression, this, scopeFacade).Apply(),
+            BinaryExpression expression => expressionStrategyFactory.GetBinaryExpressionEvaluationStrategy(expression, this).Apply(),
+            FixExpression expression => expressionStrategyFactory.GetFixesEvaluationStrategy(expression, scopeFacade).Apply(),
+            UnaryExpression expression => expressionStrategyFactory.GetUnaryExpressionEvaluationStrategy(expression, this).Apply(),
+            Primitive primitive => expressionStrategyFactory.GetPrimitiveEvaluationStrategy(primitive, scopeFacade).Apply(),
             _ => throw new ArgumentException()
         };
     }

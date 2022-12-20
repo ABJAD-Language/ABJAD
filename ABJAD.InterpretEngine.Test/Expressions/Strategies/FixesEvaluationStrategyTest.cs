@@ -8,7 +8,7 @@ using NSubstitute;
 
 namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
-public class FixesInterpretingStrategyTest
+public class FixesEvaluationStrategyTest
 {
     private readonly ScopeFacade scopeFacade = Substitute.For<ScopeFacade>();
 
@@ -18,7 +18,7 @@ public class FixesInterpretingStrategyTest
         var target = new IdentifierPrimitive { Value = "id" };
         scopeFacade.ReferenceExists("id").Returns(false);
         var additionPostfix = new AdditionPostfix { Target = target };
-        var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
+        var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
         Assert.Throws<ReferenceNameDoesNotExistException>(() => strategy.Apply());
     }
 
@@ -31,7 +31,7 @@ public class FixesInterpretingStrategyTest
         targetType.IsNumber().Returns(false);
         scopeFacade.GetType("id").Returns(targetType);
         var additionPostfix = new AdditionPostfix { Target = target };
-        var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
+        var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
 
@@ -45,7 +45,7 @@ public class FixesInterpretingStrategyTest
         scopeFacade.GetType("id").Returns(targetType);
         scopeFacade.Get("id").Returns(SpecialValues.UNDEFINED);
         var additionPostfix = new AdditionPostfix { Target = target };
-        var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
+        var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
         Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
     }
 
@@ -64,7 +64,7 @@ public class FixesInterpretingStrategyTest
             scopeFacade.Get("id").Returns(3.2);
 
             var additionPostfix = new AdditionPostfix { Target = target };
-            var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
+            var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
             strategy.Apply();
             scopeFacade.Received(1).Set("id", 4.2);
         }
@@ -78,7 +78,7 @@ public class FixesInterpretingStrategyTest
             scopeFacade.Get("id").Returns(3.2);
 
             var additionPostfix = new AdditionPostfix { Target = target };
-            var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
+            var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(3.2, result.Value);
@@ -100,7 +100,7 @@ public class FixesInterpretingStrategyTest
             scopeFacade.Get("id").Returns(10.0);
 
             var additionPrefix = new AdditionPrefix { Target = target };
-            var strategy = new FixesInterpretingStrategy(additionPrefix, scopeFacade);
+            var strategy = new FixesEvaluationStrategy(additionPrefix, scopeFacade);
             strategy.Apply();
             scopeFacade.Received(1).Set("id", 11.0);
         }
@@ -114,7 +114,7 @@ public class FixesInterpretingStrategyTest
             scopeFacade.Get("id").Returns(10.0);
 
             var additionPrefix = new AdditionPrefix { Target = target };
-            var strategy = new FixesInterpretingStrategy(additionPrefix, scopeFacade);
+            var strategy = new FixesEvaluationStrategy(additionPrefix, scopeFacade);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(11.0, result.Value);
@@ -136,7 +136,7 @@ public class FixesInterpretingStrategyTest
             scopeFacade.Get("id").Returns(13.0);
 
             var subtractionPostfix = new SubtractionPostfix { Target = target };
-            var strategy = new FixesInterpretingStrategy(subtractionPostfix, scopeFacade);
+            var strategy = new FixesEvaluationStrategy(subtractionPostfix, scopeFacade);
             strategy.Apply();
             scopeFacade.Received(1).Set("id", 12.0);
         }
@@ -150,7 +150,7 @@ public class FixesInterpretingStrategyTest
             scopeFacade.Get("id").Returns(13.0);
         
             var subtractionPostfix = new SubtractionPostfix { Target = target };
-            var strategy = new FixesInterpretingStrategy(subtractionPostfix, scopeFacade);
+            var strategy = new FixesEvaluationStrategy(subtractionPostfix, scopeFacade);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(13.0, result.Value);
@@ -172,7 +172,7 @@ public class FixesInterpretingStrategyTest
             scopeFacade.Get("id").Returns(15.0);
 
             var subtractionPrefix = new SubtractionPrefix { Target = target };
-            var strategy = new FixesInterpretingStrategy(subtractionPrefix, scopeFacade);
+            var strategy = new FixesEvaluationStrategy(subtractionPrefix, scopeFacade);
             strategy.Apply();
             scopeFacade.Received(1).Set("id", 14.0);
         }
@@ -186,7 +186,7 @@ public class FixesInterpretingStrategyTest
             scopeFacade.Get("id").Returns(15.0);
         
             var subtractionPrefix = new SubtractionPrefix { Target = target };
-            var strategy = new FixesInterpretingStrategy(subtractionPrefix, scopeFacade);
+            var strategy = new FixesEvaluationStrategy(subtractionPrefix, scopeFacade);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(14.0, result.Value);

@@ -4,12 +4,12 @@ using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
 
-public class PrimitiveInterpretingStrategy : ExpressionInterpretingStrategy
+public class PrimitiveEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly Primitive primitive;
     private readonly ScopeFacade scopeFacade;
 
-    public PrimitiveInterpretingStrategy(Primitive primitive, ScopeFacade scopeFacade)
+    public PrimitiveEvaluationStrategy(Primitive primitive, ScopeFacade scopeFacade)
     {
         this.primitive = primitive;
         this.scopeFacade = scopeFacade;

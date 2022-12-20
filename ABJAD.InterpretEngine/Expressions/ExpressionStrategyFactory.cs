@@ -11,29 +11,29 @@ namespace ABJAD.InterpretEngine.Expressions;
 
 public class ExpressionStrategyFactory : IExpressionStrategyFactory
 {
-    public ExpressionInterpretingStrategy GetAssignmentInterpretingStrategy(AssignmentExpression expression, Evaluator<Expression> expressionEvaluator, ScopeFacade scopeFacade)
+    public ExpressionEvaluationStrategy GetAssignmentEvaluationStrategy(AssignmentExpression expression, Evaluator<Expression> expressionEvaluator, ScopeFacade scopeFacade)
     {
-        return new AssignmentInterpretingStrategy(expression, scopeFacade, expressionEvaluator);
+        return new AssignmentEvaluationStrategy(expression, scopeFacade, expressionEvaluator);
     }
 
-    public ExpressionInterpretingStrategy GetBinaryExpressionInterpretingStrategy(BinaryExpression expression, Evaluator<Expression> expressionEvaluator)
+    public ExpressionEvaluationStrategy GetBinaryExpressionEvaluationStrategy(BinaryExpression expression, Evaluator<Expression> expressionEvaluator)
     {
-        return new BinaryExpressionInterpretingStrategy(expression, expressionEvaluator);
+        return new BinaryExpressionEvaluationStrategy(expression, expressionEvaluator);
     }
 
-    public ExpressionInterpretingStrategy GetFixesInterpretingStrategy(FixExpression expression, ScopeFacade scopeFacade)
+    public ExpressionEvaluationStrategy GetFixesEvaluationStrategy(FixExpression expression, ScopeFacade scopeFacade)
     {
-        return new FixesInterpretingStrategy(expression, scopeFacade);
+        return new FixesEvaluationStrategy(expression, scopeFacade);
     }
 
-    public ExpressionInterpretingStrategy GetPrimitiveInterpretingStrategy(Primitive primitive, ScopeFacade scopeFacade)
+    public ExpressionEvaluationStrategy GetPrimitiveEvaluationStrategy(Primitive primitive, ScopeFacade scopeFacade)
     {
-        return new PrimitiveInterpretingStrategy(primitive, scopeFacade);
+        return new PrimitiveEvaluationStrategy(primitive, scopeFacade);
     }
 
-    public ExpressionInterpretingStrategy GetUnaryExpressionInterpretingStrategy(UnaryExpression expression,
+    public ExpressionEvaluationStrategy GetUnaryExpressionEvaluationStrategy(UnaryExpression expression,
         Evaluator<Expression> expressionEvaluator)
     {
-        return new UnaryExpressionInterpretingStrategy(expression, expressionEvaluator);
+        return new UnaryExpressionEvaluationStrategy(expression, expressionEvaluator);
     }
 }

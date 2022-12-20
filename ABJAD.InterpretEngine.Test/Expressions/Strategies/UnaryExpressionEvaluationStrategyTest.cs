@@ -6,7 +6,7 @@ using NSubstitute;
 
 namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
-public class UnaryExpressionInterpretingStrategyTest
+public class UnaryExpressionEvaluationStrategyTest
 {
     private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
     private readonly Expression target = Substitute.For<Expression>();
@@ -16,7 +16,7 @@ public class UnaryExpressionInterpretingStrategyTest
     {
         var negation = new Negation { Target = target };
         expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Value = SpecialValues.UNDEFINED });
-        var strategy = new UnaryExpressionInterpretingStrategy(negation, expressionEvaluator);
+        var strategy = new UnaryExpressionEvaluationStrategy(negation, expressionEvaluator);
         Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
     }
     
@@ -32,7 +32,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var negation = new Negation { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = new object() });
             type.IsBool().Returns(false);
-            var strategy = new UnaryExpressionInterpretingStrategy(negation, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(negation, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -42,7 +42,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var negation = new Negation { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = false });
             type.IsBool().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(negation, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(negation, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -54,7 +54,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var negation = new Negation { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = true });
             type.IsBool().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(negation, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(negation, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -73,7 +73,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var negative = new Negative { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = new object() });
             type.IsNumber().Returns(false);
-            var strategy = new UnaryExpressionInterpretingStrategy(negative, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(negative, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -83,7 +83,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var negative = new Negative { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = -3.0});
             type.IsNumber().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(negative, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(negative, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(3.0, result.Value);
@@ -95,7 +95,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var negative = new Negative { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = 11.0});
             type.IsNumber().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(negative, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(negative, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(-11.0, result.Value);
@@ -114,7 +114,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toBool = new ToBool { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = new object() });
             type.IsString().Returns(false);
-            var strategy = new UnaryExpressionInterpretingStrategy(toBool, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toBool, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -124,7 +124,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toBool = new ToBool { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = SpecialValues.NULL });
             type.IsString().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toBool, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toBool, expressionEvaluator);
             Assert.Throws<NullPointerException>(() => strategy.Apply());
         }
 
@@ -134,7 +134,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toBool = new ToBool { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = "صحيح"});
             type.IsString().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toBool, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toBool, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(true, result.Value);
@@ -146,7 +146,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toBool = new ToBool { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = "خطا"});
             type.IsString().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toBool, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toBool, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsBool());
             Assert.Equal(false, result.Value);
@@ -158,7 +158,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toBool = new ToBool { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = "صح"});
             type.IsString().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toBool, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toBool, expressionEvaluator);
             Assert.Throws<InvalidTypeCastException>(() => strategy.Apply());
         }
     }
@@ -175,7 +175,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toNumber = new ToNumber { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = new object() });
             type.IsString().Returns(false);
-            var strategy = new UnaryExpressionInterpretingStrategy(toNumber, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toNumber, expressionEvaluator);
             Assert.Throws<InvalidTypeException>(() => strategy.Apply());
         }
 
@@ -185,7 +185,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toNumber = new ToNumber { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = SpecialValues.NULL });
             type.IsString().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toNumber, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toNumber, expressionEvaluator);
             Assert.Throws<NullPointerException>(() => strategy.Apply());
         }
 
@@ -195,7 +195,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toNumber = new ToNumber { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = "90.0" });
             type.IsString().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toNumber, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toNumber, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(90.0, result.Value);
@@ -207,7 +207,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toNumber = new ToNumber { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = "+13.0" });
             type.IsString().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toNumber, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toNumber, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(13.0, result.Value);
@@ -219,7 +219,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toNumber = new ToNumber { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = "-33.0" });
             type.IsString().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toNumber, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toNumber, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(-33.0, result.Value);
@@ -231,7 +231,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toNumber = new ToNumber { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = "10.0.3" });
             type.IsString().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toNumber, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toNumber, expressionEvaluator);
             Assert.Throws<InvalidTypeCastException>(() => strategy.Apply());
         }
     }
@@ -247,7 +247,7 @@ public class UnaryExpressionInterpretingStrategyTest
         {
             var toString = new ToString { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Value = SpecialValues.NULL });
-            var strategy = new UnaryExpressionInterpretingStrategy(toString, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toString, expressionEvaluator);
             Assert.Throws<NullPointerException>(() => strategy.Apply());
         }
 
@@ -257,7 +257,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toString = new ToString { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = -12.3 });
             type.IsNumber().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toString, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toString, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("-12.3", result.Value);
@@ -269,7 +269,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toString = new ToString { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = false });
             type.IsBool().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toString, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toString, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("خطا", result.Value);
@@ -281,7 +281,7 @@ public class UnaryExpressionInterpretingStrategyTest
             var toString = new ToString { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = type, Value = true });
             type.IsBool().Returns(true);
-            var strategy = new UnaryExpressionInterpretingStrategy(toString, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(toString, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("صحيح", result.Value);
@@ -298,7 +298,7 @@ public class UnaryExpressionInterpretingStrategyTest
         {
             var typeOf = new TypeOf { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = DataType.Undefined(), Value = new object() });
-            var strategy = new UnaryExpressionInterpretingStrategy(typeOf, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(typeOf, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("غير_معرف", result.Value);
@@ -309,7 +309,7 @@ public class UnaryExpressionInterpretingStrategyTest
         {
             var typeOf = new TypeOf { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = DataType.Number(), Value = new object() });
-            var strategy = new UnaryExpressionInterpretingStrategy(typeOf, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(typeOf, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("رقم", result.Value);
@@ -320,7 +320,7 @@ public class UnaryExpressionInterpretingStrategyTest
         {
             var typeOf = new TypeOf { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = DataType.String(), Value = new object() });
-            var strategy = new UnaryExpressionInterpretingStrategy(typeOf, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(typeOf, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("مقطع", result.Value);
@@ -331,7 +331,7 @@ public class UnaryExpressionInterpretingStrategyTest
         {
             var typeOf = new TypeOf { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = new object() });
-            var strategy = new UnaryExpressionInterpretingStrategy(typeOf, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(typeOf, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("منطق", result.Value);
@@ -342,7 +342,7 @@ public class UnaryExpressionInterpretingStrategyTest
         {
             var typeOf = new TypeOf { Target = target };
             expressionEvaluator.Evaluate(target).Returns(new EvaluatedResult { Type = DataType.Custom("خاص"), Value = new object() });
-            var strategy = new UnaryExpressionInterpretingStrategy(typeOf, expressionEvaluator);
+            var strategy = new UnaryExpressionEvaluationStrategy(typeOf, expressionEvaluator);
             var result = strategy.Apply();
             Assert.True(result.Type.IsString());
             Assert.Equal("خاص", result.Value);

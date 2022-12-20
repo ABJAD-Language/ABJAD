@@ -4,13 +4,13 @@ using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
 
-public class BinaryExpressionInterpretingStrategy : ExpressionInterpretingStrategy
+public class BinaryExpressionEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly BinaryExpression expression;
     private readonly Evaluator<Expression> expressionEvaluator;
     private static readonly double NumberComparisonTolerance = 10e-100;
 
-    public BinaryExpressionInterpretingStrategy(BinaryExpression expression, Evaluator<Expression> expressionEvaluator)
+    public BinaryExpressionEvaluationStrategy(BinaryExpression expression, Evaluator<Expression> expressionEvaluator)
     {
         this.expression = expression;
         this.expressionEvaluator = expressionEvaluator;

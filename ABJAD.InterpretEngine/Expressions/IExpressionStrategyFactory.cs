@@ -11,9 +11,9 @@ namespace ABJAD.InterpretEngine.Expressions;
 
 public interface IExpressionStrategyFactory
 {
-    ExpressionInterpretingStrategy GetAssignmentInterpretingStrategy(AssignmentExpression expression, Evaluator<Expression> expressionEvaluator, ScopeFacade scopeFacade);
-    ExpressionInterpretingStrategy GetBinaryExpressionInterpretingStrategy(BinaryExpression expression, Evaluator<Expression> expressionEvaluator);
-    ExpressionInterpretingStrategy GetFixesInterpretingStrategy(FixExpression expression, ScopeFacade scopeFacade);
-    ExpressionInterpretingStrategy GetPrimitiveInterpretingStrategy(Primitive primitive, ScopeFacade scopeFacade);
-    ExpressionInterpretingStrategy GetUnaryExpressionInterpretingStrategy(UnaryExpression expression, Evaluator<Expression> expressionEvaluator);
+    ExpressionEvaluationStrategy GetAssignmentEvaluationStrategy(AssignmentExpression expression, Evaluator<Expression> expressionEvaluator, ScopeFacade scopeFacade);
+    ExpressionEvaluationStrategy GetBinaryExpressionEvaluationStrategy(BinaryExpression expression, Evaluator<Expression> expressionEvaluator);
+    ExpressionEvaluationStrategy GetFixesEvaluationStrategy(FixExpression expression, ScopeFacade scopeFacade);
+    ExpressionEvaluationStrategy GetPrimitiveEvaluationStrategy(Primitive primitive, ScopeFacade scopeFacade);
+    ExpressionEvaluationStrategy GetUnaryExpressionEvaluationStrategy(UnaryExpression expression, Evaluator<Expression> expressionEvaluator);
 }
