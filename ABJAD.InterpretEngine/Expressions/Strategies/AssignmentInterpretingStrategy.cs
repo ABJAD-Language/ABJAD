@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.ScopeManagement;
+using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Assignments;
 using ABJAD.InterpretEngine.Types;
 
@@ -7,13 +8,13 @@ namespace ABJAD.InterpretEngine.Expressions.Strategies;
 public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
 {
     private readonly AssignmentExpression assignmentExpression;
-    private readonly IScope scope;
+    private readonly ScopeFacade scopeFacade;
     private readonly Evaluator<Expression> expressionEvaluator;
 
-    public AssignmentInterpretingStrategy(AssignmentExpression assignmentExpression, IScope scope, Evaluator<Expression> expressionEvaluator)
+    public AssignmentInterpretingStrategy(AssignmentExpression assignmentExpression, ScopeFacade scopeFacade, Evaluator<Expression> expressionEvaluator)
     {
         this.assignmentExpression = assignmentExpression;
-        this.scope = scope;
+        this.scopeFacade = scopeFacade;
         this.expressionEvaluator = expressionEvaluator;
     }
 
@@ -31,7 +32,7 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
 
     private void FailIfTargetValueWasUndefined()
     {
-        if (scope.Get(assignmentExpression.Target).Equals(SpecialValues.UNDEFINED))
+        if (scopeFacade.Get(assignmentExpression.Target).Equals(SpecialValues.UNDEFINED))
         {
             throw new OperationOnUndefinedValueException(assignmentExpression.Target);
         }
@@ -39,13 +40,13 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
 
     private double GetTargetOldValue()
     {
-        return (double)scope.Get(assignmentExpression.Target);
+        return (double)scopeFacade.Get(assignmentExpression.Target);
     }
 
     private EvaluatedResult ApplyOperationAndStoreNewValue(double oldValue, EvaluatedResult offset)
     {
         var newValue = EvaluateNewValue(oldValue, offset);
-        scope.Set(assignmentExpression.Target, newValue);
+        scopeFacade.Set(assignmentExpression.Target, newValue);
         return new EvaluatedResult { Type = DataType.Number(), Value = newValue };
     }
 
@@ -74,7 +75,7 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
 
     private void FailIfTargetIsNotNumber()
     {
-        var targetType = scope.GetType(assignmentExpression.Target);
+        var targetType = scopeFacade.GetType(assignmentExpression.Target);
         if (!targetType.IsNumber())
         {
             throw new InvalidTypeException(targetType, DataType.Number());
@@ -83,7 +84,7 @@ public class AssignmentInterpretingStrategy : ExpressionInterpretingStrategy
 
     private void FailIfReferenceDoesNotExist()
     {
-        if (!scope.ReferenceExists(assignmentExpression.Target))
+        if (!scopeFacade.ReferenceExists(assignmentExpression.Target))
         {
             throw new ReferenceNameDoesNotExistException(assignmentExpression.Target);
         }

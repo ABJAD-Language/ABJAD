@@ -1,4 +1,5 @@
 ﻿using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 using ABJAD.InterpretEngine.Types;
@@ -8,13 +9,13 @@ namespace ABJAD.InterpretEngine.Statements.Strategies;
 public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
 {
     private readonly Assignment assignment;
-    private readonly IScope scope;
+    private readonly ScopeFacade scopeFacade;
     private readonly Evaluator<Expression> expressionEvaluator;
 
-    public AssignmentInterpretationStrategy(Assignment assignment, IScope scope, Evaluator<Expression> expressionEvaluator)
+    public AssignmentInterpretationStrategy(Assignment assignment, ScopeFacade scopeFacade, Evaluator<Expression> expressionEvaluator)
     {
         this.assignment = assignment;
-        this.scope = scope;
+        this.scopeFacade = scopeFacade;
         this.expressionEvaluator = expressionEvaluator;
     }
 
@@ -27,7 +28,7 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
         ValidateValueTypeMatchesTargetType(evaluatedResult);
         ValidateValueIsNotUndefined(evaluatedResult);
 
-        scope.Set(assignment.Target, evaluatedResult.Value);
+        scopeFacade.Set(assignment.Target, evaluatedResult.Value);
     }
 
     private static void ValidateValueIsNotUndefined(EvaluatedResult evaluatedResult)
@@ -40,7 +41,7 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
 
     private void ValidateValueTypeMatchesTargetType(EvaluatedResult evaluatedResult)
     {
-        var targetType = scope.GetType(assignment.Target);
+        var targetType = scopeFacade.GetType(assignment.Target);
         if (!targetType.Is(evaluatedResult.Type))
         {
             throw new IncompatibleTypesException(targetType, evaluatedResult.Type);
@@ -49,7 +50,7 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
 
     private void ValidateTargetExists()
     {
-        if (!scope.ReferenceExists(assignment.Target))
+        if (!scopeFacade.ReferenceExists(assignment.Target))
         {
             throw new ReferenceNameDoesNotExistException(assignment.Target);
         }
