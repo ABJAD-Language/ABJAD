@@ -1,7 +1,7 @@
 ﻿using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 
-namespace ABJAD.InterpretEngine;
+namespace ABJAD.InterpretEngine.Statements;
 
 public class StatementInterpreter : Interpreter<Statement>
 {
