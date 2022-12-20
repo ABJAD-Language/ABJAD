@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions.Fixes;
+﻿using ABJAD.InterpretEngine.ScopeManagement;
+using ABJAD.InterpretEngine.Shared.Expressions.Fixes;
 using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
@@ -6,12 +7,12 @@ namespace ABJAD.InterpretEngine.Expressions.Strategies;
 public class FixesInterpretingStrategy : ExpressionInterpretingStrategy
 {
     private readonly FixExpression fixExpression;
-    private readonly IScope scope;
+    private readonly ScopeFacade scopeFacade;
 
-    public FixesInterpretingStrategy(FixExpression fixExpression, IScope scope)
+    public FixesInterpretingStrategy(FixExpression fixExpression, ScopeFacade scopeFacade)
     {
         this.fixExpression = fixExpression;
-        this.scope = scope;
+        this.scopeFacade = scopeFacade;
     }
 
     public EvaluatedResult Apply()
@@ -32,35 +33,35 @@ public class FixesInterpretingStrategy : ExpressionInterpretingStrategy
 
     private EvaluatedResult HandleSubtractionPrefix()
     {
-        var oldValue = (double)scope.Get(fixExpression.Target.Value);
-        scope.Set(fixExpression.Target.Value, oldValue - 1);
+        var oldValue = (double)scopeFacade.Get(fixExpression.Target.Value);
+        scopeFacade.Set(fixExpression.Target.Value, oldValue - 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue - 1 };
     }
 
     private EvaluatedResult HandleSubtractionPostfix()
     {
-        var oldValue = (double)scope.Get(fixExpression.Target.Value);
-        scope.Set(fixExpression.Target.Value, oldValue - 1);
+        var oldValue = (double)scopeFacade.Get(fixExpression.Target.Value);
+        scopeFacade.Set(fixExpression.Target.Value, oldValue - 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue };
     }
 
     private EvaluatedResult HandleAdditionPrefix()
     {
-        var oldValue = (double) scope.Get(fixExpression.Target.Value);
-        scope.Set(fixExpression.Target.Value, oldValue + 1);
+        var oldValue = (double) scopeFacade.Get(fixExpression.Target.Value);
+        scopeFacade.Set(fixExpression.Target.Value, oldValue + 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue + 1 };
     }
 
     private EvaluatedResult HandleAdditionPostfix()
     {
-        var oldValue = (double) scope.Get(fixExpression.Target.Value);
-        scope.Set(fixExpression.Target.Value, oldValue + 1);
+        var oldValue = (double) scopeFacade.Get(fixExpression.Target.Value);
+        scopeFacade.Set(fixExpression.Target.Value, oldValue + 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue };
     }
 
     private void ValidateTargetValueIsNotUndefined()
     {
-        if (scope.Get(fixExpression.Target.Value).Equals(SpecialValues.UNDEFINED))
+        if (scopeFacade.Get(fixExpression.Target.Value).Equals(SpecialValues.UNDEFINED))
         {
             throw new OperationOnUndefinedValueException();
         }
@@ -68,7 +69,7 @@ public class FixesInterpretingStrategy : ExpressionInterpretingStrategy
 
     private void ValidateTargetIsNumber()
     {
-        var targetType = scope.GetType(fixExpression.Target.Value);
+        var targetType = scopeFacade.GetType(fixExpression.Target.Value);
         if (!targetType.IsNumber())
         {
             throw new InvalidTypeException(targetType, DataType.Number());
@@ -77,7 +78,7 @@ public class FixesInterpretingStrategy : ExpressionInterpretingStrategy
 
     private void ValidateTargetExists()
     {
-        if (!scope.ReferenceExists(fixExpression.Target.Value))
+        if (!scopeFacade.ReferenceExists(fixExpression.Target.Value))
         {
             throw new ReferenceNameDoesNotExistException(fixExpression.Target.Value);
         }

@@ -1,5 +1,6 @@
 ﻿using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.Expressions.Strategies;
+using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Expressions.Fixes;
 using ABJAD.InterpretEngine.Shared.Expressions.Primitives;
 using ABJAD.InterpretEngine.Types;
@@ -9,15 +10,15 @@ namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
 public class FixesInterpretingStrategyTest
 {
-    private readonly IScope scope = Substitute.For<IScope>();
+    private readonly ScopeFacade scopeFacade = Substitute.For<ScopeFacade>();
 
     [Fact(DisplayName = "throws error if target did not exist in scope")]
     public void throws_error_if_target_did_not_exist_in_scope()
     {
         var target = new IdentifierPrimitive { Value = "id" };
-        scope.ReferenceExists("id").Returns(false);
+        scopeFacade.ReferenceExists("id").Returns(false);
         var additionPostfix = new AdditionPostfix { Target = target };
-        var strategy = new FixesInterpretingStrategy(additionPostfix, scope);
+        var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
         Assert.Throws<ReferenceNameDoesNotExistException>(() => strategy.Apply());
     }
 
@@ -25,12 +26,12 @@ public class FixesInterpretingStrategyTest
     public void throws_error_if_type_of_target_was_not_number()
     {
         var target = new IdentifierPrimitive { Value = "id" };
-        scope.ReferenceExists("id").Returns(true);
+        scopeFacade.ReferenceExists("id").Returns(true);
         var targetType = Substitute.For<DataType>();
         targetType.IsNumber().Returns(false);
-        scope.GetType("id").Returns(targetType);
+        scopeFacade.GetType("id").Returns(targetType);
         var additionPostfix = new AdditionPostfix { Target = target };
-        var strategy = new FixesInterpretingStrategy(additionPostfix, scope);
+        var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
 
@@ -40,17 +41,17 @@ public class FixesInterpretingStrategyTest
         var target = new IdentifierPrimitive { Value = "id" };
         var targetType = Substitute.For<DataType>();
         targetType.IsNumber().Returns(true);
-        scope.ReferenceExists("id").Returns(true);
-        scope.GetType("id").Returns(targetType);
-        scope.Get("id").Returns(SpecialValues.UNDEFINED);
+        scopeFacade.ReferenceExists("id").Returns(true);
+        scopeFacade.GetType("id").Returns(targetType);
+        scopeFacade.Get("id").Returns(SpecialValues.UNDEFINED);
         var additionPostfix = new AdditionPostfix { Target = target };
-        var strategy = new FixesInterpretingStrategy(additionPostfix, scope);
+        var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
         Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
     }
 
     public class AdditionPostfixInterpretationTest
     {
-        private readonly IScope scope = Substitute.For<IScope>();
+        private readonly ScopeFacade scopeFacade = Substitute.For<ScopeFacade>();
         private readonly IdentifierPrimitive target = new IdentifierPrimitive { Value = "id" };
         private readonly DataType targetType = Substitute.For<DataType>();
 
@@ -58,26 +59,26 @@ public class FixesInterpretingStrategyTest
         public void updates_scope_with_the_incremented_value()
         {
             targetType.IsNumber().Returns(true);
-            scope.ReferenceExists("id").Returns(true);
-            scope.GetType("id").Returns(targetType);
-            scope.Get("id").Returns(3.2);
+            scopeFacade.ReferenceExists("id").Returns(true);
+            scopeFacade.GetType("id").Returns(targetType);
+            scopeFacade.Get("id").Returns(3.2);
 
             var additionPostfix = new AdditionPostfix { Target = target };
-            var strategy = new FixesInterpretingStrategy(additionPostfix, scope);
+            var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
             strategy.Apply();
-            scope.Received(1).Set("id", 4.2);
+            scopeFacade.Received(1).Set("id", 4.2);
         }
 
         [Fact(DisplayName = "returns the old value of target")]
         public void returns_the_old_value_of_target()
         {
             targetType.IsNumber().Returns(true);
-            scope.ReferenceExists("id").Returns(true);
-            scope.GetType("id").Returns(targetType);
-            scope.Get("id").Returns(3.2);
+            scopeFacade.ReferenceExists("id").Returns(true);
+            scopeFacade.GetType("id").Returns(targetType);
+            scopeFacade.Get("id").Returns(3.2);
 
             var additionPostfix = new AdditionPostfix { Target = target };
-            var strategy = new FixesInterpretingStrategy(additionPostfix, scope);
+            var strategy = new FixesInterpretingStrategy(additionPostfix, scopeFacade);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(3.2, result.Value);
@@ -86,7 +87,7 @@ public class FixesInterpretingStrategyTest
 
     public class AdditionPrefixInterpretationTest
     {
-        private readonly IScope scope = Substitute.For<IScope>();
+        private readonly ScopeFacade scopeFacade = Substitute.For<ScopeFacade>();
         private readonly IdentifierPrimitive target = new IdentifierPrimitive { Value = "id" };
         private readonly DataType targetType = Substitute.For<DataType>();
 
@@ -94,26 +95,26 @@ public class FixesInterpretingStrategyTest
         public void updates_scope_with_the_incremented_value()
         {
             targetType.IsNumber().Returns(true);
-            scope.ReferenceExists("id").Returns(true);
-            scope.GetType("id").Returns(targetType);
-            scope.Get("id").Returns(10.0);
+            scopeFacade.ReferenceExists("id").Returns(true);
+            scopeFacade.GetType("id").Returns(targetType);
+            scopeFacade.Get("id").Returns(10.0);
 
             var additionPrefix = new AdditionPrefix { Target = target };
-            var strategy = new FixesInterpretingStrategy(additionPrefix, scope);
+            var strategy = new FixesInterpretingStrategy(additionPrefix, scopeFacade);
             strategy.Apply();
-            scope.Received(1).Set("id", 11.0);
+            scopeFacade.Received(1).Set("id", 11.0);
         }
 
         [Fact(DisplayName = "return the incremented value")]
         public void return_the_incremented_value()
         {
             targetType.IsNumber().Returns(true);
-            scope.ReferenceExists("id").Returns(true);
-            scope.GetType("id").Returns(targetType);
-            scope.Get("id").Returns(10.0);
+            scopeFacade.ReferenceExists("id").Returns(true);
+            scopeFacade.GetType("id").Returns(targetType);
+            scopeFacade.Get("id").Returns(10.0);
 
             var additionPrefix = new AdditionPrefix { Target = target };
-            var strategy = new FixesInterpretingStrategy(additionPrefix, scope);
+            var strategy = new FixesInterpretingStrategy(additionPrefix, scopeFacade);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(11.0, result.Value);
@@ -122,7 +123,7 @@ public class FixesInterpretingStrategyTest
 
     public class SubtractionPostfixInterpretationTest
     {
-        private readonly IScope scope = Substitute.For<IScope>();
+        private readonly ScopeFacade scopeFacade = Substitute.For<ScopeFacade>();
         private readonly IdentifierPrimitive target = new IdentifierPrimitive { Value = "id" };
         private readonly DataType targetType = Substitute.For<DataType>();
 
@@ -130,26 +131,26 @@ public class FixesInterpretingStrategyTest
         public void updates_scope_with_the_incremented_value()
         {
             targetType.IsNumber().Returns(true);
-            scope.ReferenceExists("id").Returns(true);
-            scope.GetType("id").Returns(targetType);
-            scope.Get("id").Returns(13.0);
+            scopeFacade.ReferenceExists("id").Returns(true);
+            scopeFacade.GetType("id").Returns(targetType);
+            scopeFacade.Get("id").Returns(13.0);
 
             var subtractionPostfix = new SubtractionPostfix { Target = target };
-            var strategy = new FixesInterpretingStrategy(subtractionPostfix, scope);
+            var strategy = new FixesInterpretingStrategy(subtractionPostfix, scopeFacade);
             strategy.Apply();
-            scope.Received(1).Set("id", 12.0);
+            scopeFacade.Received(1).Set("id", 12.0);
         }
 
         [Fact(DisplayName = "returns the old value of target")]
         public void returns_the_old_value_of_target()
         {
             targetType.IsNumber().Returns(true);
-            scope.ReferenceExists("id").Returns(true);
-            scope.GetType("id").Returns(targetType);
-            scope.Get("id").Returns(13.0);
+            scopeFacade.ReferenceExists("id").Returns(true);
+            scopeFacade.GetType("id").Returns(targetType);
+            scopeFacade.Get("id").Returns(13.0);
         
             var subtractionPostfix = new SubtractionPostfix { Target = target };
-            var strategy = new FixesInterpretingStrategy(subtractionPostfix, scope);
+            var strategy = new FixesInterpretingStrategy(subtractionPostfix, scopeFacade);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(13.0, result.Value);
@@ -158,7 +159,7 @@ public class FixesInterpretingStrategyTest
 
     public class SubtractionPrefixInterpretationTest
     {
-        private readonly IScope scope = Substitute.For<IScope>();
+        private readonly ScopeFacade scopeFacade = Substitute.For<ScopeFacade>();
         private readonly IdentifierPrimitive target = new IdentifierPrimitive { Value = "id" };
         private readonly DataType targetType = Substitute.For<DataType>();
 
@@ -166,26 +167,26 @@ public class FixesInterpretingStrategyTest
         public void updates_scope_with_the_incremented_value()
         {
             targetType.IsNumber().Returns(true);
-            scope.ReferenceExists("id").Returns(true);
-            scope.GetType("id").Returns(targetType);
-            scope.Get("id").Returns(15.0);
+            scopeFacade.ReferenceExists("id").Returns(true);
+            scopeFacade.GetType("id").Returns(targetType);
+            scopeFacade.Get("id").Returns(15.0);
 
             var subtractionPrefix = new SubtractionPrefix { Target = target };
-            var strategy = new FixesInterpretingStrategy(subtractionPrefix, scope);
+            var strategy = new FixesInterpretingStrategy(subtractionPrefix, scopeFacade);
             strategy.Apply();
-            scope.Received(1).Set("id", 14.0);
+            scopeFacade.Received(1).Set("id", 14.0);
         }
 
         [Fact(DisplayName = "return the incremented value")]
         public void return_the_incremented_value()
         {
             targetType.IsNumber().Returns(true);
-            scope.ReferenceExists("id").Returns(true);
-            scope.GetType("id").Returns(targetType);
-            scope.Get("id").Returns(15.0);
+            scopeFacade.ReferenceExists("id").Returns(true);
+            scopeFacade.GetType("id").Returns(targetType);
+            scopeFacade.Get("id").Returns(15.0);
         
             var subtractionPrefix = new SubtractionPrefix { Target = target };
-            var strategy = new FixesInterpretingStrategy(subtractionPrefix, scope);
+            var strategy = new FixesInterpretingStrategy(subtractionPrefix, scopeFacade);
             var result = strategy.Apply();
             Assert.True(result.Type.IsNumber());
             Assert.Equal(14.0, result.Value);

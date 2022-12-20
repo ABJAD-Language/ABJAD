@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions.Primitives;
+﻿using ABJAD.InterpretEngine.ScopeManagement;
+using ABJAD.InterpretEngine.Shared.Expressions.Primitives;
 using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
@@ -6,12 +7,12 @@ namespace ABJAD.InterpretEngine.Expressions.Strategies;
 public class PrimitiveInterpretingStrategy : ExpressionInterpretingStrategy
 {
     private readonly Primitive primitive;
-    private readonly IScope scope;
+    private readonly ScopeFacade scopeFacade;
 
-    public PrimitiveInterpretingStrategy(Primitive primitive, IScope scope)
+    public PrimitiveInterpretingStrategy(Primitive primitive, ScopeFacade scopeFacade)
     {
         this.primitive = primitive;
-        this.scope = scope;
+        this.scopeFacade = scopeFacade;
     }
 
     public EvaluatedResult Apply()
@@ -28,10 +29,10 @@ public class PrimitiveInterpretingStrategy : ExpressionInterpretingStrategy
 
     private EvaluatedResult GetIdentifierValueIfExists(IdentifierPrimitive identifierPrimitive)
     {
-        if (scope.ReferenceExists(identifierPrimitive.Value))
+        if (scopeFacade.ReferenceExists(identifierPrimitive.Value))
         {
-            var type = scope.GetType(identifierPrimitive.Value);
-            var value = scope.Get(identifierPrimitive.Value);
+            var type = scopeFacade.GetType(identifierPrimitive.Value);
+            var value = scopeFacade.Get(identifierPrimitive.Value);
             return new EvaluatedResult { Type = type, Value = value };
         }
 

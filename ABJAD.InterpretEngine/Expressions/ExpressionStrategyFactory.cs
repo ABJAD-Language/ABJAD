@@ -1,4 +1,5 @@
 ﻿using ABJAD.InterpretEngine.Expressions.Strategies;
+using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Assignments;
 using ABJAD.InterpretEngine.Shared.Expressions.Binary;
@@ -10,33 +11,24 @@ namespace ABJAD.InterpretEngine.Expressions;
 
 public class ExpressionStrategyFactory : IExpressionStrategyFactory
 {
-    private readonly IScope scope;
-
-    public ExpressionStrategyFactory(IScope scope)
+    public ExpressionInterpretingStrategy GetAssignmentInterpretingStrategy(AssignmentExpression expression, Evaluator<Expression> expressionEvaluator, ScopeFacade scopeFacade)
     {
-        this.scope = scope;
+        return new AssignmentInterpretingStrategy(expression, scopeFacade, expressionEvaluator);
     }
 
-    public ExpressionInterpretingStrategy GetAssignmentInterpretingStrategy(AssignmentExpression expression, 
-        Evaluator<Expression> expressionEvaluator)
-    {
-        return new AssignmentInterpretingStrategy(expression, scope, expressionEvaluator);
-    }
-
-    public ExpressionInterpretingStrategy GetBinaryExpressionInterpretingStrategy(BinaryExpression expression,
-        Evaluator<Expression> expressionEvaluator)
+    public ExpressionInterpretingStrategy GetBinaryExpressionInterpretingStrategy(BinaryExpression expression, Evaluator<Expression> expressionEvaluator)
     {
         return new BinaryExpressionInterpretingStrategy(expression, expressionEvaluator);
     }
 
-    public ExpressionInterpretingStrategy GetFixesInterpretingStrategy(FixExpression expression)
+    public ExpressionInterpretingStrategy GetFixesInterpretingStrategy(FixExpression expression, ScopeFacade scopeFacade)
     {
-        return new FixesInterpretingStrategy(expression, scope);
+        return new FixesInterpretingStrategy(expression, scopeFacade);
     }
 
-    public ExpressionInterpretingStrategy GetPrimitiveInterpretingStrategy(Primitive primitive)
+    public ExpressionInterpretingStrategy GetPrimitiveInterpretingStrategy(Primitive primitive, ScopeFacade scopeFacade)
     {
-        return new PrimitiveInterpretingStrategy(primitive, scope);
+        return new PrimitiveInterpretingStrategy(primitive, scopeFacade);
     }
 
     public ExpressionInterpretingStrategy GetUnaryExpressionInterpretingStrategy(UnaryExpression expression,
