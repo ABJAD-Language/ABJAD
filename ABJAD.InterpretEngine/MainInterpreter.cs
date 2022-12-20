@@ -3,7 +3,7 @@ using ABJAD.InterpretEngine.Shared.Statements;
 
 namespace ABJAD.InterpretEngine;
 
-public class MainInterpreter
+public class MainInterpreter : Interpreter<Binding>
 {
     private readonly Interpreter<Statement> statementInterpreter;
 
@@ -16,10 +16,15 @@ public class MainInterpreter
     {
         foreach (var binding in bindings)
         {
-            if (binding is Statement statement)
-            {
-                statementInterpreter.Interpret(statement);   
-            }
+            Interpret(binding);
+        }
+    }
+
+    public void Interpret(Binding target)
+    {
+        if (target is Statement statement)
+        {
+            statementInterpreter.Interpret(statement);   
         }
     }
 }

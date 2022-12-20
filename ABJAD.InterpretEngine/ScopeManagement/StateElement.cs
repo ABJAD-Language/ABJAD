@@ -2,8 +2,8 @@
 
 namespace ABJAD.InterpretEngine.ScopeManagement;
 
-public class StateElement
+public record StateElement
 {
-    public DataType Type { get; set; }
-    public object Value { get; set; }
+    public DataType Type { get; init; }
+    public object Value { get; init; }
 }

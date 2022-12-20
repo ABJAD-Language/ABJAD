@@ -28,11 +28,18 @@ public class Scope : IScope
 
     public void Set(string name, object value)
     {
-        state[name].Value = value;
+        var oldElement = state[name];
+        state.Remove(name);
+        state.Add(name, oldElement with { Value = value });
     }
 
     public void Define(string name, DataType type, object value)
     {
         state.Add(name, new StateElement { Type = type, Value = value });
+    }
+
+    public IScope Clone()
+    {
+        return new Scope(state.ToDictionary(entry => entry.Key, entry => entry.Value));
     }
 }

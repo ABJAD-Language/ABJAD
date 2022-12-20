@@ -71,4 +71,34 @@ public class ScopeTest
         var scope = new Scope(state);
         Assert.Throws<ArgumentException>(() => scope.Define("id", DataType.Bool(), true));
     }
+
+    [Fact(DisplayName = "adding new value to a cloned scope does not add it to the original one")]
+    public void adding_new_value_to_a_cloned_scope_does_not_add_it_to_the_original_one()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>());
+        var clonedScope = scope.Clone();
+        clonedScope.Define("id", DataType.Number(), 1);
+        Assert.False(scope.ReferenceExists("id"));
+        Assert.True(clonedScope.ReferenceExists("id"));
+    }
+
+    [Fact(DisplayName = "changing a value in a cloned scope does not change it in the original one")]
+    public void changing_a_value_in_a_cloned_scope_does_not_change_it_in_the_original_one()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement { Value = 1 } } });
+        var clonedScope = scope.Clone();
+        clonedScope.Set("id", 2);
+        Assert.Equal(1, scope.Get("id"));
+        Assert.Equal(2, clonedScope.Get("id"));
+    }
+
+    [Fact(DisplayName = "changing a value in a scope does not change it in its clone")]
+    public void changing_a_value_in_a_scope_does_not_change_it_in_its_clone()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement { Value = 1 } } });
+        var clonedScope = scope.Clone();
+        scope.Set("id", 2);
+        Assert.Equal(2, scope.Get("id"));
+        Assert.Equal(1, clonedScope.Get("id"));
+    }
 }

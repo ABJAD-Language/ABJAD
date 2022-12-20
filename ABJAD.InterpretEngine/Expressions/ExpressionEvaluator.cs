@@ -19,6 +19,12 @@ public class ExpressionEvaluator : Evaluator<Expression>
         this.scopeFacade = scopeFacade;
     }
 
+    public ExpressionEvaluator(ScopeFacade scopeFacade)
+    {
+        this.scopeFacade = scopeFacade;
+        this.expressionStrategyFactory = new ExpressionStrategyFactory();
+    }
+
     public EvaluatedResult Evaluate(Expression target)
     {
         return target switch
@@ -30,5 +36,10 @@ public class ExpressionEvaluator : Evaluator<Expression>
             Primitive primitive => expressionStrategyFactory.GetPrimitiveEvaluationStrategy(primitive, scopeFacade).Apply(),
             _ => throw new ArgumentException()
         };
+    }
+
+    public ScopeManager CloneScope()
+    {
+        return scopeFacade.CloneScope();
     }
 }
