@@ -2,7 +2,7 @@
 
 namespace ABJAD.InterpretEngine;
 
-public interface Interpreter<in T>
+public interface Interpreter<in T> where T : Binding
 {
     void Interpret(T target);
 }

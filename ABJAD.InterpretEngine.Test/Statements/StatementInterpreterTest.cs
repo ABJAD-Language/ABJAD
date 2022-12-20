@@ -1,8 +1,9 @@
 ﻿using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 using NSubstitute;
 
-namespace ABJAD.InterpretEngine.Test;
+namespace ABJAD.InterpretEngine.Test.Statements;
 
 public class StatementInterpreterTest
 {
