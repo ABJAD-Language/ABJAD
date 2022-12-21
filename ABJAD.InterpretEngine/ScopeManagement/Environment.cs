@@ -2,18 +2,13 @@
 
 namespace ABJAD.InterpretEngine.ScopeManagement;
 
-public class Environment : ScopeManager, ScopeFacade
+public class Environment : ScopeFacade
 {
     private readonly List<IScope> scopes;
 
     public Environment(List<IScope> scopes)
     {
         this.scopes = scopes;
-    }
-
-    public void AddNewScope()
-    {
-        scopes.Add(new Scope(new Dictionary<string, StateElement>()));
     }
 
     public bool ReferenceExists(string name)
@@ -54,8 +49,13 @@ public class Environment : ScopeManager, ScopeFacade
         scopes.Last().Define(name, type, value);
     }
 
-    public ScopeManager CloneScope()
+    public ScopeFacade CloneScope()
     {
         return new Environment(scopes.Select(s => s.Clone()).ToList());
+    }
+
+    public void AddNewScope()
+    {
+        scopes.Add(new Scope(new Dictionary<string, StateElement>()));
     }
 }

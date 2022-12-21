@@ -37,9 +37,4 @@ public class ExpressionEvaluator : Evaluator<Expression>
             _ => throw new ArgumentException()
         };
     }
-
-    public ScopeManager CloneScope()
-    {
-        return scopeFacade.CloneScope();
-    }
 }
