@@ -11,4 +11,5 @@ public interface ScopeFacade
     void Set(string name, object value);
     void Define(string name, DataType type, object value);
     ScopeFacade CloneScope();
+    void AddNewScope();
 }
