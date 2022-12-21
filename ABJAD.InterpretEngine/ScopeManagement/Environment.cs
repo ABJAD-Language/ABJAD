@@ -21,6 +21,11 @@ public class Environment : ScopeManager, ScopeFacade
         return scopes.Any(s => s.ReferenceExists(name));
     }
 
+    public bool ReferenceExistsInCurrentScope(string name)
+    {
+        return scopes.Last().ReferenceExists(name);
+    }
+
     public DataType GetType(string name)
     {
         return scopes.FindLast(s => s.ReferenceExists(name)).GetType(name);

@@ -26,6 +26,26 @@ public class EnvironmentTest
         Assert.True(environment.ReferenceExists("id2"));
     }
 
+    [Fact(DisplayName = "returns true if asked about a reference existence in the current scope which exists")]
+    public void returns_true_if_asked_about_a_reference_existence_in_the_current_scope_which_exists()
+    {
+        var firstScope = new Scope(new Dictionary<string, StateElement>() { { "id1", new StateElement() }});
+        var secondScope = new Scope(new Dictionary<string, StateElement>() { { "id2", new StateElement() }});
+        var scopes = new List<IScope>() { firstScope, secondScope };
+        var environment = new Environment(scopes);
+        Assert.True(environment.ReferenceExistsInCurrentScope("id2"));
+    }
+
+    [Fact(DisplayName = "returns false if asked about a reference existence in the current scope which does not exist")]
+    public void returns_false_if_asked_about_a_reference_existence_in_the_current_scope_which_does_not_exist()
+    {
+        var firstScope = new Scope(new Dictionary<string, StateElement>() { { "id1", new StateElement() }});
+        var secondScope = new Scope(new Dictionary<string, StateElement>() { { "id2", new StateElement() }});
+        var scopes = new List<IScope>() { firstScope, secondScope };
+        var environment = new Environment(scopes);
+        Assert.False(environment.ReferenceExistsInCurrentScope("id1"));
+    }
+
     [Fact(DisplayName = "getting the type of a reference gives priority to the state in the later scopes")]
     public void getting_the_type_of_a_reference_gives_priority_to_the_state_in_the_later_scopes()
     {
