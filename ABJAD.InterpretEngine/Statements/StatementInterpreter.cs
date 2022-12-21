@@ -1,22 +1,45 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.ScopeManagement;
+using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements.Strategies;
 
 namespace ABJAD.InterpretEngine.Statements;
 
 public class StatementInterpreter : Interpreter<Statement>
 {
+    private readonly ScopeFacade scope;
     private readonly Evaluator<Expression> expressionEvaluator;
 
-    public StatementInterpreter(Evaluator<Expression> expressionEvaluator)
+    public StatementInterpreter(ScopeFacade scope)
     {
-        this.expressionEvaluator = expressionEvaluator;
+        this.scope = scope;
+        expressionEvaluator = new ExpressionEvaluator(scope);
     }
 
     public void Interpret(Statement target)
     {
-        if (target is ExpressionStatement expressionStatement)
+        GetStrategy(target).Apply();
+    }
+
+    private StatementInterpretationStrategy GetStrategy(Statement target)
+    {
+        return target switch
         {
-            expressionEvaluator.Evaluate(expressionStatement.Target);
-        }
+            ExpressionStatement expressionStatement => new ExpressionStatementInterpretationStrategy(expressionStatement, expressionEvaluator),
+            Assignment assignment => new AssignmentInterpretationStrategy(assignment, scope, expressionEvaluator),
+            Block block => HandleBlock(block),
+            _ => throw new ArgumentException()
+        };
+    }
+
+    private StatementInterpretationStrategy HandleBlock(Block block)
+    {
+        var cloneScope = scope.CloneScope();
+        cloneScope.AddNewScope();
+        var statementInterpreter = new StatementInterpreter(cloneScope);
+        var declarationInterpreter = new DeclarationInterpreter(cloneScope);
+        return new BlockInterpretationStrategy(block, statementInterpreter, declarationInterpreter);
     }
 }

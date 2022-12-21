@@ -1,4 +1,4 @@
-﻿using ABJAD.InterpretEngine.Declaration.Strategies;
+﻿using ABJAD.InterpretEngine.Declarations.Strategies;
 using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Expressions;

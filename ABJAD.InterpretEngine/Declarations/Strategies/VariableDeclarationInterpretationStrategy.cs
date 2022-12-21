@@ -3,7 +3,7 @@ using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Types;
 
-namespace ABJAD.InterpretEngine.Declaration.Strategies;
+namespace ABJAD.InterpretEngine.Declarations.Strategies;
 
 public class VariableDeclarationInterpretationStrategy : DeclarationInterpretationStrategy
 {
