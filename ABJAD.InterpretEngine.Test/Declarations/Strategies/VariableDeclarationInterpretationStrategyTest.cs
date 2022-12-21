@@ -12,6 +12,7 @@ public class VariableDeclarationInterpretationStrategyTest
     private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
     private readonly ScopeFacade scope = Substitute.For<ScopeFacade>();
 
+    
     [Fact(DisplayName = "throws error if the reference exists in the current scope")]
     public void throws_error_if_the_reference_exists_in_the_current_scope()
     {
