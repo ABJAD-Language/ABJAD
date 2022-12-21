@@ -11,11 +11,13 @@ public class StatementInterpreter : Interpreter<Statement>
 {
     private readonly ScopeFacade scope;
     private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly DeclarationInterpreter declarationInterpreter;
 
     public StatementInterpreter(ScopeFacade scope)
     {
         this.scope = scope;
         expressionEvaluator = new ExpressionEvaluator(scope);
+        declarationInterpreter = new DeclarationInterpreter(scope);
     }
 
     public void Interpret(Statement target)
@@ -30,6 +32,7 @@ public class StatementInterpreter : Interpreter<Statement>
             ExpressionStatement expressionStatement => new ExpressionStatementInterpretationStrategy(expressionStatement, expressionEvaluator),
             Assignment assignment => new AssignmentInterpretationStrategy(assignment, scope, expressionEvaluator),
             Block block => HandleBlock(block),
+            ForLoop forLoop => new ForLoopInterpretationStrategy(forLoop, this, declarationInterpreter, expressionEvaluator),
             _ => throw new ArgumentException()
         };
     }
