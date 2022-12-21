@@ -112,13 +112,13 @@ public class ParserTest
         var expectedBinding = new DeclarationBinding(
             new ClassDeclaration(
                 "className",
-                new BlockStatement(
-                    new List<Binding>
+                new BlockDeclaration(
+                    new List<DeclarationBinding>
                     {
-                        new DeclarationBinding(
+                        new(
                             new VariableDeclaration("NUMBER", "field", null)
                         ),
-                        new DeclarationBinding(
+                        new(
                             new ConstructorDeclaration(
                                 new List<FunctionParameter>
                                 {
@@ -135,7 +135,7 @@ public class ParserTest
                                 )
                             )
                         ),
-                        new DeclarationBinding(
+                        new(
                             new FunctionDeclaration(
                                 "getField", "STRING", new List<FunctionParameter>(),
                                 new BlockStatement(

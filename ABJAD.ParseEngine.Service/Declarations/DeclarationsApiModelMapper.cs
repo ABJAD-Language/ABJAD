@@ -12,6 +12,7 @@ public static class DeclarationsApiModelMapper
         {
             ConstantDeclaration constantDeclaration => Map(constantDeclaration),
             VariableDeclaration variableDeclaration => Map(variableDeclaration),
+            BlockDeclaration blockDeclaration => Map(blockDeclaration),
             ClassDeclaration classDeclaration => Map(classDeclaration),
             FunctionDeclaration functionDeclaration => Map(functionDeclaration),
             ConstructorDeclaration constructorDeclaration => Map(constructorDeclaration)
@@ -36,7 +37,12 @@ public static class DeclarationsApiModelMapper
 
     private static ClassDeclarationApiModel Map(ClassDeclaration declaration)
     {
-        return new ClassDeclarationApiModel(declaration.Name, StatementApiModelMapper.Map(declaration.Body));
+        return new ClassDeclarationApiModel(declaration.Name, Map(declaration.Body));
+    }
+
+    private static BlockDeclarationApiModel Map(BlockDeclaration declaration)
+    {
+        return new BlockDeclarationApiModel(declaration.DeclarationBindings.Select(db => Map(db.Declaration)).ToList());
     }
 
     private static VariableDeclarationApiModel Map(VariableDeclaration declaration)

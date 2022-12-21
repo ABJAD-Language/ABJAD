@@ -42,12 +42,22 @@ public class DeclarationsApiModelMapperTest
         declarationApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 
+    [Fact(DisplayName = "maps block declaration correctly")]
+    public void maps_block_declaration_correctly()
+    {
+        var declarationApiModel = Map(new BlockDeclaration(new List<DeclarationBinding>
+            { new(new VariableDeclaration("string", "field", null)) }));
+        var expectedApiModel = new BlockDeclarationApiModel(new List<DeclarationApiModel>()
+            { new VariableDeclarationApiModel("string", "field") });
+        declarationApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
+    }
+
     [Fact(DisplayName = "maps class declaration correctly")]
     public void maps_class_declaration_correctly()
     {
-        var declarationApiModel = Map(new ClassDeclaration("name", new BlockStatement(new List<Binding>
+        var declarationApiModel = Map(new ClassDeclaration("name", new BlockDeclaration(new List<DeclarationBinding>
                 { new DeclarationBinding(new VariableDeclaration("string", "field", null)) })));
-        var expectedApiModel = new ClassDeclarationApiModel("name", new BlockStatementApiModel(new List<BindingApiModel>
+        var expectedApiModel = new ClassDeclarationApiModel("name", new BlockDeclarationApiModel(new List<DeclarationApiModel>
                 { new VariableDeclarationApiModel("string", "field") }));
         declarationApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }

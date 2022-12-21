@@ -2,7 +2,7 @@
   {
     "name": "انسان",
     "body": {
-      "bindings": [
+      "declarations": [
         {
           "type": "STRING",
           "name": "الاسم",
@@ -96,7 +96,7 @@
           "_type": "declaration.function"
         }
       ],
-      "_type": "statement.block"
+      "_type": "declaration.block"
     },
     "_type": "declaration.class"
   }

@@ -5,9 +5,9 @@ namespace ABJAD.ParseEngine.Service.Declarations;
 public class ClassDeclarationApiModel : DeclarationApiModel
 {
     public string Name { get; }
-    public BlockStatementApiModel Body { get; }
+    public BlockDeclarationApiModel Body { get; }
 
-    public ClassDeclarationApiModel(string name, BlockStatementApiModel body)
+    public ClassDeclarationApiModel(string name, BlockDeclarationApiModel body)
     {
         Name = name;
         Body = body;

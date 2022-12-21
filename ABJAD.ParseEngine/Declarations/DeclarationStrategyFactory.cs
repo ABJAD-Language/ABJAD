@@ -35,7 +35,12 @@ public class DeclarationStrategyFactory : IDeclarationStrategyFactory
 
     private ParseClassDeclarationStrategy GetClassStrategy()
     {
-        return new ParseClassDeclarationStrategy(tokenConsumer, GetBlockStatementParser());
+        return new ParseClassDeclarationStrategy(tokenConsumer, GetBlockDeclarationParser());
+    }
+
+    private ParseBlockDeclarationStrategy GetBlockDeclarationParser()
+    {
+        return new ParseBlockDeclarationStrategy(tokenConsumer, new DeclarationStrategyFactory(tokenConsumer));
     }
 
     private ParseConstructorDeclarationStrategy GetConstructorStrategy()

@@ -12,23 +12,23 @@ namespace ABJAD.ParseEngine.Test.Declarations;
 public class ParseClassDeclarationStrategyTest
 {
     private readonly Mock<ITokenConsumer> tokenConsumer = new();
-    private readonly Mock<BlockStatementParser> blockStatementParser = new();
+    private readonly Mock<ParseDeclarationStrategy> blockDeclarationParser = new();
 
     public ParseClassDeclarationStrategyTest()
     {
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" });
-        blockStatementParser.Setup(p => p.Parse()).Returns(new BlockStatement(new List<Binding>()));
+        blockDeclarationParser.Setup(p => p.Parse()).Returns(new BlockDeclaration(new List<DeclarationBinding>()));
     }
 
     [Fact]
     private void ThrowsExceptionIfTokenConsumerIsNull()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            new ParseClassDeclarationStrategy(null, blockStatementParser.Object));
+            new ParseClassDeclarationStrategy(null, blockDeclarationParser.Object));
     }
 
     [Fact]
-    private void ThrowsExceptionIfBlockStatementParserIsNull()
+    private void ThrowsExceptionIfParseDeclarationStrategyIsNull()
     {
         Assert.Throws<ArgumentNullException>(() =>
             new ParseClassDeclarationStrategy(tokenConsumer.Object, null));
@@ -61,18 +61,18 @@ public class ParseClassDeclarationStrategyTest
         tokenConsumer.Setup(c => c.Consume(TokenType.CLASS)).Callback(() => Assert.Equal(1, order++));
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" })
             .Callback(() => Assert.Equal(2, order++));
-        blockStatementParser.Setup(c => c.Parse()).Returns(new BlockStatement(new List<Binding>()))
+        blockDeclarationParser.Setup(c => c.Parse()).Returns(new BlockDeclaration(new List<DeclarationBinding>()))
             .Callback(() => Assert.Equal(3, order++));
 
         GetStrategy().Parse();
-        blockStatementParser.Verify(p => p.Parse());
+        blockDeclarationParser.Verify(p => p.Parse());
     }
 
     [Fact]
     private void ReturnsClassDeclarationOnHappyPath()
     {
-        var blockStatement = new BlockStatement(new List<Binding>());
-        blockStatementParser.Setup(p => p.Parse()).Returns(blockStatement);
+        var blockDeclaration = new BlockDeclaration(new List<DeclarationBinding>());
+        blockDeclarationParser.Setup(p => p.Parse()).Returns(blockDeclaration);
 
         tokenConsumer.Setup(c => c.Consume(TokenType.ID)).Returns(new Token { Content = "className" });
 
@@ -81,11 +81,11 @@ public class ParseClassDeclarationStrategyTest
 
         var classDeclaration = declaration as ClassDeclaration;
         Assert.Equal("className", classDeclaration.Name);
-        Assert.Equal(blockStatement, classDeclaration.Body);
+        Assert.Equal(blockDeclaration, classDeclaration.Body);
     }
 
     private ParseClassDeclarationStrategy GetStrategy()
     {
-        return new ParseClassDeclarationStrategy(tokenConsumer.Object, blockStatementParser.Object);
+        return new ParseClassDeclarationStrategy(tokenConsumer.Object, blockDeclarationParser.Object);
     }
 }
