@@ -1,4 +1,4 @@
-﻿namespace ABJAD.InterpretEngine.Declaration.Strategies;
+﻿namespace ABJAD.InterpretEngine.Declarations.Strategies;
 
 public interface DeclarationInterpretationStrategy
 {
