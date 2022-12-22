@@ -29,13 +29,29 @@ public class Scope : IScope
     public void Set(string name, object value)
     {
         var oldElement = state[name];
+
+        if (oldElement.IsConstant)
+        {
+            throw new IllegalConstantValueChangeException(name);
+        }
+        
         state.Remove(name);
         state.Add(name, oldElement with { Value = value });
     }
 
-    public void Define(string name, DataType type, object value)
+    public void DefineVariable(string name, DataType type, object value)
     {
-        state.Add(name, new StateElement { Type = type, Value = value });
+        state.Add(name, new StateElement { Type = type, Value = value, IsConstant = false });
+    }
+
+    public void DefineConstant(string name, DataType type, object value)
+    {
+        state.Add(name, new StateElement { Type = type, Value = value, IsConstant = true });
+    }
+
+    public bool IsConstant(string name)
+    {
+        return state[name].IsConstant;
     }
 
     public IScope Clone()

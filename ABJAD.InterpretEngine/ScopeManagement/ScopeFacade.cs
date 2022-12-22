@@ -9,7 +9,9 @@ public interface ScopeFacade
     DataType GetType(string name);
     object Get(string name);
     void Set(string name, object value);
-    void Define(string name, DataType type, object value);
+    void DefineVariable(string name, DataType type, object value);
+    void DefineConstant(string name, DataType type, object value);
+    bool IsConstant(string name);
     ScopeFacade CloneScope();
     void AddNewScope();
 }

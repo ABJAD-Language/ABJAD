@@ -29,7 +29,7 @@ public class VariableDeclarationInterpretationStrategyTest
         var variableDeclaration = new VariableDeclaration() { Name = "id", Type = DataType.Number() };
         var strategy = new VariableDeclarationInterpretationStrategy(variableDeclaration, scope, expressionEvaluator);
         strategy.Apply();
-        scope.Received(1).Define("id", DataType.Number(), SpecialValues.UNDEFINED);
+        scope.Received(1).DefineVariable("id", DataType.Number(), SpecialValues.UNDEFINED);
     }
 
     [Fact(DisplayName = "throws error if the type does not match the type of the evaluated expression")]
@@ -63,6 +63,6 @@ public class VariableDeclarationInterpretationStrategyTest
         var strategy = new VariableDeclarationInterpretationStrategy(variableDeclaration, scope, expressionEvaluator);
         expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Number(), Value = 1 });
         strategy.Apply();
-        scope.Received(1).Define("id", DataType.Number(), 1);
+        scope.Received(1).DefineVariable("id", DataType.Number(), 1);
     }
 }

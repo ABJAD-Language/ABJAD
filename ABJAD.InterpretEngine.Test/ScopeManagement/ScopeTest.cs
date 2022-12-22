@@ -38,6 +38,15 @@ public class ScopeTest
         Assert.Equal(dataValue, scope.Get("id"));
     }
 
+    [Fact(DisplayName = "returns true when asked about a constant that exists")]
+    public void returns_true_when_asked_about_a_constant_that_exists()
+    {
+        var dataValue = new object();
+        var state = new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = dataValue, IsConstant = true} } };
+        var scope = new Scope(state);
+        Assert.True(scope.IsConstant("id"));
+    }
+
     [Fact(DisplayName = "updates the value of a state reference correctly")]
     public void updates_the_value_of_a_state_reference_correctly()
     {
@@ -54,30 +63,68 @@ public class ScopeTest
         Assert.Throws<KeyNotFoundException>(() => scope.Set("id", 2));
     }
 
-    [Fact(DisplayName = "adds a new state element to the state when defining a new reference")]
-    public void adds_a_new_state_element_to_the_state_when_defining_a_new_reference()
+    [Fact(DisplayName = "fails to update the value of a state element that is constant")]
+    public void fails_to_update_the_value_of_a_state_element_that_is_constant()
+    {
+        var state = new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1, IsConstant = true } } };
+        var scope = new Scope(state);
+        Assert.Throws<IllegalConstantValueChangeException>(() => scope.Set("id", 2));
+    }
+
+    [Fact(DisplayName = "adds a new state element to the state when defining a new variable reference")]
+    public void adds_a_new_state_element_to_the_state_when_defining_a_new_variable_reference()
     {
         var scope = new Scope(new Dictionary<string, StateElement>());
-        scope.Define("id", DataType.Bool(), true);
+        scope.DefineVariable("id", DataType.Bool(), true);
         Assert.True(scope.ReferenceExists("id"));
         Assert.True(scope.GetType("id").IsBool());
         Assert.Equal(true, scope.Get("id"));
+        Assert.False(scope.IsConstant("id"));
     }
 
-    [Fact(DisplayName = "fails to define a new state element with the same name as another existing one")]
-    public void fails_to_define_a_new_state_element_with_the_same_name_as_another_existing_one()
+    [Fact(DisplayName = "adds a new state element to the state when defining a new constant reference")]
+    public void adds_a_new_state_element_to_the_state_when_defining_a_new_constant_reference()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>());
+        scope.DefineConstant("id", DataType.Bool(), true);
+        Assert.True(scope.ReferenceExists("id"));
+        Assert.True(scope.GetType("id").IsBool());
+        Assert.Equal(true, scope.Get("id"));
+        Assert.True(scope.IsConstant("id"));
+    }
+
+    [Fact(DisplayName = "fails to define a new variable with the same name as another existing one")]
+    public void fails_to_define_a_new_variable_with_the_same_name_as_another_existing_one()
     {
         var state = new Dictionary<string, StateElement>() { { "id", new StateElement() } };
         var scope = new Scope(state);
-        Assert.Throws<ArgumentException>(() => scope.Define("id", DataType.Bool(), true));
+        Assert.Throws<ArgumentException>(() => scope.DefineVariable("id", DataType.Bool(), true));
     }
 
-    [Fact(DisplayName = "adding new value to a cloned scope does not add it to the original one")]
-    public void adding_new_value_to_a_cloned_scope_does_not_add_it_to_the_original_one()
+    [Fact(DisplayName = "fails to define a new constant with the same name as another existing one")]
+    public void fails_to_define_a_new_constant_with_the_same_name_as_another_existing_one()
+    {
+        var state = new Dictionary<string, StateElement>() { { "id", new StateElement() } };
+        var scope = new Scope(state);
+        Assert.Throws<ArgumentException>(() => scope.DefineConstant("id", DataType.Bool(), true));
+    }
+
+    [Fact(DisplayName = "adding new variable to a cloned scope does not add it to the original one")]
+    public void adding_new_variable_to_a_cloned_scope_does_not_add_it_to_the_original_one()
     {
         var scope = new Scope(new Dictionary<string, StateElement>());
         var clonedScope = scope.Clone();
-        clonedScope.Define("id", DataType.Number(), 1);
+        clonedScope.DefineVariable("id", DataType.Number(), 1);
+        Assert.False(scope.ReferenceExists("id"));
+        Assert.True(clonedScope.ReferenceExists("id"));
+    }
+
+    [Fact(DisplayName = "adding new constant to a cloned scope does not add it to the original one")]
+    public void adding_new_constant_to_a_cloned_scope_does_not_add_it_to_the_original_one()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>());
+        var clonedScope = scope.Clone();
+        clonedScope.DefineConstant("id", DataType.Number(), 1);
         Assert.False(scope.ReferenceExists("id"));
         Assert.True(clonedScope.ReferenceExists("id"));
     }
