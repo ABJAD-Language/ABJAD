@@ -24,7 +24,7 @@ public class VariableDeclarationInterpretationStrategy : DeclarationInterpretati
 
         if (declaration.Value is null)
         {
-            scope.Define(declaration.Name, declaration.Type, SpecialValues.UNDEFINED);
+            scope.DefineVariable(declaration.Name, declaration.Type, SpecialValues.UNDEFINED);
             return;
         }
         
@@ -32,7 +32,7 @@ public class VariableDeclarationInterpretationStrategy : DeclarationInterpretati
         ValidateTypeMatches(evaluatedResult);
         ValidateValueIsNotUndefined(evaluatedResult);
         
-        scope.Define(declaration.Name, declaration.Type, evaluatedResult.Value);
+        scope.DefineVariable(declaration.Name, declaration.Type, evaluatedResult.Value);
     }
 
     private static void ValidateValueIsNotUndefined(EvaluatedResult evaluatedResult)

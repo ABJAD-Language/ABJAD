@@ -67,6 +67,34 @@ public class EnvironmentTest
         Assert.Equal(2, environment.Get("id"));
     }
 
+    [Fact(DisplayName = "returns true if asked about a constant reference if is constant")]
+    public void returns_true_if_asked_about_a_constant_reference_if_is_constant()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { IsConstant = true } }});
+        var scopes = new List<IScope>() { scope };
+        var environment = new Environment(scopes);
+        Assert.True(environment.IsConstant("id"));
+    }
+
+    [Fact(DisplayName = "returns false if asked about a variable reference if is constant")]
+    public void returns_true_if_asked_about_a_variable_reference_if_is_constant()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { IsConstant = false } }});
+        var scopes = new List<IScope>() { scope };
+        var environment = new Environment(scopes);
+        Assert.False(environment.IsConstant("id"));
+    }
+
+    [Fact(DisplayName = "checking if reference is constant gives priority to the later scopes")]
+    public void checking_if_reference_is_constant_gives_priority_to_the_later_scopes()
+    {
+        var firstScope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { IsConstant = true } }});
+        var secondScope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { IsConstant = false } }});
+        var scopes = new List<IScope>() { firstScope, secondScope };
+        var environment = new Environment(scopes);
+        Assert.False(environment.IsConstant("id"));
+    }
+
     [Fact(DisplayName = "setting a value to a reference should preserve its type when it exists in the last scope")]
     public void setting_a_value_to_a_reference_should_preserve_its_type_when_it_exists_in_the_last_scope()
     {
@@ -91,44 +119,84 @@ public class EnvironmentTest
         Assert.Equal(5, environment.Get("id"));
     }
 
-    [Fact(DisplayName = "defining a new value adds it to the last scope")]
-    public void defining_a_new_value_adds_it_to_the_last_scope()
+    [Fact(DisplayName = "defining a new variable adds it to the last scope")]
+    public void defining_a_new_variable_adds_it_to_the_last_scope()
     {
         var firstScope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var secondScope = new Scope(new Dictionary<string, StateElement>());
         var scopes = new List<IScope>() { firstScope, secondScope };
         var environment = new Environment(scopes);
-        environment.Define("id", DataType.String(), "hello");
+        environment.DefineVariable("id", DataType.String(), "hello");
         Assert.True(environment.GetType("id").IsString());
         Assert.Equal("hello", environment.Get("id"));
+        Assert.False(environment.IsConstant("id"));
     }
-
-    [Fact(DisplayName = "adding a new reference to a cloned environment does not add it to the original one")]
-    public void adding_a_new_reference_to_a_cloned_environment_does_not_add_it_to_the_original_one()
+    
+    [Fact(DisplayName = "adding a new variable to a cloned environment does not add it to the original one")]
+    public void adding_a_new_variable_to_a_cloned_environment_does_not_add_it_to_the_original_one()
     {
         var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var scopes = new List<IScope>() { scope };
         var environment = new Environment(scopes);
 
         var cloneEnvironment = (Environment) environment.CloneScope();
-        cloneEnvironment.Define("id2", DataType.String(), "hello");
+        cloneEnvironment.DefineVariable("id2", DataType.String(), "hello");
         Assert.True(cloneEnvironment.ReferenceExists("id2"));
         Assert.False(environment.ReferenceExists("id2"));
     }
 
-    [Fact(DisplayName = "defining a new reference in an environment does not add it to its clone")]
-    public void defining_a_new_reference_in_an_environment_does_not_add_it_to_its_clone()
+    [Fact(DisplayName = "defining a new variable in an environment does not add it to its clone")]
+    public void defining_a_new_variable_in_an_environment_does_not_add_it_to_its_clone()
     {
         var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var scopes = new List<IScope>() { scope };
         var environment = new Environment(scopes);
         var cloneEnvironment = (Environment) environment.CloneScope();
 
-        environment.Define("id2", DataType.String(), "hello");
+        environment.DefineVariable("id2", DataType.String(), "hello");
         Assert.False(cloneEnvironment.ReferenceExists("id2"));
         Assert.True(environment.ReferenceExists("id2"));
     }
 
+    [Fact(DisplayName = "defining a new constant adds it to the last scope")]
+    public void defining_a_new_constant_adds_it_to_the_last_scope()
+    {
+        var firstScope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
+        var secondScope = new Scope(new Dictionary<string, StateElement>());
+        var scopes = new List<IScope>() { firstScope, secondScope };
+        var environment = new Environment(scopes);
+        environment.DefineConstant("id", DataType.String(), "hello");
+        Assert.True(environment.GetType("id").IsString());
+        Assert.Equal("hello", environment.Get("id"));
+        Assert.True(environment.IsConstant("id"));
+    }
+
+    [Fact(DisplayName = "adding a new constant to a cloned environment does not add it to the original one")]
+    public void adding_a_new_constant_to_a_cloned_environment_does_not_add_it_to_the_original_one()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
+        var scopes = new List<IScope>() { scope };
+        var environment = new Environment(scopes);
+
+        var cloneEnvironment = (Environment) environment.CloneScope();
+        cloneEnvironment.DefineConstant("id2", DataType.String(), "hello");
+        Assert.True(cloneEnvironment.ReferenceExists("id2"));
+        Assert.False(environment.ReferenceExists("id2"));
+    }
+    
+    [Fact(DisplayName = "defining a new constant in an environment does not add it to its clone")]
+    public void defining_a_new_constant_in_an_environment_does_not_add_it_to_its_clone()
+    {
+        var scope = new Scope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
+        var scopes = new List<IScope>() { scope };
+        var environment = new Environment(scopes);
+        var cloneEnvironment = (Environment) environment.CloneScope();
+
+        environment.DefineConstant("id2", DataType.String(), "hello");
+        Assert.False(cloneEnvironment.ReferenceExists("id2"));
+        Assert.True(environment.ReferenceExists("id2"));
+    }
+    
     [Fact(DisplayName = "modifying the value of a reference in a cloned environment does not modify it in the original one")]
     public void modifying_the_value_of_a_reference_in_a_cloned_environment_does_not_modify_it_in_the_original_one()
     {

@@ -40,13 +40,23 @@ public class Environment : ScopeFacade
         else
         {
             var referenceType = scopes.FindLast(s => s.ReferenceExists(name)).GetType(name);
-            scopes.Last().Define(name, referenceType, value);
+            scopes.Last().DefineVariable(name, referenceType, value);
         }
     }
 
-    public void Define(string name, DataType type, object value)
+    public void DefineVariable(string name, DataType type, object value)
     {
-        scopes.Last().Define(name, type, value);
+        scopes.Last().DefineVariable(name, type, value);
+    }
+
+    public void DefineConstant(string name, DataType type, object value)
+    {
+        scopes.Last().DefineConstant(name, type, value);
+    }
+
+    public bool IsConstant(string name)
+    {
+        return scopes.FindLast(s => s.ReferenceExists(name)).IsConstant(name);
     }
 
     public ScopeFacade CloneScope()
