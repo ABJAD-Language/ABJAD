@@ -33,6 +33,7 @@ public class StatementInterpreter : Interpreter<Statement>
             Assignment assignment => new AssignmentInterpretationStrategy(assignment, scope, expressionEvaluator),
             Block block => HandleBlock(block),
             ForLoop forLoop => new ForLoopInterpretationStrategy(forLoop, this, declarationInterpreter, expressionEvaluator),
+            WhileLoop whileLoop => new WhileLoopInterpretationStrategy(whileLoop, expressionEvaluator, this),
             _ => throw new ArgumentException()
         };
     }
