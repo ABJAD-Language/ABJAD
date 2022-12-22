@@ -12,10 +12,12 @@ public class StatementInterpreter : Interpreter<Statement>
     private readonly ScopeFacade scope;
     private readonly Evaluator<Expression> expressionEvaluator;
     private readonly DeclarationInterpreter declarationInterpreter;
+    private readonly TextWriter writer;
 
-    public StatementInterpreter(ScopeFacade scope)
+    public StatementInterpreter(ScopeFacade scope, TextWriter writer)
     {
         this.scope = scope;
+        this.writer = writer;
         expressionEvaluator = new ExpressionEvaluator(scope);
         declarationInterpreter = new DeclarationInterpreter(scope);
     }
@@ -34,6 +36,7 @@ public class StatementInterpreter : Interpreter<Statement>
             Block block => HandleBlock(block),
             ForLoop forLoop => new ForLoopInterpretationStrategy(forLoop, this, declarationInterpreter, expressionEvaluator),
             WhileLoop whileLoop => new WhileLoopInterpretationStrategy(whileLoop, expressionEvaluator, this),
+            Print print => new PrintInterpretationStrategy(print, writer, expressionEvaluator),
             _ => throw new ArgumentException()
         };
     }
@@ -42,7 +45,7 @@ public class StatementInterpreter : Interpreter<Statement>
     {
         var cloneScope = scope.CloneScope();
         cloneScope.AddNewScope();
-        var statementInterpreter = new StatementInterpreter(cloneScope);
+        var statementInterpreter = new StatementInterpreter(cloneScope, writer);
         var declarationInterpreter = new DeclarationInterpreter(cloneScope);
         return new BlockInterpretationStrategy(block, statementInterpreter, declarationInterpreter);
     }
