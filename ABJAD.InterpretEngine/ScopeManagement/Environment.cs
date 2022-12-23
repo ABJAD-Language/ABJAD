@@ -88,15 +88,31 @@ public class Environment : ScopeFacade
         scopes.Last().FunctionScope.DefineFunction(name, function);
     }
 
+    public bool TypeExists(string name)
+    {
+        return scopes.Any(s => s.TypeScope.TypeExists(name));
+    }
+
+    public ClassElement GetType(string name)
+    {
+        return scopes.Single(s => s.TypeScope.TypeExists(name)).TypeScope.Get(name);
+    }
+
+    public void DefineType(string name, ClassElement @class)
+    {
+        scopes.Last().TypeScope.Define(name, @class);
+    }
+
     public ScopeFacade CloneScope()
     {
-        return new Environment(scopes.Select(s => new Scope(s.ReferenceScope.Clone(), s.FunctionScope.Clone())).ToList());
+        return new Environment(scopes.Select(s => new Scope(s.ReferenceScope.Clone(), s.FunctionScope.Clone(), s.TypeScope.Clone())).ToList());
     }
 
     public void AddNewScope()
     {
         var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
-        scopes.Add(new Scope(referenceScope, functionScope));
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        scopes.Add(new Scope(referenceScope, functionScope, typeScope));
     }
 }
