@@ -27,7 +27,7 @@ public class AssignmentInterpretationStrategyTest
     {
         scopeFacade.ReferenceExists("id").Returns(true);
         var targetType = Substitute.For<DataType>();
-        scopeFacade.GetType("id").Returns(targetType);
+        scopeFacade.GetReferenceType("id").Returns(targetType);
         var value = Substitute.For<Expression>();
         var valueType = Substitute.For<DataType>();
         expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = valueType });
@@ -43,7 +43,7 @@ public class AssignmentInterpretationStrategyTest
     {
         scopeFacade.ReferenceExists("id").Returns(true);
         var targetType = Substitute.For<DataType>();
-        scopeFacade.GetType("id").Returns(targetType);
+        scopeFacade.GetReferenceType("id").Returns(targetType);
         var value = Substitute.For<Expression>();
         var valueType = Substitute.For<DataType>();
         expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = valueType, Value = SpecialValues.UNDEFINED });
@@ -59,7 +59,7 @@ public class AssignmentInterpretationStrategyTest
     {
         scopeFacade.ReferenceExists("id").Returns(true);
         var targetType = Substitute.For<DataType>();
-        scopeFacade.GetType("id").Returns(targetType);
+        scopeFacade.GetReferenceType("id").Returns(targetType);
         var valueExpression = Substitute.For<Expression>();
         var valueType = Substitute.For<DataType>();
         var newValue = new object();
@@ -69,6 +69,6 @@ public class AssignmentInterpretationStrategyTest
         var assignment = new Assignment { Target = "id", Value = valueExpression };
         var strategy = new AssignmentInterpretationStrategy(assignment, scopeFacade, expressionEvaluator);
         strategy.Apply();
-        scopeFacade.Received(1).Set("id", newValue);
+        scopeFacade.Received(1).SetReference("id", newValue);
     }
 }

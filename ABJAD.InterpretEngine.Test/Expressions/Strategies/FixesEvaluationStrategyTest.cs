@@ -29,7 +29,7 @@ public class FixesEvaluationStrategyTest
         scopeFacade.ReferenceExists("id").Returns(true);
         var targetType = Substitute.For<DataType>();
         targetType.IsNumber().Returns(false);
-        scopeFacade.GetType("id").Returns(targetType);
+        scopeFacade.GetReferenceType("id").Returns(targetType);
         var additionPostfix = new AdditionPostfix { Target = target };
         var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
@@ -42,8 +42,8 @@ public class FixesEvaluationStrategyTest
         var targetType = Substitute.For<DataType>();
         targetType.IsNumber().Returns(true);
         scopeFacade.ReferenceExists("id").Returns(true);
-        scopeFacade.GetType("id").Returns(targetType);
-        scopeFacade.Get("id").Returns(SpecialValues.UNDEFINED);
+        scopeFacade.GetReferenceType("id").Returns(targetType);
+        scopeFacade.GetReference("id").Returns(SpecialValues.UNDEFINED);
         var additionPostfix = new AdditionPostfix { Target = target };
         var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
         Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
@@ -60,13 +60,13 @@ public class FixesEvaluationStrategyTest
         {
             targetType.IsNumber().Returns(true);
             scopeFacade.ReferenceExists("id").Returns(true);
-            scopeFacade.GetType("id").Returns(targetType);
-            scopeFacade.Get("id").Returns(3.2);
+            scopeFacade.GetReferenceType("id").Returns(targetType);
+            scopeFacade.GetReference("id").Returns(3.2);
 
             var additionPostfix = new AdditionPostfix { Target = target };
             var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
             strategy.Apply();
-            scopeFacade.Received(1).Set("id", 4.2);
+            scopeFacade.Received(1).SetReference("id", 4.2);
         }
 
         [Fact(DisplayName = "returns the old value of target")]
@@ -74,8 +74,8 @@ public class FixesEvaluationStrategyTest
         {
             targetType.IsNumber().Returns(true);
             scopeFacade.ReferenceExists("id").Returns(true);
-            scopeFacade.GetType("id").Returns(targetType);
-            scopeFacade.Get("id").Returns(3.2);
+            scopeFacade.GetReferenceType("id").Returns(targetType);
+            scopeFacade.GetReference("id").Returns(3.2);
 
             var additionPostfix = new AdditionPostfix { Target = target };
             var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
@@ -96,13 +96,13 @@ public class FixesEvaluationStrategyTest
         {
             targetType.IsNumber().Returns(true);
             scopeFacade.ReferenceExists("id").Returns(true);
-            scopeFacade.GetType("id").Returns(targetType);
-            scopeFacade.Get("id").Returns(10.0);
+            scopeFacade.GetReferenceType("id").Returns(targetType);
+            scopeFacade.GetReference("id").Returns(10.0);
 
             var additionPrefix = new AdditionPrefix { Target = target };
             var strategy = new FixesEvaluationStrategy(additionPrefix, scopeFacade);
             strategy.Apply();
-            scopeFacade.Received(1).Set("id", 11.0);
+            scopeFacade.Received(1).SetReference("id", 11.0);
         }
 
         [Fact(DisplayName = "return the incremented value")]
@@ -110,8 +110,8 @@ public class FixesEvaluationStrategyTest
         {
             targetType.IsNumber().Returns(true);
             scopeFacade.ReferenceExists("id").Returns(true);
-            scopeFacade.GetType("id").Returns(targetType);
-            scopeFacade.Get("id").Returns(10.0);
+            scopeFacade.GetReferenceType("id").Returns(targetType);
+            scopeFacade.GetReference("id").Returns(10.0);
 
             var additionPrefix = new AdditionPrefix { Target = target };
             var strategy = new FixesEvaluationStrategy(additionPrefix, scopeFacade);
@@ -132,13 +132,13 @@ public class FixesEvaluationStrategyTest
         {
             targetType.IsNumber().Returns(true);
             scopeFacade.ReferenceExists("id").Returns(true);
-            scopeFacade.GetType("id").Returns(targetType);
-            scopeFacade.Get("id").Returns(13.0);
+            scopeFacade.GetReferenceType("id").Returns(targetType);
+            scopeFacade.GetReference("id").Returns(13.0);
 
             var subtractionPostfix = new SubtractionPostfix { Target = target };
             var strategy = new FixesEvaluationStrategy(subtractionPostfix, scopeFacade);
             strategy.Apply();
-            scopeFacade.Received(1).Set("id", 12.0);
+            scopeFacade.Received(1).SetReference("id", 12.0);
         }
 
         [Fact(DisplayName = "returns the old value of target")]
@@ -146,8 +146,8 @@ public class FixesEvaluationStrategyTest
         {
             targetType.IsNumber().Returns(true);
             scopeFacade.ReferenceExists("id").Returns(true);
-            scopeFacade.GetType("id").Returns(targetType);
-            scopeFacade.Get("id").Returns(13.0);
+            scopeFacade.GetReferenceType("id").Returns(targetType);
+            scopeFacade.GetReference("id").Returns(13.0);
         
             var subtractionPostfix = new SubtractionPostfix { Target = target };
             var strategy = new FixesEvaluationStrategy(subtractionPostfix, scopeFacade);
@@ -168,13 +168,13 @@ public class FixesEvaluationStrategyTest
         {
             targetType.IsNumber().Returns(true);
             scopeFacade.ReferenceExists("id").Returns(true);
-            scopeFacade.GetType("id").Returns(targetType);
-            scopeFacade.Get("id").Returns(15.0);
+            scopeFacade.GetReferenceType("id").Returns(targetType);
+            scopeFacade.GetReference("id").Returns(15.0);
 
             var subtractionPrefix = new SubtractionPrefix { Target = target };
             var strategy = new FixesEvaluationStrategy(subtractionPrefix, scopeFacade);
             strategy.Apply();
-            scopeFacade.Received(1).Set("id", 14.0);
+            scopeFacade.Received(1).SetReference("id", 14.0);
         }
 
         [Fact(DisplayName = "return the incremented value")]
@@ -182,8 +182,8 @@ public class FixesEvaluationStrategyTest
         {
             targetType.IsNumber().Returns(true);
             scopeFacade.ReferenceExists("id").Returns(true);
-            scopeFacade.GetType("id").Returns(targetType);
-            scopeFacade.Get("id").Returns(15.0);
+            scopeFacade.GetReferenceType("id").Returns(targetType);
+            scopeFacade.GetReference("id").Returns(15.0);
         
             var subtractionPrefix = new SubtractionPrefix { Target = target };
             var strategy = new FixesEvaluationStrategy(subtractionPrefix, scopeFacade);

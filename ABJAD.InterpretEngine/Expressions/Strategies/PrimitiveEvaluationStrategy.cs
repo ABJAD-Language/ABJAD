@@ -31,8 +31,8 @@ public class PrimitiveEvaluationStrategy : ExpressionEvaluationStrategy
     {
         if (scopeFacade.ReferenceExists(identifierPrimitive.Value))
         {
-            var type = scopeFacade.GetType(identifierPrimitive.Value);
-            var value = scopeFacade.Get(identifierPrimitive.Value);
+            var type = scopeFacade.GetReferenceType(identifierPrimitive.Value);
+            var value = scopeFacade.GetReference(identifierPrimitive.Value);
             return new EvaluatedResult { Type = type, Value = value };
         }
 

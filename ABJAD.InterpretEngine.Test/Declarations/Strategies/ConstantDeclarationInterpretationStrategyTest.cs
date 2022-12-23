@@ -35,7 +35,7 @@ public class ConstantDeclarationInterpretationStrategyTest
         var constantDeclaration = new ConstantDeclaration() { Type = DataType.Number(), Value = new NumberPrimitive { Value = 13.0 }, Name = "id" };
         var strategy = new ConstantDeclarationInterpretationStrategy(constantDeclaration, scope);
         strategy.Apply();
-        scope.Received(1).DefineVariable("id", DataType.Number(), 13.0);
+        scope.Received(1).DefineConstant("id", DataType.Number(), 13.0);
     }
 
     [Fact(DisplayName = "throws error if the constant type is string and value is not a string primitive")]
@@ -52,7 +52,7 @@ public class ConstantDeclarationInterpretationStrategyTest
         var constantDeclaration = new ConstantDeclaration() { Type = DataType.String(), Value = new StringPrimitive() { Value = "hello" }, Name = "id" };
         var strategy = new ConstantDeclarationInterpretationStrategy(constantDeclaration, scope);
         strategy.Apply();
-        scope.Received(1).DefineVariable("id", DataType.String(), "hello");
+        scope.Received(1).DefineConstant("id", DataType.String(), "hello");
     }
 
     [Fact(DisplayName = "throws error if the constant type is bool and value is not a bool primitive")]
@@ -69,7 +69,7 @@ public class ConstantDeclarationInterpretationStrategyTest
         var constantDeclaration = new ConstantDeclaration() { Type = DataType.Bool(), Value = new BoolPrimitive() { Value = true }, Name = "id" };
         var strategy = new ConstantDeclarationInterpretationStrategy(constantDeclaration, scope);
         strategy.Apply();
-        scope.Received(1).DefineVariable("id", DataType.Bool(), true);
+        scope.Received(1).DefineConstant("id", DataType.Bool(), true);
     }
 
     [Fact(DisplayName = "throws error if the constant type is neither of the accepted ones")]

@@ -28,7 +28,7 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
         ValidateValueTypeMatchesTargetType(evaluatedResult);
         ValidateValueIsNotUndefined(evaluatedResult);
 
-        scopeFacade.Set(assignment.Target, evaluatedResult.Value);
+        scopeFacade.SetReference(assignment.Target, evaluatedResult.Value);
     }
 
     private static void ValidateValueIsNotUndefined(EvaluatedResult evaluatedResult)
@@ -41,7 +41,7 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
 
     private void ValidateValueTypeMatchesTargetType(EvaluatedResult evaluatedResult)
     {
-        var targetType = scopeFacade.GetType(assignment.Target);
+        var targetType = scopeFacade.GetReferenceType(assignment.Target);
         if (!targetType.Is(evaluatedResult.Type))
         {
             throw new IncompatibleTypesException(targetType, evaluatedResult.Type);
