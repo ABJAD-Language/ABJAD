@@ -12,7 +12,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id1", new StateElement() }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id2", new StateElement() }});
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         Assert.False(environment.ReferenceExists("id3"));
     }
@@ -22,7 +22,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id1", new StateElement() }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id2", new StateElement() }});
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         Assert.True(environment.ReferenceExists("id2"));
     }
@@ -32,7 +32,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id1", new StateElement() }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id2", new StateElement() }});
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         Assert.True(environment.ReferenceExistsInCurrentScope("id2"));
     }
@@ -42,7 +42,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id1", new StateElement() }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id2", new StateElement() }});
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         Assert.False(environment.ReferenceExistsInCurrentScope("id1"));
     }
@@ -52,7 +52,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Type = DataType.Number() } }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Type = DataType.String() } }});
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         Assert.False(environment.GetReferenceType("id").IsNumber());
         Assert.True(environment.GetReferenceType("id").IsString());
@@ -63,7 +63,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 2 } }});
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         Assert.Equal(2, environment.GetReference("id"));
     }
@@ -72,7 +72,7 @@ public class EnvironmentTest
     public void returns_true_if_asked_about_a_constant_reference_if_is_constant()
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { IsConstant = true } }});
-        var scopes = new List<Scope>() { new(scope, null) };
+        var scopes = new List<Scope>() { new(scope, null, null) };
         var environment = new Environment(scopes);
         Assert.True(environment.IsReferenceConstant("id"));
     }
@@ -81,7 +81,7 @@ public class EnvironmentTest
     public void returns_true_if_asked_about_a_variable_reference_if_is_constant()
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { IsConstant = false } }});
-        var scopes = new List<Scope>() { new(scope, null) };
+        var scopes = new List<Scope>() { new(scope, null, null) };
         var environment = new Environment(scopes);
         Assert.False(environment.IsReferenceConstant("id"));
     }
@@ -91,7 +91,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { IsConstant = true } }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { IsConstant = false } }});
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         Assert.False(environment.IsReferenceConstant("id"));
     }
@@ -101,7 +101,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>());
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Type = DataType.Number(), Value = 1 } }});
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         environment.SetReference("id", 5);
         Assert.True(environment.GetReferenceType("id").IsNumber());
@@ -113,7 +113,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Type = DataType.Number(), Value = 1 } }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>());
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         environment.SetReference("id", 5);
         Assert.True(environment.GetReferenceType("id").IsNumber());
@@ -125,7 +125,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>());
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         environment.DefineVariable("id", DataType.String(), "hello");
         Assert.True(environment.GetReferenceType("id").IsString());
@@ -138,7 +138,8 @@ public class EnvironmentTest
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
-        var scopes = new List<Scope>() { new(scope, functionScope) };
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
 
         var cloneEnvironment = (Environment) environment.CloneScope();
@@ -152,7 +153,8 @@ public class EnvironmentTest
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
-        var scopes = new List<Scope>() { new(scope, functionScope) };
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
         var cloneEnvironment = (Environment) environment.CloneScope();
 
@@ -166,7 +168,7 @@ public class EnvironmentTest
     {
         var firstScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>());
-        var scopes = new List<Scope>() { new(firstScope, null), new(secondScope, null) };
+        var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
         environment.DefineConstant("id", DataType.String(), "hello");
         Assert.True(environment.GetReferenceType("id").IsString());
@@ -179,7 +181,8 @@ public class EnvironmentTest
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
-        var scopes = new List<Scope>() { new(scope, functionScope) };
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
 
         var cloneEnvironment = (Environment) environment.CloneScope();
@@ -193,7 +196,8 @@ public class EnvironmentTest
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
-        var scopes = new List<Scope>() { new(scope, functionScope) };
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
         var cloneEnvironment = (Environment) environment.CloneScope();
 
@@ -207,7 +211,8 @@ public class EnvironmentTest
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
-        var scopes = new List<Scope>() { new(scope, functionScope) };
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
         var cloneEnvironment = (Environment) environment.CloneScope();
 
@@ -221,7 +226,8 @@ public class EnvironmentTest
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
-        var scopes = new List<Scope>() { new(scope, functionScope) };
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
         var cloneEnvironment = (Environment) environment.CloneScope();
 
@@ -236,8 +242,13 @@ public class EnvironmentTest
         var firstFunctionScope = Substitute.For<IFunctionScope>();
         var secondFunctionScope = Substitute.For<IFunctionScope>();
         firstFunctionScope.FunctionExists("func", 0).Returns(true);
-        
-        var environment = new Environment(new List<Scope>() { new(null, firstFunctionScope), new(null, secondFunctionScope)});
+
+        var scopes = new List<Scope>()
+        {
+            new(null, firstFunctionScope, null), 
+            new(null, secondFunctionScope, null)
+        };
+        var environment = new Environment(scopes);
         var functionExists = environment.FunctionExists("func", 0);
         Assert.True(functionExists);
     }
@@ -249,7 +260,12 @@ public class EnvironmentTest
         var secondFunctionScope = Substitute.For<IFunctionScope>();
         firstFunctionScope.FunctionExists("func", 0).Returns(true);
         
-        var environment = new Environment(new List<Scope>() { new(null, firstFunctionScope), new(null, secondFunctionScope)});
+        var scopes = new List<Scope>()
+        {
+            new(null, firstFunctionScope, null), 
+            new(null, secondFunctionScope, null)
+        };
+        var environment = new Environment(scopes);
         var functionExists = environment.FunctionExistsInCurrentScope("func", 0);
         firstFunctionScope.DidNotReceive().FunctionExists("func", 0);
         secondFunctionScope.Received(1).FunctionExists("func", 0);
@@ -268,7 +284,12 @@ public class EnvironmentTest
         var functionReturnType = Substitute.For<DataType>();
         firstFunctionScope.GetFunctionReturnType("func", 0).Returns(functionReturnType);
         
-        var environment = new Environment(new List<Scope>() { new(null, firstFunctionScope), new(null, secondFunctionScope)});
+        var scopes = new List<Scope>()
+        {
+            new(null, firstFunctionScope, null), 
+            new(null, secondFunctionScope, null)
+        };
+        var environment = new Environment(scopes);
         var returnType = environment.GetFunctionReturnType("func", 0);
         
         Assert.Equal(functionReturnType, returnType);
@@ -285,7 +306,12 @@ public class EnvironmentTest
         var function = new FunctionElement();
         secondFunctionScope.GetFunction("func", 0).Returns(function);
         
-        var environment = new Environment(new List<Scope>() { new(null, firstFunctionScope), new(null, secondFunctionScope)});
+        var scopes = new List<Scope>()
+        {
+            new(null, firstFunctionScope, null), 
+            new(null, secondFunctionScope, null)
+        };
+        var environment = new Environment(scopes);
         Assert.Equal(function, environment.GetFunction("func", 0));
     }
 
@@ -298,7 +324,12 @@ public class EnvironmentTest
         secondFunctionScope.FunctionExists("func", 0).Returns(false);
         firstFunctionScope.FunctionExists("func", 0).Returns(true);
 
-        var environment = new Environment(new List<Scope>() { new(null, firstFunctionScope), new(null, secondFunctionScope)});
+        var scopes = new List<Scope>()
+        {
+            new(null, firstFunctionScope, null), 
+            new(null, secondFunctionScope, null)
+        };
+        var environment = new Environment(scopes);
         var function = new FunctionElement() { Parameters = new List<FunctionParameter>()};
         environment.DefineFunction("func", function);
         secondFunctionScope.Received(1).DefineFunction("func", function);
@@ -309,7 +340,8 @@ public class EnvironmentTest
     {
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
         var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
-        var scope = new Scope(referenceScope, functionScope);
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scope = new Scope(referenceScope, functionScope, typeScope);
         var environment = new Environment(new List<Scope>() { scope });
         var clonedEnvironment = environment.CloneScope();
         
@@ -320,12 +352,77 @@ public class EnvironmentTest
         Assert.False(environment.FunctionExists("func", 0));
     }
 
+    [Fact(DisplayName = "checking if type exists delegates to the type scope")]
+    public void checking_if_type_exists_delegates_to_the_type_scope()
+    {
+        var typeScope = Substitute.For<ITypeScope>();
+        var scopes = new List<Scope> { new(Substitute.For<IReferenceScope>(), Substitute.For<IFunctionScope>(), typeScope) };
+        var environment = new Environment(scopes);
+
+        typeScope.TypeExists("type").Returns(true);
+
+        var typeExists = environment.TypeExists("type");
+        typeScope.Received(1).TypeExists("type");
+        Assert.True(typeExists);
+    }
+
+    [Fact(DisplayName = "getting a type delegates to the type scope")]
+    public void getting_a_type_delegates_to_the_type_scope()
+    {
+        var typeScope = Substitute.For<ITypeScope>();
+        var scopes = new List<Scope> { new(Substitute.For<IReferenceScope>(), Substitute.For<IFunctionScope>(), typeScope) };
+        var environment = new Environment(scopes);
+
+        var classElement = new ClassElement();
+        typeScope.TypeExists("type").Returns(true);
+        typeScope.Get("type").Returns(classElement);
+
+        var actualClassElement = environment.GetType("type");
+        typeScope.Received(1).Get("type");
+        Assert.Equal(classElement, actualClassElement);
+    }
+
+    [Fact(DisplayName = "defining a new type delegates to the current scope")]
+    public void defining_a_new_type_delegates_to_the_current_scope()
+    {
+        var globalTypeScope = Substitute.For<ITypeScope>();
+        var localTypeScope = Substitute.For<ITypeScope>();
+        var globalScope = new Scope(Substitute.For<IReferenceScope>(), Substitute.For<IFunctionScope>(), globalTypeScope);
+        var localScope = new Scope(Substitute.For<IReferenceScope>(), Substitute.For<IFunctionScope>(), localTypeScope);
+        var scopes = new List<Scope> { globalScope, localScope };
+        var environment = new Environment(scopes);
+
+        var classElement = new ClassElement();
+        environment.DefineType("type", classElement);
+        localTypeScope.Received(1).Define("type", classElement);
+        globalTypeScope.DidNotReceive().Define("type", classElement);
+    }
+
+    [Fact(DisplayName = "adding a new type to a cloned environment does not affect the old one")]
+    public void adding_a_new_type_to_a_cloned_environment_does_not_affect_the_old_one()
+    {
+        var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
+        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scopes = new List<Scope> { new(referenceScope, functionScope, typeScope) };
+        var environment = new Environment(scopes);
+
+        var clonedEnvironment = environment.CloneScope();
+        
+        environment.DefineType("type1", new ClassElement());
+        clonedEnvironment.DefineType("type2", new ClassElement());
+        
+        Assert.False(clonedEnvironment.TypeExists("type1"));
+        Assert.False(environment.TypeExists("type2"));
+    }
+
     [Fact(DisplayName = "adding a new scope allows us to define existing references and functions")]
     public void adding_a_new_scope_allows_us_to_define_existing_references_and_functions()
     {
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
         var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
-        var scope = new Scope(referenceScope, functionScope);
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scope = new Scope(referenceScope, functionScope, typeScope);
         var environment = new Environment(new List<Scope>() { scope });
         
         functionScope.DefineFunction("func", new FunctionElement() { Parameters = new List<FunctionParameter>()});
