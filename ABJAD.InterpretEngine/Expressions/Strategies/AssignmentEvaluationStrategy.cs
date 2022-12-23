@@ -32,7 +32,7 @@ public class AssignmentEvaluationStrategy : ExpressionEvaluationStrategy
 
     private void FailIfTargetValueWasUndefined()
     {
-        if (scopeFacade.Get(assignmentExpression.Target).Equals(SpecialValues.UNDEFINED))
+        if (scopeFacade.GetReference(assignmentExpression.Target).Equals(SpecialValues.UNDEFINED))
         {
             throw new OperationOnUndefinedValueException(assignmentExpression.Target);
         }
@@ -40,13 +40,13 @@ public class AssignmentEvaluationStrategy : ExpressionEvaluationStrategy
 
     private double GetTargetOldValue()
     {
-        return (double)scopeFacade.Get(assignmentExpression.Target);
+        return (double)scopeFacade.GetReference(assignmentExpression.Target);
     }
 
     private EvaluatedResult ApplyOperationAndStoreNewValue(double oldValue, EvaluatedResult offset)
     {
         var newValue = EvaluateNewValue(oldValue, offset);
-        scopeFacade.Set(assignmentExpression.Target, newValue);
+        scopeFacade.SetReference(assignmentExpression.Target, newValue);
         return new EvaluatedResult { Type = DataType.Number(), Value = newValue };
     }
 
@@ -75,7 +75,7 @@ public class AssignmentEvaluationStrategy : ExpressionEvaluationStrategy
 
     private void FailIfTargetIsNotNumber()
     {
-        var targetType = scopeFacade.GetType(assignmentExpression.Target);
+        var targetType = scopeFacade.GetReferenceType(assignmentExpression.Target);
         if (!targetType.IsNumber())
         {
             throw new InvalidTypeException(targetType, DataType.Number());

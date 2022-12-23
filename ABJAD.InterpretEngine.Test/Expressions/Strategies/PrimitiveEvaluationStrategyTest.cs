@@ -57,8 +57,8 @@ public class PrimitiveEvaluationStrategyTest
     public void returns_the_value_of_the_identifier_when_the_primitive_is_identifier()
     {
         scopeFacade.ReferenceExists("id").Returns(true);
-        scopeFacade.Get("id").Returns(2);
-        scopeFacade.GetType("id").Returns(DataType.Number());
+        scopeFacade.GetReference("id").Returns(2);
+        scopeFacade.GetReferenceType("id").Returns(DataType.Number());
         var strategy = new PrimitiveEvaluationStrategy(new IdentifierPrimitive { Value = "id" }, scopeFacade);
         var result = strategy.Apply();
         Assert.True(result.Type.IsNumber());

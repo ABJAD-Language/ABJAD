@@ -21,19 +21,19 @@ public class ConstantDeclarationInterpretationStrategy : DeclarationInterpretati
 
         if (constantDeclaration.Type.IsNumber() && constantDeclaration.Value is NumberPrimitive number)
         {
-            scope.DefineVariable(constantDeclaration.Name, constantDeclaration.Type, number.Value);
+            scope.DefineConstant(constantDeclaration.Name, constantDeclaration.Type, number.Value);
             return;
         }
 
         if (constantDeclaration.Type.IsString() && constantDeclaration.Value is StringPrimitive @string)
         {
-            scope.DefineVariable(constantDeclaration.Name, constantDeclaration.Type, @string.Value);
+            scope.DefineConstant(constantDeclaration.Name, constantDeclaration.Type, @string.Value);
             return;
         }
 
         if (constantDeclaration.Type.IsBool() && constantDeclaration.Value is BoolPrimitive @bool)
         {
-            scope.DefineVariable(constantDeclaration.Name, constantDeclaration.Type, @bool.Value);
+            scope.DefineConstant(constantDeclaration.Name, constantDeclaration.Type, @bool.Value);
             return;
         }
 

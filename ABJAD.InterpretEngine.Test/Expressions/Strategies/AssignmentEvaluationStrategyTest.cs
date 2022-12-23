@@ -34,7 +34,7 @@ public class AssignmentEvaluationStrategyTest
         var targetType = Substitute.For<DataType>();
         targetType.IsNumber().Returns(false);
         targetType.GetValue().Returns("notNumber");
-        scopeFacade.GetType("id").Returns(targetType);
+        scopeFacade.GetReferenceType("id").Returns(targetType);
         var strategy = new AssignmentEvaluationStrategy(new AdditionAssignment { Target = "id" }, scopeFacade, expressionEvaluator);
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
@@ -45,8 +45,8 @@ public class AssignmentEvaluationStrategyTest
         scopeFacade.ReferenceExists("id").Returns(true);
         var targetType = Substitute.For<DataType>();
         targetType.IsNumber().Returns(true);
-        scopeFacade.GetType("id").Returns(targetType);
-        scopeFacade.Get("id").Returns(SpecialValues.UNDEFINED);
+        scopeFacade.GetReferenceType("id").Returns(targetType);
+        scopeFacade.GetReference("id").Returns(SpecialValues.UNDEFINED);
         var strategy = new AssignmentEvaluationStrategy(new AdditionAssignment { Target = "id" }, scopeFacade, expressionEvaluator);
         Assert.Throws<OperationOnUndefinedValueException>(() => strategy.Apply());
     }
@@ -55,8 +55,8 @@ public class AssignmentEvaluationStrategyTest
     public void throws_error_if_the_offset_was_not_of_type_number()
     {
         scopeFacade.ReferenceExists("id").Returns(true);
-        scopeFacade.GetType("id").Returns(DataType.Number());
-        scopeFacade.Get("id").Returns(1.0);
+        scopeFacade.GetReferenceType("id").Returns(DataType.Number());
+        scopeFacade.GetReference("id").Returns(1.0);
 
         var expression = Substitute.For<Expression>();
         var expressionType = Substitute.For<DataType>();
@@ -73,8 +73,8 @@ public class AssignmentEvaluationStrategyTest
     public void updates_the_value_of_target_correctly_and_return_the_result_when_the_expression_is_addition_assignment()
     {
         scopeFacade.ReferenceExists("id").Returns(true);
-        scopeFacade.Get("id").Returns(2.0);
-        scopeFacade.GetType("id").Returns(DataType.Number());
+        scopeFacade.GetReference("id").Returns(2.0);
+        scopeFacade.GetReferenceType("id").Returns(DataType.Number());
 
         var offset = Substitute.For<Expression>();
 
@@ -84,7 +84,7 @@ public class AssignmentEvaluationStrategyTest
         var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
-        scopeFacade.Received(1).Set("id", 5.0);
+        scopeFacade.Received(1).SetReference("id", 5.0);
             
         Assert.True(result.Type.IsNumber());
         Assert.Equal(5.0, result.Value);
@@ -94,8 +94,8 @@ public class AssignmentEvaluationStrategyTest
     public void updates_the_value_of_target_correctly_and_return_the_result_when_the_expression_is_subtraction_assignment()
     {
         scopeFacade.ReferenceExists("id").Returns(true);
-        scopeFacade.Get("id").Returns(7.0);
-        scopeFacade.GetType("id").Returns(DataType.Number());
+        scopeFacade.GetReference("id").Returns(7.0);
+        scopeFacade.GetReferenceType("id").Returns(DataType.Number());
 
         var offset = Substitute.For<Expression>();
 
@@ -105,7 +105,7 @@ public class AssignmentEvaluationStrategyTest
         var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
-        scopeFacade.Received(1).Set("id", 3.0);
+        scopeFacade.Received(1).SetReference("id", 3.0);
             
         Assert.True(result.Type.IsNumber());
         Assert.Equal(3.0, result.Value);
@@ -115,8 +115,8 @@ public class AssignmentEvaluationStrategyTest
     public void updates_the_value_of_target_correctly_and_return_the_result_when_the_expression_is_multiplication_assignment()
     {
         scopeFacade.ReferenceExists("id").Returns(true);
-        scopeFacade.Get("id").Returns(8.0);
-        scopeFacade.GetType("id").Returns(DataType.Number());
+        scopeFacade.GetReference("id").Returns(8.0);
+        scopeFacade.GetReferenceType("id").Returns(DataType.Number());
 
         var offset = Substitute.For<Expression>();
 
@@ -126,7 +126,7 @@ public class AssignmentEvaluationStrategyTest
         var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
-        scopeFacade.Received(1).Set("id", -8.0);
+        scopeFacade.Received(1).SetReference("id", -8.0);
             
         Assert.True(result.Type.IsNumber());
         Assert.Equal(-8.0, result.Value);
@@ -136,8 +136,8 @@ public class AssignmentEvaluationStrategyTest
     public void updates_the_value_of_target_correctly_and_return_the_result_when_the_expression_is_division_assignment()
     {
         scopeFacade.ReferenceExists("id").Returns(true);
-        scopeFacade.Get("id").Returns(9.0);
-        scopeFacade.GetType("id").Returns(DataType.Number());
+        scopeFacade.GetReference("id").Returns(9.0);
+        scopeFacade.GetReferenceType("id").Returns(DataType.Number());
 
         var offset = Substitute.For<Expression>();
 
@@ -147,7 +147,7 @@ public class AssignmentEvaluationStrategyTest
         var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
-        scopeFacade.Received(1).Set("id", 4.5);
+        scopeFacade.Received(1).SetReference("id", 4.5);
             
         Assert.True(result.Type.IsNumber());
         Assert.Equal(4.5, result.Value);

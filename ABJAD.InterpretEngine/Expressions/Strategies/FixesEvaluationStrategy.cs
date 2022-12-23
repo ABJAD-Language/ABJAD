@@ -33,35 +33,35 @@ public class FixesEvaluationStrategy : ExpressionEvaluationStrategy
 
     private EvaluatedResult HandleSubtractionPrefix()
     {
-        var oldValue = (double)scopeFacade.Get(fixExpression.Target.Value);
-        scopeFacade.Set(fixExpression.Target.Value, oldValue - 1);
+        var oldValue = (double)scopeFacade.GetReference(fixExpression.Target.Value);
+        scopeFacade.SetReference(fixExpression.Target.Value, oldValue - 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue - 1 };
     }
 
     private EvaluatedResult HandleSubtractionPostfix()
     {
-        var oldValue = (double)scopeFacade.Get(fixExpression.Target.Value);
-        scopeFacade.Set(fixExpression.Target.Value, oldValue - 1);
+        var oldValue = (double)scopeFacade.GetReference(fixExpression.Target.Value);
+        scopeFacade.SetReference(fixExpression.Target.Value, oldValue - 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue };
     }
 
     private EvaluatedResult HandleAdditionPrefix()
     {
-        var oldValue = (double) scopeFacade.Get(fixExpression.Target.Value);
-        scopeFacade.Set(fixExpression.Target.Value, oldValue + 1);
+        var oldValue = (double) scopeFacade.GetReference(fixExpression.Target.Value);
+        scopeFacade.SetReference(fixExpression.Target.Value, oldValue + 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue + 1 };
     }
 
     private EvaluatedResult HandleAdditionPostfix()
     {
-        var oldValue = (double) scopeFacade.Get(fixExpression.Target.Value);
-        scopeFacade.Set(fixExpression.Target.Value, oldValue + 1);
+        var oldValue = (double) scopeFacade.GetReference(fixExpression.Target.Value);
+        scopeFacade.SetReference(fixExpression.Target.Value, oldValue + 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue };
     }
 
     private void ValidateTargetValueIsNotUndefined()
     {
-        if (scopeFacade.Get(fixExpression.Target.Value).Equals(SpecialValues.UNDEFINED))
+        if (scopeFacade.GetReference(fixExpression.Target.Value).Equals(SpecialValues.UNDEFINED))
         {
             throw new OperationOnUndefinedValueException();
         }
@@ -69,7 +69,7 @@ public class FixesEvaluationStrategy : ExpressionEvaluationStrategy
 
     private void ValidateTargetIsNumber()
     {
-        var targetType = scopeFacade.GetType(fixExpression.Target.Value);
+        var targetType = scopeFacade.GetReferenceType(fixExpression.Target.Value);
         if (!targetType.IsNumber())
         {
             throw new InvalidTypeException(targetType, DataType.Number());
