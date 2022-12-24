@@ -1,5 +1,6 @@
 ﻿using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Declarations;
+using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Test.ScopeManagement;
 
@@ -19,6 +20,54 @@ public class TypeScopeTest
         Assert.True(typeScope.TypeExists("type"));
     }
 
+    [Fact(DisplayName = "returns false when asked about a type that exists if it has constructor when it does not")]
+    public void returns_false_when_asked_about_a_type_that_exists_if_it_has_constructor_when_it_does_not()
+    {
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement> { { "type", new ClassElement() }});
+        Assert.False(typeScope.HasConstructor("type"));
+    }
+
+    [Fact(DisplayName = "returns true when asked about a type that exists if it has a parameterless constructor when it does")]
+    public void returns_true_when_asked_about_a_type_that_exists_if_it_has_a_parameterless_constructor_when_it_does()
+    {
+        var classElement = new ClassElement();
+        classElement.Constructors.Add(new ConstructorElement() { Parameters = new List<FunctionParameter>()});
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement> { { "type", classElement }});
+        Assert.True(typeScope.HasConstructor("type"));
+    }
+
+    [Fact(DisplayName = "returns false when asked about a type that exists if it has a constructor when a similar one with different order of parameters exists")]
+    public void returns_false_when_asked_about_a_type_that_exists_if_it_has_a_constructor_when_a_similar_one_with_different_order_of_parameters_exists()
+    {
+        var classElement = new ClassElement();
+        classElement.Constructors.Add(new ConstructorElement()
+        {
+            Parameters = new List<FunctionParameter>()
+            {
+                new() { Type = DataType.Bool() }, 
+                new() { Type = DataType.Number() }
+            }
+        });
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement> { { "type", classElement }});
+        Assert.False(typeScope.HasConstructor("type", DataType.Number(), DataType.Bool()));
+    }
+
+    [Fact(DisplayName = "returns true when asked about a type that exists if it has a specific constructor and a matching one exists")]
+    public void returns_true_when_asked_about_a_type_that_exists_if_it_has_a_specific_constructor_and_a_matching_one_exists()
+    {
+        var classElement = new ClassElement();
+        classElement.Constructors.Add(new ConstructorElement()
+        {
+            Parameters = new List<FunctionParameter>()
+            {
+                new() { Type = DataType.Bool() }, 
+                new() { Type = DataType.Number() }
+            }
+        });
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement> { { "type", classElement }});
+        Assert.True(typeScope.HasConstructor("type", DataType.Bool(), DataType.Number()));
+    }
+
     [Fact(DisplayName = "returns the specified type when asked about")]
     public void returns_the_specified_type_when_asked_about()
     {
@@ -35,6 +84,23 @@ public class TypeScopeTest
         typeScope.Define("type", classElement);
         Assert.True(typeScope.TypeExists("type"));
         Assert.Equal(classElement, typeScope.Get("type"));
+    }
+
+    [Fact(DisplayName = "defining a constructor adds it to the type")]
+    public void defining_a_constructor_adds_it_to_the_type()
+    {
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement> { { "type", new ClassElement() }});
+        var constructorElement = new ConstructorElement()
+        {
+            Parameters = new List<FunctionParameter>()
+            {
+                new() { Type = DataType.Bool() }, 
+                new() { Type = DataType.Number() }
+            }
+        };
+        typeScope.DefineConstructor("type", constructorElement);
+        Assert.True(typeScope.HasConstructor("type", DataType.Bool(), DataType.Number()));
+        Assert.Equal(constructorElement, typeScope.Get("type").Constructors[0]);
     }
 
     [Fact(DisplayName = "cloning a scope returns a deep copy of it")]

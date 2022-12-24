@@ -366,6 +366,25 @@ public class EnvironmentTest
         Assert.True(typeExists);
     }
 
+    [Fact(DisplayName = "checking if a type has a certain constructor delegates to the type scope")]
+    public void checking_if_a_type_has_a_certain_constructor_delegates_to_the_type_scope()
+    {
+        var typeScope = Substitute.For<ITypeScope>();
+        var scopes = new List<Scope> { new(Substitute.For<IReferenceScope>(), Substitute.For<IFunctionScope>(), typeScope) };
+        var environment = new Environment(scopes);
+
+        var parameterTypeOne = Substitute.For<DataType>();
+        var parameterTypeTwo = Substitute.For<DataType>();
+
+        typeScope.TypeExists("type").Returns(true);
+        typeScope.HasConstructor("type", parameterTypeOne, parameterTypeTwo).Returns(true);
+
+        var typeHasConstructor = environment.TypeHasConstructor("type", parameterTypeOne, parameterTypeTwo);
+
+        typeScope.Received(1).HasConstructor("type", parameterTypeOne, parameterTypeTwo);
+        Assert.True(typeHasConstructor);
+    }
+
     [Fact(DisplayName = "getting a type delegates to the type scope")]
     public void getting_a_type_delegates_to_the_type_scope()
     {
@@ -396,6 +415,21 @@ public class EnvironmentTest
         environment.DefineType("type", classElement);
         localTypeScope.Received(1).Define("type", classElement);
         globalTypeScope.DidNotReceive().Define("type", classElement);
+    }
+
+    [Fact(DisplayName = "defining a new constructor to a type delegates it to the local type scope")]
+    public void defining_a_new_constructor_to_a_type_delegates_it_to_the_local_type_scope()
+    {
+        var globalTypeScope = Substitute.For<ITypeScope>();
+        var localTypeScope = Substitute.For<ITypeScope>();
+        var globalScope = new Scope(Substitute.For<IReferenceScope>(), Substitute.For<IFunctionScope>(), globalTypeScope);
+        var localScope = new Scope(Substitute.For<IReferenceScope>(), Substitute.For<IFunctionScope>(), localTypeScope);
+        var scopes = new List<Scope> { globalScope, localScope };
+        var environment = new Environment(scopes);
+
+        var constructorElement = new ConstructorElement();
+        environment.DefineTypeConstructor("type", constructorElement);
+        localTypeScope.Received(1).DefineConstructor("type", constructorElement);
     }
 
     [Fact(DisplayName = "adding a new type to a cloned environment does not affect the old one")]
