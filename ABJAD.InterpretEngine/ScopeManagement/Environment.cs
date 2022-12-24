@@ -93,6 +93,11 @@ public class Environment : ScopeFacade
         return scopes.Any(s => s.TypeScope.TypeExists(name));
     }
 
+    public bool TypeHasConstructor(string className, params DataType[] parameterTypes)
+    {
+        return scopes.Single(s => s.TypeScope.TypeExists(className)).TypeScope.HasConstructor("type", parameterTypes);
+    }
+
     public ClassElement GetType(string name)
     {
         return scopes.Single(s => s.TypeScope.TypeExists(name)).TypeScope.Get(name);
@@ -101,6 +106,11 @@ public class Environment : ScopeFacade
     public void DefineType(string name, ClassElement @class)
     {
         scopes.Last().TypeScope.Define(name, @class);
+    }
+
+    public void DefineTypeConstructor(string className, ConstructorElement constructor)
+    {
+        scopes.Last().TypeScope.DefineConstructor(className, constructor);
     }
 
     public ScopeFacade CloneScope()

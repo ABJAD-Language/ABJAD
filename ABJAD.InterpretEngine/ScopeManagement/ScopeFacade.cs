@@ -20,9 +20,11 @@ public interface ScopeFacade
     void DefineFunction(string name, FunctionElement function);
     
     bool TypeExists(string name);
+    bool TypeHasConstructor(string className, params DataType[] parameterTypes);
     ClassElement GetType(string name);
     void DefineType(string name, ClassElement @class);
-    
+    void DefineTypeConstructor(string className, ConstructorElement constructor);
+
     ScopeFacade CloneScope();
     void AddNewScope();
 }
