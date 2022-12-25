@@ -22,9 +22,12 @@ public interface ScopeFacade
     bool TypeExists(string name);
     bool TypeHasConstructor(string className, params DataType[] parameterTypes);
     ClassElement GetType(string name);
+    ConstructorElement GetTypeConstructor(string name, params DataType[] parameterTypes);
     void DefineType(string name, ClassElement @class);
     void DefineTypeConstructor(string className, ConstructorElement constructor);
 
     ScopeFacade CloneScope();
     void AddNewScope();
+    void AddScope(ScopeFacade scopeFacade);
+    List<Scope> GetScopes();
 }

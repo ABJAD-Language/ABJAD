@@ -68,6 +68,23 @@ public class TypeScopeTest
         Assert.True(typeScope.HasConstructor("type", DataType.Bool(), DataType.Number()));
     }
 
+    [Fact(DisplayName = "returns the specified constructor when asked to do so")]
+    public void returns_the_specified_constructor_when_asked_to_do_so()
+    {
+        var classElement = new ClassElement();
+        var constructorElement = new ConstructorElement()
+        {
+            Parameters = new List<FunctionParameter>()
+            {
+                new() { Type = DataType.Bool() }, 
+                new() { Type = DataType.Number() }
+            }
+        };
+        classElement.Constructors.Add(constructorElement);
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement> { { "type", classElement }});
+        Assert.Equal(constructorElement, typeScope.GetConstructor("type", DataType.Bool(), DataType.Number()));
+    }
+
     [Fact(DisplayName = "returns the specified type when asked about")]
     public void returns_the_specified_type_when_asked_about()
     {

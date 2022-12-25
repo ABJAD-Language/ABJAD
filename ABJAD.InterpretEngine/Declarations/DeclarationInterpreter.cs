@@ -11,10 +11,10 @@ public class DeclarationInterpreter : Interpreter<Declaration>
     private readonly ScopeFacade scope;
     private readonly Evaluator<Expression> expressionEvaluator;
 
-    public DeclarationInterpreter(ScopeFacade scope)
+    public DeclarationInterpreter(ScopeFacade scope, TextWriter writer)
     {
         this.scope = scope;
-        expressionEvaluator = new ExpressionEvaluator(scope);
+        expressionEvaluator = new ExpressionEvaluator(scope, writer);
     }
 
     public void Interpret(Declaration target)

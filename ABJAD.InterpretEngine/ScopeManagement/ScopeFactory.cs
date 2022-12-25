@@ -1,0 +1,12 @@
+﻿namespace ABJAD.InterpretEngine.ScopeManagement;
+
+public class ScopeFactory
+{
+    public static Scope NewScope()
+    {
+        var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
+        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        return new Scope(referenceScope, functionScope, typeScope);
+    }
+}

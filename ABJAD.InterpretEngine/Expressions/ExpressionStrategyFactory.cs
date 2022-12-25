@@ -1,11 +1,13 @@
 ﻿using ABJAD.InterpretEngine.Expressions.Strategies;
 using ABJAD.InterpretEngine.ScopeManagement;
+using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Assignments;
 using ABJAD.InterpretEngine.Shared.Expressions.Binary;
 using ABJAD.InterpretEngine.Shared.Expressions.Fixes;
 using ABJAD.InterpretEngine.Shared.Expressions.Primitives;
 using ABJAD.InterpretEngine.Shared.Expressions.Unary;
+using ABJAD.InterpretEngine.Shared.Statements;
 
 namespace ABJAD.InterpretEngine.Expressions;
 
@@ -35,5 +37,13 @@ public class ExpressionStrategyFactory : IExpressionStrategyFactory
         Evaluator<Expression> expressionEvaluator)
     {
         return new UnaryExpressionEvaluationStrategy(expression, expressionEvaluator);
+    }
+
+    public ExpressionEvaluationStrategy GetInstantiationEvaluationStrategy(Instantiation instantiation, ScopeFacade globalScope,
+        ScopeFacade localScope, ExpressionEvaluator expressionEvaluator, Interpreter<Statement> statementInterpreter,
+        Interpreter<Declaration> declarationInterpreter)
+    {
+        return new InstantiationEvaluationStrategy(instantiation, globalScope, localScope, expressionEvaluator,
+            statementInterpreter, declarationInterpreter);
     }
 }
