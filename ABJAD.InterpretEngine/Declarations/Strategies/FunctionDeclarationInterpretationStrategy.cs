@@ -37,7 +37,7 @@ public class FunctionDeclarationInterpretationStrategy : DeclarationInterpretati
 
     private void ValidateNoMatchingFunctionDeclarationExistsInSameScope()
     {
-        if (scope.FunctionExistsInCurrentScope(functionDeclaration.Name, functionDeclaration.Parameters.Count))
+        if (scope.FunctionExistsInCurrentScope(functionDeclaration.Name, functionDeclaration.Parameters.Select(p => p.Type).ToArray()))
         {
             throw new MatchingFunctionAlreadyExistsException(functionDeclaration.Name,
                 functionDeclaration.Parameters.Count);

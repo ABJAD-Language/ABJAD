@@ -16,7 +16,7 @@ public class FunctionDeclarationInterpretationStrategyTest
     public void throws_error_if_a_matching_function_declaration_exists_in_the_same_scope()
     {
         var functionDeclaration = new FunctionDeclaration() { Name = "func", Parameters = new List<Parameter>() };
-        scope.FunctionExistsInCurrentScope("func", 0).Returns(true);
+        scope.FunctionExistsInCurrentScope("func").Returns(true);
         var strategy = new FunctionDeclarationInterpretationStrategy(functionDeclaration, scope);
         Assert.Throws<MatchingFunctionAlreadyExistsException>(() => strategy.Apply());
     }
