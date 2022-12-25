@@ -23,25 +23,17 @@ public class Environment : ScopeFacade
 
     public DataType GetReferenceType(string name)
     {
-        return scopes.FindLast(s => s.ReferenceScope.ReferenceExists(name)).ReferenceScope.GetType(name);
+        return scopes.Last(s => s.ReferenceScope.ReferenceExists(name)).ReferenceScope.GetType(name);
     }
 
     public object GetReference(string name)
     {
-        return scopes.FindLast(s => s.ReferenceScope.ReferenceExists(name)).ReferenceScope.Get(name);
+        return scopes.Last(s => s.ReferenceScope.ReferenceExists(name)).ReferenceScope.Get(name);
     }
 
-    public void SetReference(string name, object value) // TODO updating a value changes it everywhere
+    public void UpdateReference(string name, object value) 
     {
-        if (scopes.Last().ReferenceScope.ReferenceExists(name))
-        {
-            scopes.Last().ReferenceScope.Update(name, value);
-        }
-        else
-        {
-            var referenceType = scopes.FindLast(s => s.ReferenceScope.ReferenceExists(name)).ReferenceScope.GetType(name);
-            scopes.Last().ReferenceScope.DefineVariable(name, referenceType, value);
-        }
+        scopes.Last(scope => scope.ReferenceScope.ReferenceExists(name)).ReferenceScope.Update(name, value);
     }
 
     public void DefineVariable(string name, DataType type, object value)
@@ -56,7 +48,7 @@ public class Environment : ScopeFacade
 
     public bool IsReferenceConstant(string name)
     {
-        return scopes.FindLast(s => s.ReferenceScope.ReferenceExists(name)).ReferenceScope.IsConstant(name);
+        return scopes.Last(s => s.ReferenceScope.ReferenceExists(name)).ReferenceScope.IsConstant(name);
     }
 
     public bool FunctionExists(string name, int numberOfParameters)

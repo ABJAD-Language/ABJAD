@@ -8,7 +8,7 @@ public interface ScopeFacade
     bool ReferenceExistsInCurrentScope(string name);
     DataType GetReferenceType(string name);
     object GetReference(string name);
-    void SetReference(string name, object value);
+    void UpdateReference(string name, object value);
     void DefineVariable(string name, DataType type, object value);
     void DefineConstant(string name, DataType type, object value);
     bool IsReferenceConstant(string name);

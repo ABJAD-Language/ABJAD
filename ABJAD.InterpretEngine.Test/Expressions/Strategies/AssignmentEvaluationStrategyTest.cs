@@ -84,7 +84,7 @@ public class AssignmentEvaluationStrategyTest
         var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
-        scopeFacade.Received(1).SetReference("id", 5.0);
+        scopeFacade.Received(1).UpdateReference("id", 5.0);
             
         Assert.True(result.Type.IsNumber());
         Assert.Equal(5.0, result.Value);
@@ -105,7 +105,7 @@ public class AssignmentEvaluationStrategyTest
         var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
-        scopeFacade.Received(1).SetReference("id", 3.0);
+        scopeFacade.Received(1).UpdateReference("id", 3.0);
             
         Assert.True(result.Type.IsNumber());
         Assert.Equal(3.0, result.Value);
@@ -126,7 +126,7 @@ public class AssignmentEvaluationStrategyTest
         var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
-        scopeFacade.Received(1).SetReference("id", -8.0);
+        scopeFacade.Received(1).UpdateReference("id", -8.0);
             
         Assert.True(result.Type.IsNumber());
         Assert.Equal(-8.0, result.Value);
@@ -147,7 +147,7 @@ public class AssignmentEvaluationStrategyTest
         var strategy = new AssignmentEvaluationStrategy(assignmentExpression, scopeFacade, expressionEvaluator);
         var result = strategy.Apply();
 
-        scopeFacade.Received(1).SetReference("id", 4.5);
+        scopeFacade.Received(1).UpdateReference("id", 4.5);
             
         Assert.True(result.Type.IsNumber());
         Assert.Equal(4.5, result.Value);

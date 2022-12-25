@@ -34,28 +34,28 @@ public class FixesEvaluationStrategy : ExpressionEvaluationStrategy
     private EvaluatedResult HandleSubtractionPrefix()
     {
         var oldValue = (double)scopeFacade.GetReference(fixExpression.Target.Value);
-        scopeFacade.SetReference(fixExpression.Target.Value, oldValue - 1);
+        scopeFacade.UpdateReference(fixExpression.Target.Value, oldValue - 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue - 1 };
     }
 
     private EvaluatedResult HandleSubtractionPostfix()
     {
         var oldValue = (double)scopeFacade.GetReference(fixExpression.Target.Value);
-        scopeFacade.SetReference(fixExpression.Target.Value, oldValue - 1);
+        scopeFacade.UpdateReference(fixExpression.Target.Value, oldValue - 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue };
     }
 
     private EvaluatedResult HandleAdditionPrefix()
     {
         var oldValue = (double) scopeFacade.GetReference(fixExpression.Target.Value);
-        scopeFacade.SetReference(fixExpression.Target.Value, oldValue + 1);
+        scopeFacade.UpdateReference(fixExpression.Target.Value, oldValue + 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue + 1 };
     }
 
     private EvaluatedResult HandleAdditionPostfix()
     {
         var oldValue = (double) scopeFacade.GetReference(fixExpression.Target.Value);
-        scopeFacade.SetReference(fixExpression.Target.Value, oldValue + 1);
+        scopeFacade.UpdateReference(fixExpression.Target.Value, oldValue + 1);
         return new EvaluatedResult { Type = DataType.Number(), Value = oldValue };
     }
 

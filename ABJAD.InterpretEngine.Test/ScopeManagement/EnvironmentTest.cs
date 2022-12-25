@@ -103,7 +103,7 @@ public class EnvironmentTest
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Type = DataType.Number(), Value = 1 } }});
         var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
-        environment.SetReference("id", 5);
+        environment.UpdateReference("id", 5);
         Assert.True(environment.GetReferenceType("id").IsNumber());
         Assert.Equal(5, environment.GetReference("id"));
     }
@@ -115,7 +115,7 @@ public class EnvironmentTest
         var secondScope = new ReferenceScope(new Dictionary<string, StateElement>());
         var scopes = new List<Scope>() { new(firstScope, null, null), new(secondScope, null, null) };
         var environment = new Environment(scopes);
-        environment.SetReference("id", 5);
+        environment.UpdateReference("id", 5);
         Assert.True(environment.GetReferenceType("id").IsNumber());
         Assert.Equal(5, environment.GetReference("id"));
     }
@@ -216,7 +216,7 @@ public class EnvironmentTest
         var environment = new Environment(scopes);
         var cloneEnvironment = (Environment) environment.CloneScope();
 
-        cloneEnvironment.SetReference("id", 2);
+        cloneEnvironment.UpdateReference("id", 2);
         Assert.Equal(1, environment.GetReference("id"));
         Assert.Equal(2, cloneEnvironment.GetReference("id"));
     }
@@ -231,7 +231,7 @@ public class EnvironmentTest
         var environment = new Environment(scopes);
         var cloneEnvironment = (Environment) environment.CloneScope();
 
-        environment.SetReference("id", 2);
+        environment.UpdateReference("id", 2);
         Assert.Equal(2, environment.GetReference("id"));
         Assert.Equal(1, cloneEnvironment.GetReference("id"));
     }

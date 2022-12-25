@@ -66,7 +66,7 @@ public class FixesEvaluationStrategyTest
             var additionPostfix = new AdditionPostfix { Target = target };
             var strategy = new FixesEvaluationStrategy(additionPostfix, scopeFacade);
             strategy.Apply();
-            scopeFacade.Received(1).SetReference("id", 4.2);
+            scopeFacade.Received(1).UpdateReference("id", 4.2);
         }
 
         [Fact(DisplayName = "returns the old value of target")]
@@ -102,7 +102,7 @@ public class FixesEvaluationStrategyTest
             var additionPrefix = new AdditionPrefix { Target = target };
             var strategy = new FixesEvaluationStrategy(additionPrefix, scopeFacade);
             strategy.Apply();
-            scopeFacade.Received(1).SetReference("id", 11.0);
+            scopeFacade.Received(1).UpdateReference("id", 11.0);
         }
 
         [Fact(DisplayName = "return the incremented value")]
@@ -138,7 +138,7 @@ public class FixesEvaluationStrategyTest
             var subtractionPostfix = new SubtractionPostfix { Target = target };
             var strategy = new FixesEvaluationStrategy(subtractionPostfix, scopeFacade);
             strategy.Apply();
-            scopeFacade.Received(1).SetReference("id", 12.0);
+            scopeFacade.Received(1).UpdateReference("id", 12.0);
         }
 
         [Fact(DisplayName = "returns the old value of target")]
@@ -174,7 +174,7 @@ public class FixesEvaluationStrategyTest
             var subtractionPrefix = new SubtractionPrefix { Target = target };
             var strategy = new FixesEvaluationStrategy(subtractionPrefix, scopeFacade);
             strategy.Apply();
-            scopeFacade.Received(1).SetReference("id", 14.0);
+            scopeFacade.Received(1).UpdateReference("id", 14.0);
         }
 
         [Fact(DisplayName = "return the incremented value")]
