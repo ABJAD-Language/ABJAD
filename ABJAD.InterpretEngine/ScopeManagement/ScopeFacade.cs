@@ -13,10 +13,10 @@ public interface ScopeFacade
     void DefineConstant(string name, DataType type, object value);
     bool IsReferenceConstant(string name);
     
-    bool FunctionExists(string name, int numberOfParameters);
-    bool FunctionExistsInCurrentScope(string name, int numberOfParameters);
-    DataType? GetFunctionReturnType(string name, int numberOfParameters);
-    FunctionElement GetFunction(string name, int numberOfParameters);
+    bool FunctionExists(string name, params DataType[] parametersTypes);
+    bool FunctionExistsInCurrentScope(string name, params DataType[] parametersTypes);
+    DataType? GetFunctionReturnType(string name, params DataType[] parametersTypes);
+    FunctionElement GetFunction(string name, params DataType[] parametersTypes);
     void DefineFunction(string name, FunctionElement function);
     
     bool TypeExists(string name);

@@ -51,28 +51,28 @@ public class Environment : ScopeFacade
         return scopes.Last(s => s.ReferenceScope.ReferenceExists(name)).ReferenceScope.IsConstant(name);
     }
 
-    public bool FunctionExists(string name, int numberOfParameters)
+    public bool FunctionExists(string name, params DataType[] parametersTypes)
     {
-        return scopes.Any(s => s.FunctionScope.FunctionExists(name, numberOfParameters));
+        return scopes.Any(s => s.FunctionScope.FunctionExists(name, parametersTypes));
     }
 
-    public bool FunctionExistsInCurrentScope(string name, int numberOfParameters)
+    public bool FunctionExistsInCurrentScope(string name, params DataType[] parametersTypes)
     {
-        return scopes.Last().FunctionScope.FunctionExists(name, numberOfParameters);
+        return scopes.Last().FunctionScope.FunctionExists(name, parametersTypes);
     }
 
-    public DataType? GetFunctionReturnType(string name, int numberOfParameters)
+    public DataType? GetFunctionReturnType(string name, params DataType[] parametersTypes)
     {
         return scopes
-            .Last(s => s.FunctionScope.FunctionExists(name, numberOfParameters)).FunctionScope
-            .GetFunctionReturnType(name, numberOfParameters);
+            .Last(s => s.FunctionScope.FunctionExists(name, parametersTypes)).FunctionScope
+            .GetFunctionReturnType(name, parametersTypes);
     }
 
-    public FunctionElement GetFunction(string name, int numberOfParameters)
+    public FunctionElement GetFunction(string name, params DataType[] parametersTypes)
     {
         return scopes
-            .Last(s => s.FunctionScope.FunctionExists(name, numberOfParameters)).FunctionScope
-            .GetFunction(name, numberOfParameters);
+            .Last(s => s.FunctionScope.FunctionExists(name, parametersTypes)).FunctionScope
+            .GetFunction(name, parametersTypes);
     }
 
     public void DefineFunction(string name, FunctionElement function)
@@ -118,7 +118,7 @@ public class Environment : ScopeFacade
     public void AddNewScope()
     {
         var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         scopes.Add(new Scope(referenceScope, functionScope, typeScope));
     }

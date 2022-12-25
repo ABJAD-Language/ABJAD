@@ -137,7 +137,7 @@ public class EnvironmentTest
     public void adding_a_new_variable_to_a_cloned_environment_does_not_add_it_to_the_original_one()
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
@@ -152,7 +152,7 @@ public class EnvironmentTest
     public void defining_a_new_variable_in_an_environment_does_not_add_it_to_its_clone()
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
@@ -180,7 +180,7 @@ public class EnvironmentTest
     public void adding_a_new_constant_to_a_cloned_environment_does_not_add_it_to_the_original_one()
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
@@ -195,7 +195,7 @@ public class EnvironmentTest
     public void defining_a_new_constant_in_an_environment_does_not_add_it_to_its_clone()
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
@@ -210,7 +210,7 @@ public class EnvironmentTest
     public void modifying_the_value_of_a_reference_in_a_cloned_environment_does_not_modify_it_in_the_original_one()
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
@@ -225,7 +225,7 @@ public class EnvironmentTest
     public void modifying_the_value_of_a_reference_in_an_environment_does_not_modify_it_in_its_clone()
     {
         var scope = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement() { Value = 1 } }});
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         var scopes = new List<Scope>() { new(scope, functionScope, typeScope) };
         var environment = new Environment(scopes);
@@ -241,7 +241,8 @@ public class EnvironmentTest
     {
         var firstFunctionScope = Substitute.For<IFunctionScope>();
         var secondFunctionScope = Substitute.For<IFunctionScope>();
-        firstFunctionScope.FunctionExists("func", 0).Returns(true);
+        var parametersType = Substitute.For<DataType>();
+        firstFunctionScope.FunctionExists("func", parametersType).Returns(true);
 
         var scopes = new List<Scope>()
         {
@@ -249,7 +250,7 @@ public class EnvironmentTest
             new(null, secondFunctionScope, null)
         };
         var environment = new Environment(scopes);
-        var functionExists = environment.FunctionExists("func", 0);
+        var functionExists = environment.FunctionExists("func", parametersType);
         Assert.True(functionExists);
     }
 
@@ -258,7 +259,8 @@ public class EnvironmentTest
     {
         var firstFunctionScope = Substitute.For<IFunctionScope>();
         var secondFunctionScope = Substitute.For<IFunctionScope>();
-        firstFunctionScope.FunctionExists("func", 0).Returns(true);
+        var parametersType = Substitute.For<DataType>();
+        firstFunctionScope.FunctionExists("func", parametersType).Returns(true);
         
         var scopes = new List<Scope>()
         {
@@ -266,9 +268,9 @@ public class EnvironmentTest
             new(null, secondFunctionScope, null)
         };
         var environment = new Environment(scopes);
-        var functionExists = environment.FunctionExistsInCurrentScope("func", 0);
-        firstFunctionScope.DidNotReceive().FunctionExists("func", 0);
-        secondFunctionScope.Received(1).FunctionExists("func", 0);
+        var functionExists = environment.FunctionExistsInCurrentScope("func", parametersType);
+        firstFunctionScope.DidNotReceive().FunctionExists("func", parametersType);
+        secondFunctionScope.Received(1).FunctionExists("func", parametersType);
         Assert.False(functionExists);
     }
 
@@ -278,11 +280,12 @@ public class EnvironmentTest
         var firstFunctionScope = Substitute.For<IFunctionScope>();
         var secondFunctionScope = Substitute.For<IFunctionScope>();
 
-        secondFunctionScope.FunctionExists("func", 0).Returns(false);
-        firstFunctionScope.FunctionExists("func", 0).Returns(true);
-        
+        var parametersType = Substitute.For<DataType>();
+        firstFunctionScope.FunctionExists("func", parametersType).Returns(true);
+        secondFunctionScope.FunctionExists("func", parametersType).Returns(true);
+
         var functionReturnType = Substitute.For<DataType>();
-        firstFunctionScope.GetFunctionReturnType("func", 0).Returns(functionReturnType);
+        secondFunctionScope.GetFunctionReturnType("func", parametersType).Returns(functionReturnType);
         
         var scopes = new List<Scope>()
         {
@@ -290,7 +293,7 @@ public class EnvironmentTest
             new(null, secondFunctionScope, null)
         };
         var environment = new Environment(scopes);
-        var returnType = environment.GetFunctionReturnType("func", 0);
+        var returnType = environment.GetFunctionReturnType("func", parametersType);
         
         Assert.Equal(functionReturnType, returnType);
     }
@@ -301,10 +304,11 @@ public class EnvironmentTest
         var firstFunctionScope = Substitute.For<IFunctionScope>();
         var secondFunctionScope = Substitute.For<IFunctionScope>();
 
-        secondFunctionScope.FunctionExists("func", 0).Returns(true);
+        var parametersType = Substitute.For<DataType>();
+        secondFunctionScope.FunctionExists("func", parametersType).Returns(true);
         
         var function = new FunctionElement();
-        secondFunctionScope.GetFunction("func", 0).Returns(function);
+        secondFunctionScope.GetFunction("func", parametersType).Returns(function);
         
         var scopes = new List<Scope>()
         {
@@ -312,7 +316,7 @@ public class EnvironmentTest
             new(null, secondFunctionScope, null)
         };
         var environment = new Environment(scopes);
-        Assert.Equal(function, environment.GetFunction("func", 0));
+        Assert.Equal(function, environment.GetFunction("func", parametersType));
     }
 
     [Fact(DisplayName = "defining a new function adds it to the last scope")]
@@ -321,8 +325,8 @@ public class EnvironmentTest
         var firstFunctionScope = Substitute.For<IFunctionScope>();
         var secondFunctionScope = Substitute.For<IFunctionScope>();
 
-        secondFunctionScope.FunctionExists("func", 0).Returns(false);
-        firstFunctionScope.FunctionExists("func", 0).Returns(true);
+        secondFunctionScope.FunctionExists("func").Returns(false);
+        firstFunctionScope.FunctionExists("func").Returns(true);
 
         var scopes = new List<Scope>()
         {
@@ -338,18 +342,19 @@ public class EnvironmentTest
     [Fact(DisplayName = "adding functions to a cloned environment does not add it to the original one")]
     public void adding_functions_to_a_cloned_environment_does_not_add_it_to_the_original_one()
     {
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         var scope = new Scope(referenceScope, functionScope, typeScope);
         var environment = new Environment(new List<Scope>() { scope });
         var clonedEnvironment = environment.CloneScope();
-        
-        environment.DefineFunction("func", new FunctionElement() { Parameters = new List<FunctionParameter> { new() }});
-        Assert.False(clonedEnvironment.FunctionExists("func", 1));
+
+        var parameterType = Substitute.For<DataType>();
+        environment.DefineFunction("func", new FunctionElement() { Parameters = new List<FunctionParameter> { new() { Type = parameterType} }});
+        Assert.False(clonedEnvironment.FunctionExists("func", parameterType));
         
         clonedEnvironment.DefineFunction("func1", new FunctionElement() { Parameters = new List<FunctionParameter>()});
-        Assert.False(environment.FunctionExists("func", 0));
+        Assert.False(environment.FunctionExists("func"));
     }
 
     [Fact(DisplayName = "checking if type exists delegates to the type scope")]
@@ -453,7 +458,7 @@ public class EnvironmentTest
     public void adding_a_new_type_to_a_cloned_environment_does_not_affect_the_old_one()
     {
         var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         var scopes = new List<Scope> { new(referenceScope, functionScope, typeScope) };
         var environment = new Environment(scopes);
@@ -470,7 +475,7 @@ public class EnvironmentTest
     [Fact(DisplayName = "adding a new scope allows us to define existing references and functions")]
     public void adding_a_new_scope_allows_us_to_define_existing_references_and_functions()
     {
-        var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
         var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         var scope = new Scope(referenceScope, functionScope, typeScope);
@@ -482,7 +487,7 @@ public class EnvironmentTest
         environment.AddNewScope();
         
         Assert.False(environment.ReferenceExistsInCurrentScope("id"));
-        Assert.False(environment.FunctionExistsInCurrentScope("func", 0));
+        Assert.False(environment.FunctionExistsInCurrentScope("func"));
     }
 
     [Fact(DisplayName = "aggregating an existing scope add it on top")]
