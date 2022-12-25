@@ -28,7 +28,7 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
         ValidateValueTypeMatchesTargetType(evaluatedResult);
         ValidateValueIsNotUndefined(evaluatedResult);
 
-        scopeFacade.SetReference(assignment.Target, evaluatedResult.Value);
+        scopeFacade.UpdateReference(assignment.Target, evaluatedResult.Value);
     }
 
     private static void ValidateValueIsNotUndefined(EvaluatedResult evaluatedResult)

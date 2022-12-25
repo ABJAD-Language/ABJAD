@@ -69,6 +69,6 @@ public class AssignmentInterpretationStrategyTest
         var assignment = new Assignment { Target = "id", Value = valueExpression };
         var strategy = new AssignmentInterpretationStrategy(assignment, scopeFacade, expressionEvaluator);
         strategy.Apply();
-        scopeFacade.Received(1).SetReference("id", newValue);
+        scopeFacade.Received(1).UpdateReference("id", newValue);
     }
 }

@@ -46,7 +46,7 @@ public class AssignmentEvaluationStrategy : ExpressionEvaluationStrategy
     private EvaluatedResult ApplyOperationAndStoreNewValue(double oldValue, EvaluatedResult offset)
     {
         var newValue = EvaluateNewValue(oldValue, offset);
-        scopeFacade.SetReference(assignmentExpression.Target, newValue);
+        scopeFacade.UpdateReference(assignmentExpression.Target, newValue);
         return new EvaluatedResult { Type = DataType.Number(), Value = newValue };
     }
 
