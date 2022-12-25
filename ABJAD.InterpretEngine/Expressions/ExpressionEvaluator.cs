@@ -1,4 +1,5 @@
 ﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Expressions.Strategies;
 using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Assignments;
@@ -35,14 +36,57 @@ public class ExpressionEvaluator : Evaluator<Expression>
     {
         return target switch
         {
-            AssignmentExpression expression => expressionStrategyFactory.GetAssignmentEvaluationStrategy(expression, this, scopeFacade).Apply(),
-            BinaryExpression expression => expressionStrategyFactory.GetBinaryExpressionEvaluationStrategy(expression, this).Apply(),
-            FixExpression expression => expressionStrategyFactory.GetFixesEvaluationStrategy(expression, scopeFacade).Apply(),
-            UnaryExpression expression => expressionStrategyFactory.GetUnaryExpressionEvaluationStrategy(expression, this).Apply(),
-            Primitive primitive => expressionStrategyFactory.GetPrimitiveEvaluationStrategy(primitive, scopeFacade).Apply(),
+            AssignmentExpression expression => HandleAssignment(expression),
+            BinaryExpression expression => HandleBinary(expression),
+            FixExpression expression => HandleFix(expression),
+            UnaryExpression expression => HandleUnary(expression),
+            Primitive primitive => HandlePrimitive(primitive),
             Instantiation instantiation => HandleInstantiation(instantiation),
+            MethodCall methodCall => HandleMethodCall(methodCall),
             _ => throw new ArgumentException()
         };
+    }
+
+    private EvaluatedResult HandleAssignment(AssignmentExpression expression)
+    {
+        return expressionStrategyFactory.GetAssignmentEvaluationStrategy(expression, this, scopeFacade).Apply();
+    }
+
+    private EvaluatedResult HandleBinary(BinaryExpression expression)
+    {
+        return expressionStrategyFactory.GetBinaryExpressionEvaluationStrategy(expression, this).Apply();
+    }
+
+    private EvaluatedResult HandleFix(FixExpression expression)
+    {
+        return expressionStrategyFactory.GetFixesEvaluationStrategy(expression, scopeFacade).Apply();
+    }
+
+    private EvaluatedResult HandleUnary(UnaryExpression expression)
+    {
+        return expressionStrategyFactory.GetUnaryExpressionEvaluationStrategy(expression, this).Apply();
+    }
+
+    private EvaluatedResult HandlePrimitive(Primitive primitive)
+    {
+        return expressionStrategyFactory.GetPrimitiveEvaluationStrategy(primitive, scopeFacade).Apply();
+    }
+
+    private EvaluatedResult HandleMethodCall(MethodCall methodCall)
+    {
+        var strategy = new MethodCallEvaluationStrategy(methodCall, scopeFacade, this,
+            GetStatementInterpreter(scopeFacade), GetDeclarationInterpreter(scopeFacade));
+        return strategy.Apply();
+    }
+
+    private DeclarationInterpreter GetDeclarationInterpreter(ScopeFacade scope)
+    {
+        return new DeclarationInterpreter(scope, writer);
+    }
+
+    private StatementInterpreter GetStatementInterpreter(ScopeFacade scope)
+    {
+        return new StatementInterpreter(scope, writer);
     }
 
     private EvaluatedResult HandleInstantiation(Instantiation instantiation)
@@ -50,8 +94,8 @@ public class ExpressionEvaluator : Evaluator<Expression>
         var localScope = new Environment(new List<Scope>() { ScopeFactory.NewScope() });
         var globalScopeClone = scopeFacade.CloneScope();
         globalScopeClone.AddScope(localScope);
-        var newStatementInterpreter = new StatementInterpreter(globalScopeClone, writer);
-        var newDeclarationInterpreter = new DeclarationInterpreter(localScope, writer);
+        var newStatementInterpreter = GetStatementInterpreter(globalScopeClone);
+        var newDeclarationInterpreter = GetDeclarationInterpreter(localScope);
         var strategy = expressionStrategyFactory.GetInstantiationEvaluationStrategy(instantiation, globalScopeClone, localScope, this, newStatementInterpreter, newDeclarationInterpreter);
         return strategy.Apply();
     }
