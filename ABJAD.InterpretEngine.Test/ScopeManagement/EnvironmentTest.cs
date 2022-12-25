@@ -401,6 +401,23 @@ public class EnvironmentTest
         Assert.Equal(classElement, actualClassElement);
     }
 
+    [Fact(DisplayName = "getting a type constructor delegates to the type scope")]
+    public void getting_a_type_constructor_delegates_to_the_type_scope()
+    {
+        var typeScope = Substitute.For<ITypeScope>();
+        var scopes = new List<Scope> { new(Substitute.For<IReferenceScope>(), Substitute.For<IFunctionScope>(), typeScope) };
+        var environment = new Environment(scopes);
+
+        var parameterType = Substitute.For<DataType>();
+        var constructorElement = new ConstructorElement();
+        typeScope.TypeExists("type").Returns(true);
+        typeScope.GetConstructor("type", parameterType).Returns(constructorElement);
+
+        var actualConstructorElement = environment.GetTypeConstructor("type", parameterType);
+        typeScope.Received(1).GetConstructor("type", parameterType);
+        Assert.Equal(constructorElement, actualConstructorElement);
+    }
+
     [Fact(DisplayName = "defining a new type delegates to the current scope")]
     public void defining_a_new_type_delegates_to_the_current_scope()
     {
@@ -466,5 +483,47 @@ public class EnvironmentTest
         
         Assert.False(environment.ReferenceExistsInCurrentScope("id"));
         Assert.False(environment.FunctionExistsInCurrentScope("func", 0));
+    }
+
+    [Fact(DisplayName = "aggregating an existing scope add it on top")]
+    public void aggregating_an_existing_scope_add_it_on_top()
+    {
+        var typeScope = Substitute.For<ITypeScope>();
+        var referenceScope = Substitute.For<IReferenceScope>();
+        var functionScope = Substitute.For<IFunctionScope>();
+        var scopes = new List<Scope>() { new Scope(referenceScope, functionScope, typeScope) };
+        var environment = new Environment(scopes);
+        
+        var typeScope2 = Substitute.For<ITypeScope>();
+        var referenceScope2 = Substitute.For<IReferenceScope>();
+        var functionScope2 = Substitute.For<IFunctionScope>();
+        var scopes2 = new List<Scope>() { new Scope(referenceScope2, functionScope2, typeScope2) };
+        var environment2 = new Environment(scopes2);
+        
+        environment.AddScope(environment2);
+
+        referenceScope2.ReferenceExists("id").Returns(true);
+        referenceScope.ReferenceExists("id").Returns(false);
+
+        var existsInCurrentScope = environment.ReferenceExistsInCurrentScope("id");
+        referenceScope2.Received(1).ReferenceExists("id");
+        referenceScope.DidNotReceive().ReferenceExists("id");
+        Assert.True(existsInCurrentScope);
+    }
+
+    [Fact(DisplayName = "getting the scopes return the list of defined scopes in the environment")]
+    public void getting_the_scopes_return_the_list_of_defined_scopes_in_the_environment()
+    {
+        var scopes = new List<Scope>()
+        {
+            new Scope(
+                Substitute.For<IReferenceScope>(),
+                Substitute.For<IFunctionScope>(),
+                Substitute.For<ITypeScope>()
+            )
+        };
+        var environment = new Environment(scopes);
+        
+        Assert.Equal(scopes, environment.GetScopes());
     }
 }

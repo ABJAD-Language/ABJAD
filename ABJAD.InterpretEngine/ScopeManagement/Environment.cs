@@ -31,7 +31,7 @@ public class Environment : ScopeFacade
         return scopes.FindLast(s => s.ReferenceScope.ReferenceExists(name)).ReferenceScope.Get(name);
     }
 
-    public void SetReference(string name, object value)
+    public void SetReference(string name, object value) // TODO updating a value changes it everywhere
     {
         if (scopes.Last().ReferenceScope.ReferenceExists(name))
         {
@@ -103,6 +103,11 @@ public class Environment : ScopeFacade
         return scopes.Single(s => s.TypeScope.TypeExists(name)).TypeScope.Get(name);
     }
 
+    public ConstructorElement GetTypeConstructor(string name, params DataType[] parameterTypes)
+    {
+        return scopes.Single(s => s.TypeScope.TypeExists(name)).TypeScope.GetConstructor(name, parameterTypes);
+    }
+
     public void DefineType(string name, ClassElement @class)
     {
         scopes.Last().TypeScope.Define(name, @class);
@@ -124,5 +129,15 @@ public class Environment : ScopeFacade
         var functionScope = new FunctionScope(new Dictionary<(string, int), FunctionElement>());
         var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
         scopes.Add(new Scope(referenceScope, functionScope, typeScope));
+    }
+
+    public void AddScope(ScopeFacade scopeFacade)
+    {
+        scopes.AddRange(scopeFacade.GetScopes());
+    }
+
+    public List<Scope> GetScopes()
+    {
+        return scopes;
     }
 }

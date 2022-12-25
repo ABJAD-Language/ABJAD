@@ -34,6 +34,12 @@ public class TypeScope : ITypeScope
         return state[name];
     }
 
+    public ConstructorElement GetConstructor(string className, params DataType[] parameterTypes)
+    {
+        return state[className].Constructors
+            .Single(c => TypesMatch(c.Parameters.Select(p => p.Type).ToList(), parameterTypes.ToList()));
+    }
+
     public void DefineConstructor(string className, ConstructorElement constructor)
     {
         state[className].Constructors.Add(constructor);

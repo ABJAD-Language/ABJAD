@@ -18,8 +18,8 @@ public class StatementInterpreter : Interpreter<Statement>
     {
         this.scope = scope;
         this.writer = writer;
-        expressionEvaluator = new ExpressionEvaluator(scope);
-        declarationInterpreter = new DeclarationInterpreter(scope);
+        expressionEvaluator = new ExpressionEvaluator(scope, writer);
+        declarationInterpreter = new DeclarationInterpreter(scope, writer);
     }
 
     public void Interpret(Statement target)
@@ -46,7 +46,7 @@ public class StatementInterpreter : Interpreter<Statement>
         var cloneScope = scope.CloneScope();
         cloneScope.AddNewScope();
         var statementInterpreter = new StatementInterpreter(cloneScope, writer);
-        var declarationInterpreter = new DeclarationInterpreter(cloneScope);
+        var declarationInterpreter = new DeclarationInterpreter(cloneScope, writer);
         return new BlockInterpretationStrategy(block, statementInterpreter, declarationInterpreter);
     }
 }
