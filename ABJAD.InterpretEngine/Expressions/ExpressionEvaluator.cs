@@ -27,7 +27,7 @@ public class ExpressionEvaluator : Evaluator<Expression>
     public ExpressionEvaluator(ScopeFacade scopeFacade, TextWriter writer)
     {
         this.scopeFacade = scopeFacade;
-        this.expressionStrategyFactory = new ExpressionStrategyFactory();
+        expressionStrategyFactory = new ExpressionStrategyFactory();
         this.writer = writer;
     }
 
@@ -105,11 +105,12 @@ public class ExpressionEvaluator : Evaluator<Expression>
     private EvaluatedResult HandleInstantiation(Instantiation instantiation)
     {
         var localScope = new Environment(new List<Scope>() { ScopeFactory.NewScope() });
-        var globalScopeClone = scopeFacade.CloneScope();
-        globalScopeClone.AddScope(localScope);
-        var newStatementInterpreter = GetStatementInterpreter(globalScopeClone);
+        scopeFacade.AddScope(localScope);
+        var newStatementInterpreter = GetStatementInterpreter(scopeFacade);
         var newDeclarationInterpreter = GetDeclarationInterpreter(localScope);
-        var strategy = expressionStrategyFactory.GetInstantiationEvaluationStrategy(instantiation, globalScopeClone, localScope, this, newStatementInterpreter, newDeclarationInterpreter);
-        return strategy.Apply();
+        var strategy = expressionStrategyFactory.GetInstantiationEvaluationStrategy(instantiation, scopeFacade, localScope, this, newStatementInterpreter, newDeclarationInterpreter);
+        var result = strategy.Apply();
+        scopeFacade.RemoveLastScope();
+        return result;
     }
 }

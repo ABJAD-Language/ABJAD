@@ -152,7 +152,6 @@ public class ExpressionEvaluatorIntegrationTest
     public void evaluate_instantiation_expression()
     {
         var environment = new Environment(new List<Scope>() { ScopeFactory.NewScope() });
-        environment.DefineVariable("id", DataType.Number(), 3.0);
         var expressionEvaluator = new ExpressionEvaluator(environment, new StringWriter());
 
         var classElement = new ClassElement()

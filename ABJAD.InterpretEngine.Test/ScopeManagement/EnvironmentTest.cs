@@ -490,30 +490,61 @@ public class EnvironmentTest
         Assert.False(environment.FunctionExistsInCurrentScope("func"));
     }
 
-    [Fact(DisplayName = "aggregating an existing scope add it on top")]
-    public void aggregating_an_existing_scope_add_it_on_top()
+    [Fact(DisplayName = "removing the last scope removes all the declarations defined at it")]
+    public void removing_the_last_scope_removes_all_the_declarations_defined_at_it()
     {
-        var typeScope = Substitute.For<ITypeScope>();
-        var referenceScope = Substitute.For<IReferenceScope>();
-        var functionScope = Substitute.For<IFunctionScope>();
-        var scopes = new List<Scope>() { new Scope(referenceScope, functionScope, typeScope) };
-        var environment = new Environment(scopes);
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
+        var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scope = new Scope(referenceScope, functionScope, typeScope);
+        var environment = new Environment(new List<Scope>() { scope });
         
-        var typeScope2 = Substitute.For<ITypeScope>();
-        var referenceScope2 = Substitute.For<IReferenceScope>();
-        var functionScope2 = Substitute.For<IFunctionScope>();
-        var scopes2 = new List<Scope>() { new Scope(referenceScope2, functionScope2, typeScope2) };
+        environment.AddNewScope();
+        
+        environment.DefineFunction("func", new FunctionElement() { Parameters = new List<FunctionParameter>()});
+        environment.DefineVariable("id", DataType.Number(), 10);
+        
+        environment.RemoveLastScope();
+        
+        Assert.False(environment.ReferenceExistsInCurrentScope("id"));
+        Assert.False(environment.FunctionExistsInCurrentScope("func"));
+    }
+
+    [Fact(DisplayName = "when calling on remove scope and only one scope exists it is replaced with an empty one")]
+    public void when_calling_on_remove_scope_and_only_one_scope_exists_it_is_replaced_with_an_empty_one()
+    {
+        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
+        var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
+        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
+        var scope = new Scope(referenceScope, functionScope, typeScope);
+        var environment = new Environment(new List<Scope>() { scope });
+        
+        environment.DefineFunction("func", new FunctionElement() { Parameters = new List<FunctionParameter>()});
+        environment.DefineVariable("id", DataType.Number(), 10);
+        
+        environment.RemoveLastScope();
+        
+        Assert.False(environment.ReferenceExistsInCurrentScope("id"));
+        Assert.False(environment.FunctionExistsInCurrentScope("func"));
+    }
+
+    [Fact(DisplayName = "aggregating an existing scope squash it on top")]
+    public void aggregating_an_existing_scope_squash_it_on_top()
+    {
+        var scopes = new List<Scope>() { ScopeFactory.NewScope() };
+        var environment = new Environment(scopes);
+
+        var innerScope1 = ScopeFactory.NewScope();
+        var innerScope2 = ScopeFactory.NewScope();
+        innerScope1.ReferenceScope.DefineVariable("id", DataType.String(), "hello");
+        innerScope2.FunctionScope.DefineFunction("func", new FunctionElement() { Parameters = new List<FunctionParameter>()});
+        var scopes2 = new List<Scope>() { innerScope1, innerScope2 };
         var environment2 = new Environment(scopes2);
         
         environment.AddScope(environment2);
-
-        referenceScope2.ReferenceExists("id").Returns(true);
-        referenceScope.ReferenceExists("id").Returns(false);
-
-        var existsInCurrentScope = environment.ReferenceExistsInCurrentScope("id");
-        referenceScope2.Received(1).ReferenceExists("id");
-        referenceScope.DidNotReceive().ReferenceExists("id");
-        Assert.True(existsInCurrentScope);
+        
+        Assert.True(environment.ReferenceExistsInCurrentScope("id"));
+        Assert.True(environment.FunctionExistsInCurrentScope("func"));
     }
 
     [Fact(DisplayName = "getting the scopes return the list of defined scopes in the environment")]

@@ -130,4 +130,17 @@ public class TypeScopeTest
         clonedScope.Define("type2", new ClassElement());
         Assert.False(typeScope.TypeExists("type2"));
     }
+
+    [Fact(DisplayName = "aggregating two scopes squashes the second on top of the first")]
+    public void aggregating_two_scopes_squashes_the_second_on_top_of_the_first()
+    {
+        var typeScope1 = new TypeScope(new Dictionary<string, ClassElement>());
+        typeScope1.Define("type1", new ClassElement());
+        var typeScope2 = new TypeScope(new Dictionary<string, ClassElement>());
+        typeScope2.Define("type2", new ClassElement());
+
+        var typeScope = typeScope1.Aggregate(typeScope2);
+        Assert.True(typeScope.TypeExists("type1"));
+        Assert.True(typeScope.TypeExists("type2"));
+    }
 }

@@ -86,23 +86,21 @@ public class InstanceFieldMethodCallEvaluationStrategyTest
         var instance = new InstanceElement() { Scope = instanceScope} ;
         scope.GetReference("instance").Returns(instance);
 
-        var clonedScope = Substitute.For<ScopeFacade>();
-        scope.CloneScope().Returns(clonedScope);
-
         var localExpressionEvaluator = Substitute.For<Evaluator<Expression>>();
-        expressionEvaluatorFactory.NewExpressionEvaluator(clonedScope, writer).Returns(localExpressionEvaluator);
+        expressionEvaluatorFactory.NewExpressionEvaluator(scope, writer).Returns(localExpressionEvaluator);
 
         var strategy = new InstanceFieldMethodCallEvaluationStrategy(instanceMethodCall, scope, expressionEvaluator, expressionEvaluatorFactory, writer);
         strategy.Apply();
         
         Received.InOrder(() =>
         {
-            clonedScope.AddScope(instanceScope);
+            scope.AddScope(instanceScope);
             localExpressionEvaluator.Evaluate(Arg.Is<MethodCall>(call =>
                 call.MethodName == "method" && 
                 call.Arguments.Count == 2 && 
                 call.Arguments[0] == arg1 &&
                 call.Arguments[1] == arg2));
+            scope.RemoveLastScope();
         });
     }
 
@@ -122,11 +120,8 @@ public class InstanceFieldMethodCallEvaluationStrategyTest
         var instance = new InstanceElement() { Scope = instanceScope} ;
         scope.GetReference("instance").Returns(instance);
 
-        var clonedScope = Substitute.For<ScopeFacade>();
-        scope.CloneScope().Returns(clonedScope);
-
         var localExpressionEvaluator = Substitute.For<Evaluator<Expression>>();
-        expressionEvaluatorFactory.NewExpressionEvaluator(clonedScope, writer).Returns(localExpressionEvaluator);
+        expressionEvaluatorFactory.NewExpressionEvaluator(scope, writer).Returns(localExpressionEvaluator);
 
         var evaluatedResult = new EvaluatedResult();
         localExpressionEvaluator.Evaluate(Arg.Any<MethodCall>()).Returns(evaluatedResult);

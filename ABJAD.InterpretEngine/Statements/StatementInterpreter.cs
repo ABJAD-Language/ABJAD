@@ -24,7 +24,9 @@ public class StatementInterpreter : Interpreter<Statement>
 
     public void Interpret(Statement target)
     {
+        scope.AddNewScope();
         GetStrategy(target).Apply();
+        scope.RemoveLastScope();
     }
 
     private StatementInterpretationStrategy GetStrategy(Statement target)
@@ -43,10 +45,8 @@ public class StatementInterpreter : Interpreter<Statement>
 
     private StatementInterpretationStrategy HandleBlock(Block block)
     {
-        var cloneScope = scope.CloneScope();
-        cloneScope.AddNewScope();
-        var statementInterpreter = new StatementInterpreter(cloneScope, writer);
-        var declarationInterpreter = new DeclarationInterpreter(cloneScope, writer);
+        var statementInterpreter = new StatementInterpreter(scope, writer);
+        var declarationInterpreter = new DeclarationInterpreter(scope, writer);
         return new BlockInterpretationStrategy(block, statementInterpreter, declarationInterpreter);
     }
 }

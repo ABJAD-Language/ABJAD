@@ -39,9 +39,12 @@ public class InstanceFieldMethodCallEvaluationStrategy : ExpressionEvaluationStr
             throw new NotInstanceReferenceException(instanceMethodCall.Instances.Last());
         }
 
-        var localExpressionEvaluator = BuildNewExpressionEvaluator(instanceElement);
+        scope.AddScope(instanceElement.Scope);
+        var localExpressionEvaluator = expressionEvaluatorFactory.NewExpressionEvaluator(scope, writer);
 
-        return EvaluateMethodCall(localExpressionEvaluator);
+        var result = EvaluateMethodCall(localExpressionEvaluator);
+        scope.RemoveLastScope();
+        return result;
     }
 
     private EvaluatedResult EvaluateMethodCall(Evaluator<Expression> localExpressionEvaluator)
@@ -52,15 +55,6 @@ public class InstanceFieldMethodCallEvaluationStrategy : ExpressionEvaluationStr
             Arguments = instanceMethodCall.Arguments
         };
         return localExpressionEvaluator.Evaluate(methodCall);
-    }
-
-    private Evaluator<Expression> BuildNewExpressionEvaluator(InstanceElement instanceElement)
-    {
-        var clonedScope = scope.CloneScope();
-        clonedScope.AddScope(instanceElement.Scope);
-
-        var localExpressionEvaluator = expressionEvaluatorFactory.NewExpressionEvaluator(clonedScope, writer);
-        return localExpressionEvaluator;
     }
 
     private object RetrieveInstance()
