@@ -43,8 +43,15 @@ public class ExpressionEvaluator : Evaluator<Expression>
             Primitive primitive => HandlePrimitive(primitive),
             Instantiation instantiation => HandleInstantiation(instantiation),
             MethodCall methodCall => HandleMethodCall(methodCall),
+            InstanceMethodCall instanceMethodCall => HandleInstanceMethodCall(instanceMethodCall),
             _ => throw new ArgumentException()
         };
+    }
+
+    private EvaluatedResult HandleInstanceMethodCall(InstanceMethodCall instanceMethodCall)
+    {
+        var strategy = new InstanceFieldMethodCallEvaluationStrategy(instanceMethodCall, scopeFacade, this, writer);
+        return strategy.Apply();
     }
 
     private EvaluatedResult HandleAssignment(AssignmentExpression expression)
