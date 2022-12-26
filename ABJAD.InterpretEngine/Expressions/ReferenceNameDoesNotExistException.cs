@@ -13,6 +13,6 @@ public class ReferenceNameDoesNotExistException : InterpretationException
 
     private static string FormulateEnglishMessage(string name)
     {
-        return $"Value for identifier ${name} was not found.";
+        return $"Value for identifier {name} was not found.";
     }
 }
