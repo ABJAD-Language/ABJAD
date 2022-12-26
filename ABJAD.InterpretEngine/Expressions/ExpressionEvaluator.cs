@@ -1,5 +1,4 @@
 ﻿using ABJAD.InterpretEngine.Declarations;
-using ABJAD.InterpretEngine.Expressions.Strategies;
 using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Assignments;
@@ -43,14 +42,21 @@ public class ExpressionEvaluator : Evaluator<Expression>
             Primitive primitive => HandlePrimitive(primitive),
             Instantiation instantiation => HandleInstantiation(instantiation),
             MethodCall methodCall => HandleMethodCall(methodCall),
+            InstanceFieldAccess instanceFieldAccess => HandleInstanceFieldAccess(instanceFieldAccess),
             InstanceMethodCall instanceMethodCall => HandleInstanceMethodCall(instanceMethodCall),
             _ => throw new ArgumentException()
         };
     }
 
+    private EvaluatedResult HandleInstanceFieldAccess(InstanceFieldAccess instanceFieldAccess)
+    {
+        var strategy = expressionStrategyFactory.GetInstanceFieldAccessEvaluationStrategy(instanceFieldAccess, scopeFacade);
+        return strategy.Apply();
+    }
+
     private EvaluatedResult HandleInstanceMethodCall(InstanceMethodCall instanceMethodCall)
     {
-        var strategy = new InstanceFieldMethodCallEvaluationStrategy(instanceMethodCall, scopeFacade, this, writer);
+        var strategy = expressionStrategyFactory.GetInstanceFieldMethodCallEvaluationStrategy(instanceMethodCall, scopeFacade, this, writer);
         return strategy.Apply();
     }
 
@@ -81,7 +87,7 @@ public class ExpressionEvaluator : Evaluator<Expression>
 
     private EvaluatedResult HandleMethodCall(MethodCall methodCall)
     {
-        var strategy = new MethodCallEvaluationStrategy(methodCall, scopeFacade, this,
+        var strategy = expressionStrategyFactory.GetMethodCallEvaluationStrategy(methodCall, scopeFacade, this,
             GetStatementInterpreter(scopeFacade), GetDeclarationInterpreter(scopeFacade));
         return strategy.Apply();
     }

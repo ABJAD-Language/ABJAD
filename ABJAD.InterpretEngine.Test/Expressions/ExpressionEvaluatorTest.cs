@@ -105,4 +105,52 @@ public class ExpressionEvaluatorTest
         var result = expressionEvaluator.Evaluate(instantiation);
         Assert.Equal(expectedResult, result);
     }
+
+    [Fact(DisplayName = "applies instance field access evaluation strategy on instance field access expressions")]
+    public void applies_instance_field_access_evaluation_strategy_on_instance_field_access_expressions()
+    {
+        var expressionEvaluator = new ExpressionEvaluator(expressionStrategyFactory, scopeFacade, writer);
+        var instanceFieldAccess = new InstanceFieldAccess();
+        var strategy = Substitute.For<ExpressionEvaluationStrategy>();
+        expressionStrategyFactory.GetInstanceFieldAccessEvaluationStrategy(instanceFieldAccess, Arg.Any<ScopeFacade>()).Returns(strategy);
+        
+        var expectedResult = new EvaluatedResult { Type = Substitute.For<DataType>(), Value = new object() };
+        strategy.Apply().Returns(expectedResult);
+        
+        var result = expressionEvaluator.Evaluate(instanceFieldAccess);
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact(DisplayName = "applies instance method call evaluation strategy on instance method call expressions")]
+    public void applies_instance_method_call_evaluation_strategy_on_instance_method_call_expressions()
+    {
+        var expressionEvaluator = new ExpressionEvaluator(expressionStrategyFactory, scopeFacade, writer);
+        var instanceMethodCall = new InstanceMethodCall();
+        var strategy = Substitute.For<ExpressionEvaluationStrategy>();
+        expressionStrategyFactory.GetInstanceFieldMethodCallEvaluationStrategy(instanceMethodCall,
+            Arg.Any<ScopeFacade>(), Arg.Any<Evaluator<Expression>>(), Arg.Any<TextWriter>()).Returns(strategy);
+        
+        var expectedResult = new EvaluatedResult { Type = Substitute.For<DataType>(), Value = new object() };
+        strategy.Apply().Returns(expectedResult);
+        
+        var result = expressionEvaluator.Evaluate(instanceMethodCall);
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact(DisplayName = "applies method call evaluation strategy on method call expressions")]
+    public void applies_method_call_evaluation_strategy_on_method_call_expressions()
+    {
+        var expressionEvaluator = new ExpressionEvaluator(expressionStrategyFactory, scopeFacade, writer);
+        var methodCall = new MethodCall();
+        var strategy = Substitute.For<ExpressionEvaluationStrategy>();
+        expressionStrategyFactory.GetMethodCallEvaluationStrategy(methodCall,
+            Arg.Any<ScopeFacade>(), Arg.Any<Evaluator<Expression>>(), Arg.Any<Interpreter<Statement>>(),
+            Arg.Any<Interpreter<Declaration>>()).Returns(strategy);
+        
+        var expectedResult = new EvaluatedResult { Type = Substitute.For<DataType>(), Value = new object() };
+        strategy.Apply().Returns(expectedResult);
+        
+        var result = expressionEvaluator.Evaluate(methodCall);
+        Assert.Equal(expectedResult, result);
+    }
 }

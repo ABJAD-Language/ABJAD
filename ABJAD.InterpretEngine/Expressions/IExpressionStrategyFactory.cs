@@ -18,5 +18,8 @@ public interface IExpressionStrategyFactory
     ExpressionEvaluationStrategy GetFixesEvaluationStrategy(FixExpression expression, ScopeFacade scopeFacade);
     ExpressionEvaluationStrategy GetPrimitiveEvaluationStrategy(Primitive primitive, ScopeFacade scopeFacade);
     ExpressionEvaluationStrategy GetUnaryExpressionEvaluationStrategy(UnaryExpression expression, Evaluator<Expression> expressionEvaluator);
-    ExpressionEvaluationStrategy GetInstantiationEvaluationStrategy(Instantiation instantiation, ScopeFacade globalScope, ScopeFacade localScope, ExpressionEvaluator expressionEvaluator, Interpreter<Statement> statementInterpreter, Interpreter<Declaration> declarationInterpreter);
+    ExpressionEvaluationStrategy GetInstantiationEvaluationStrategy(Instantiation instantiation, ScopeFacade globalScope, ScopeFacade localScope,  Evaluator<Expression> expressionEvaluator, Interpreter<Statement> statementInterpreter, Interpreter<Declaration> declarationInterpreter);
+    ExpressionEvaluationStrategy GetInstanceFieldMethodCallEvaluationStrategy(InstanceMethodCall instanceMethodCall, ScopeFacade scopeFacade,  Evaluator<Expression> expressionEvaluator, TextWriter writer);
+    ExpressionEvaluationStrategy GetInstanceFieldAccessEvaluationStrategy(InstanceFieldAccess instanceFieldAccess, ScopeFacade scopeFacade);
+    ExpressionEvaluationStrategy GetMethodCallEvaluationStrategy(MethodCall methodCall, ScopeFacade scopeFacade,  Evaluator<Expression> expressionEvaluator, Interpreter<Statement> statementInterpreter, Interpreter<Declaration> declarationInterpreter);
 }

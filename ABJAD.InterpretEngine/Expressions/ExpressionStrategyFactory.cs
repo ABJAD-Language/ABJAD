@@ -40,10 +40,29 @@ public class ExpressionStrategyFactory : IExpressionStrategyFactory
     }
 
     public ExpressionEvaluationStrategy GetInstantiationEvaluationStrategy(Instantiation instantiation, ScopeFacade globalScope,
-        ScopeFacade localScope, ExpressionEvaluator expressionEvaluator, Interpreter<Statement> statementInterpreter,
+        ScopeFacade localScope, Evaluator<Expression> expressionEvaluator, Interpreter<Statement> statementInterpreter,
         Interpreter<Declaration> declarationInterpreter)
     {
         return new InstantiationEvaluationStrategy(instantiation, globalScope, localScope, expressionEvaluator,
             statementInterpreter, declarationInterpreter);
+    }
+
+    public ExpressionEvaluationStrategy GetInstanceFieldMethodCallEvaluationStrategy(InstanceMethodCall instanceMethodCall,
+        ScopeFacade scopeFacade, Evaluator<Expression> expressionEvaluator, TextWriter writer)
+    {
+        return new InstanceFieldMethodCallEvaluationStrategy(instanceMethodCall, scopeFacade, expressionEvaluator, writer);
+    }
+
+    public ExpressionEvaluationStrategy GetInstanceFieldAccessEvaluationStrategy(InstanceFieldAccess instanceFieldAccess,
+        ScopeFacade scopeFacade)
+    {
+        return new InstanceFieldAccessEvaluationStrategy(instanceFieldAccess, scopeFacade);
+    }
+
+    public ExpressionEvaluationStrategy GetMethodCallEvaluationStrategy(MethodCall methodCall, ScopeFacade scopeFacade,
+        Evaluator<Expression> expressionEvaluator, Interpreter<Statement> statementInterpreter,
+        Interpreter<Declaration> declarationInterpreter)
+    {
+        return new MethodCallEvaluationStrategy(methodCall, scopeFacade, expressionEvaluator, statementInterpreter, declarationInterpreter);
     }
 }
