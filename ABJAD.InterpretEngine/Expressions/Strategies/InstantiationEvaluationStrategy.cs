@@ -45,6 +45,9 @@ public class InstantiationEvaluationStrategy : ExpressionEvaluationStrategy
             classElement.Declarations.ForEach(d => declarationInterpreter.Interpret(d));
             
             var constructorElement = globalScope.GetTypeConstructor(instantiation.ClassName, constructorParameterTypes);
+
+            AddConstructorArgumentsToScope(constructorElement, arguments);
+
             statementInterpreter.Interpret(constructorElement.Body);
         }
         else if (constructorParameterTypes.Length == 0)
@@ -64,7 +67,17 @@ public class InstantiationEvaluationStrategy : ExpressionEvaluationStrategy
         };
     }
 
-    private ICollection<EvaluatedResult> EvaluateArguments()
+    private void AddConstructorArgumentsToScope(ConstructorElement constructorElement, List<EvaluatedResult> arguments)
+    {
+        globalScope.AddNewScope();
+        for (int i = 0; i < constructorElement.Parameters.Count; i++)
+        {
+            globalScope.DefineVariable(constructorElement.Parameters[i].Name, constructorElement.Parameters[i].Type,
+                arguments[i].Value);
+        }
+    }
+
+    private List<EvaluatedResult> EvaluateArguments()
     {
         var arguments = instantiation.Arguments.Select(arg => expressionEvaluator.Evaluate(arg)).ToList();
 

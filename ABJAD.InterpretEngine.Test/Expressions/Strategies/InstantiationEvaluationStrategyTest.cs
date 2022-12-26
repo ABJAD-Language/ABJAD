@@ -80,17 +80,30 @@ public class InstantiationEvaluationStrategyTest
     [Fact(DisplayName = "interprets the constructor body on the happy path if exists")]
     public void interprets_the_constructor_body_on_the_happy_path_if_exists()
     {
-        var instantiation = new Instantiation() { ClassName = "class", Arguments = new List<Expression>() };
+        var arg = Substitute.For<Expression>();
+        var argType = Substitute.For<DataType>();
+        var argValue = new object();
+        expressionEvaluator.Evaluate(arg).Returns(new EvaluatedResult { Type = argType, Value = argValue });
+        var instantiation = new Instantiation() { ClassName = "class", Arguments = new List<Expression>() { arg } };
         
         globalScope.TypeExists("class").Returns(true);
         globalScope.GetType("class").Returns(new ClassElement() { Declarations = new List<Declaration>() });
-        globalScope.TypeHasConstructor("class").Returns(true);
+        globalScope.TypeHasConstructor("class", argType).Returns(true);
         var constructorBody = new Block();
-        var constructorElement = new ConstructorElement() { Body = constructorBody };
-        globalScope.GetTypeConstructor("class").Returns(constructorElement);
+        var constructorElement = new ConstructorElement()
+        {
+            Body = constructorBody, 
+            Parameters = new List<FunctionParameter>() { new() { Type = argType, Name = "param" }}
+        };
+        globalScope.GetTypeConstructor("class", argType).Returns(constructorElement);
         var strategy = new InstantiationEvaluationStrategy(instantiation, globalScope, localScope, expressionEvaluator, statementInterpreter, declarationInterpreter);
         strategy.Apply();
         
+        Received.InOrder(() =>
+        {
+            globalScope.AddNewScope();
+            globalScope.DefineVariable("param", argType, argValue);
+        });
         statementInterpreter.Received(1).Interpret(constructorBody);
     }
 
