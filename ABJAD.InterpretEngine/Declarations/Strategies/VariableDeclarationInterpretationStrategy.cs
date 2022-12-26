@@ -31,8 +31,18 @@ public class VariableDeclarationInterpretationStrategy : DeclarationInterpretati
         var evaluatedResult = expressionEvaluator.Evaluate(declaration.Value);
         ValidateTypeMatches(evaluatedResult);
         ValidateValueIsNotUndefined(evaluatedResult);
+        ValidateVariableNullability(evaluatedResult);
         
         scope.DefineVariable(declaration.Name, declaration.Type, evaluatedResult.Value);
+    }
+
+    private void ValidateVariableNullability(EvaluatedResult evaluatedResult)
+    {
+        if (evaluatedResult.Value.Equals(SpecialValues.NULL) &&
+            (evaluatedResult.Type.IsBool() || evaluatedResult.Type.IsNumber()))
+        {
+            throw new IllegalNullAssignmentException(declaration.Type);
+        }
     }
 
     private static void ValidateValueIsNotUndefined(EvaluatedResult evaluatedResult)
