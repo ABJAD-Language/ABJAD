@@ -1,6 +1,7 @@
 ﻿using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 using ABJAD.InterpretEngine.Statements.Strategies;
+using ABJAD.InterpretEngine.Types;
 using NSubstitute;
 
 namespace ABJAD.InterpretEngine.Test.Statements.Strategies;
@@ -24,7 +25,7 @@ public class PrintInterpretationStrategyTest
     {
         var print = new Print() { Target = Substitute.For<Expression>() };
         var value = new object();
-        expressionEvaluator.Evaluate(print.Target).Returns(new EvaluatedResult { Value = value });
+        expressionEvaluator.Evaluate(print.Target).Returns(new EvaluatedResult { Type = Substitute.For<DataType>(), Value = value });
         var strategy = new PrintInterpretationStrategy(print, textWriter, expressionEvaluator);
         strategy.Apply();
         textWriter.Received(1).WriteLine(value);

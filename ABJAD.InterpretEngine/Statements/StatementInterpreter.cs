@@ -39,6 +39,7 @@ public class StatementInterpreter : Interpreter<Statement>
             ForLoop forLoop => new ForLoopInterpretationStrategy(forLoop, this, declarationInterpreter, expressionEvaluator),
             WhileLoop whileLoop => new WhileLoopInterpretationStrategy(whileLoop, expressionEvaluator, this),
             Print print => new PrintInterpretationStrategy(print, writer, expressionEvaluator),
+            IfElse ifElse => new IfElseInterpretationStrategy(ifElse, this, expressionEvaluator),
             _ => throw new ArgumentException()
         };
     }
