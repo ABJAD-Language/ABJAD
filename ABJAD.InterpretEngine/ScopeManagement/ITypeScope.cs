@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Types;
+﻿using System.Diagnostics.Contracts;
+using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.ScopeManagement;
 
@@ -11,4 +12,7 @@ public interface ITypeScope
     void DefineConstructor(string className, ConstructorElement constructor);
     void Define(string name, ClassElement @class);
     ITypeScope Clone();
+
+    [Pure]
+    ITypeScope Aggregate(ITypeScope scope);
 }

@@ -12,4 +12,5 @@ public interface IReferenceScope
     void DefineConstant(string name, DataType type, object value);
     bool IsConstant(string name);
     IReferenceScope Clone();
+    IReferenceScope Aggregate(IReferenceScope referenceScope);
 }

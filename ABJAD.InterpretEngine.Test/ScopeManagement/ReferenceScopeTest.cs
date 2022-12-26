@@ -148,4 +148,23 @@ public class ReferenceScopeTest
         Assert.Equal(2, scope.Get("id"));
         Assert.Equal(1, clonedScope.Get("id"));
     }
+
+    [Fact(DisplayName = "aggregating another scope squashes it into the current one")]
+    public void aggregating_another_scope_squashes_it_into_the_current_one()
+    {
+        var scope1 = new ReferenceScope(new Dictionary<string, StateElement>() { { "id1", new StateElement { Value = 1 } } });
+        var scope2 = new ReferenceScope(new Dictionary<string, StateElement>() { { "id2", new StateElement { Value = 2 } } });
+        var scope = scope1.Aggregate(scope2);
+        Assert.Equal(1, scope.Get("id1"));
+        Assert.Equal(2, scope.Get("id2"));
+    }
+
+    [Fact(DisplayName = "when aggregating two scopes that have common references priority is given to the other scope")]
+    public void when_aggregating_two_scopes_that_have_common_references_priority_is_given_to_the_other_scope()
+    {
+        var scope1 = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement { Value = 1 } } });
+        var scope2 = new ReferenceScope(new Dictionary<string, StateElement>() { { "id", new StateElement { Value = 2 } } });
+        var scope = scope1.Aggregate(scope2);
+        Assert.Equal(2, scope.Get("id"));
+    }
 }

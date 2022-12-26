@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Types;
+﻿using System.Diagnostics.Contracts;
+using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.ScopeManagement;
 
@@ -9,4 +10,6 @@ public interface IFunctionScope
     FunctionElement GetFunction(string name, params DataType[] parametersTypes);
     void DefineFunction(string name, FunctionElement function);
     IFunctionScope Clone();
+    [Pure]
+    IFunctionScope Aggregate(IFunctionScope scope);
 }

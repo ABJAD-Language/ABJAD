@@ -96,4 +96,51 @@ public class FunctionScopeTest
         cloneFunctionScope.DefineFunction("func1", new FunctionElement { Parameters = new List<FunctionParameter>() });
         Assert.False(functionScope.FunctionExists("func1"));
     }
+
+    [Fact(DisplayName = "aggregating another scope squashes it on top of the current one")]
+    public void aggregating_another_scope_squashes_it_on_top_of_the_current_one()
+    {
+        var func1 = new FunctionElement() { Parameters = new List<FunctionParameter>()};
+        var functionScope1 = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
+        functionScope1.DefineFunction("func1", func1);
+        
+        var func2 = new FunctionElement() { Parameters = new List<FunctionParameter>()};
+        var functionScope2 = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
+        functionScope2.DefineFunction("func2", func2);
+
+        var functionScope = functionScope1.Aggregate(functionScope2);
+        Assert.True(functionScope.FunctionExists("func1"));
+        Assert.True(functionScope.FunctionExists("func2"));
+    }
+
+    [Fact(DisplayName = "aggregating two scopes that have the same method name with different parameter order keeps both definitions")]
+    public void aggregating_two_scopes_that_have_the_same_method_name_with_different_parameter_order_keeps_both_definitions()
+    {
+        var func1 = new FunctionElement() { Parameters = new List<FunctionParameter>()};
+        var functionScope1 = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
+        functionScope1.DefineFunction("func", func1);
+        
+        var func2 = new FunctionElement() { Parameters = new List<FunctionParameter>() { new() { Type = DataType.String() }}};
+        var functionScope2 = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
+        functionScope2.DefineFunction("func", func2);
+
+        var functionScope = functionScope1.Aggregate(functionScope2);
+        Assert.True(functionScope.FunctionExists("func"));
+        Assert.True(functionScope.FunctionExists("func", DataType.String()));
+    }
+
+    [Fact(DisplayName = "aggregating two scopes that have the same method keeps the second one")]
+    public void aggregating_two_scopes_that_have_the_same_method_keeps_the_second_one()
+    {
+        var func1 = new FunctionElement() { Parameters = new List<FunctionParameter>()};
+        var functionScope1 = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
+        functionScope1.DefineFunction("func", func1);
+        
+        var func2 = new FunctionElement() { Parameters = new List<FunctionParameter>()};
+        var functionScope2 = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
+        functionScope2.DefineFunction("func", func2);
+
+        var functionScope = functionScope1.Aggregate(functionScope2);
+        Assert.Equal(func2, functionScope.GetFunction("func"));
+    }
 }

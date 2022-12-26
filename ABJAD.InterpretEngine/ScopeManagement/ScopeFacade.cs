@@ -26,8 +26,10 @@ public interface ScopeFacade
     void DefineType(string name, ClassElement @class);
     void DefineTypeConstructor(string className, ConstructorElement constructor);
 
+    [Obsolete]
     ScopeFacade CloneScope();
     void AddNewScope();
+    void RemoveLastScope();
     void AddScope(ScopeFacade scopeFacade);
     List<Scope> GetScopes();
 }

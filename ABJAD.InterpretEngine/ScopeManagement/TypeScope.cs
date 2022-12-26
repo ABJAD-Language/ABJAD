@@ -54,4 +54,16 @@ public class TypeScope : ITypeScope
     {
         return new TypeScope(state.ToDictionary(pair => pair.Key, pair => pair.Value));
     }
+
+    public ITypeScope Aggregate(ITypeScope scope)
+    {
+        var newState = state.ToDictionary(pair => pair.Key, pair => pair.Value);
+        var otherScope = (TypeScope) scope;
+        foreach (var key in otherScope.state.Keys)
+        {
+            newState.Add(key, otherScope.state[key]);
+        }
+
+        return new TypeScope(newState);
+    }
 }

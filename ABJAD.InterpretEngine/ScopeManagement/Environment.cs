@@ -117,15 +117,25 @@ public class Environment : ScopeFacade
 
     public void AddNewScope()
     {
-        var referenceScope = new ReferenceScope(new Dictionary<string, StateElement>());
-        var functionScope = new FunctionScope(new Dictionary<string, List<FunctionElement>>());
-        var typeScope = new TypeScope(new Dictionary<string, ClassElement>());
-        scopes.Add(new Scope(referenceScope, functionScope, typeScope));
+        scopes.Add(ScopeFactory.NewScope());
+    }
+
+    public void RemoveLastScope()
+    {
+        scopes.Remove(scopes.Last());
+        if (!scopes.Any())
+        {
+            AddNewScope();
+        }
     }
 
     public void AddScope(ScopeFacade scopeFacade)
     {
-        scopes.AddRange(scopeFacade.GetScopes());
+        var otherScopes = scopeFacade.GetScopes();
+        var referenceScope = otherScopes.Select(s => s.ReferenceScope).Aggregate((scope1, scope2) => scope1.Aggregate(scope2));
+        var functionScope = otherScopes.Select(s => s.FunctionScope).Aggregate((scope1, scope2) => scope1.Aggregate(scope2));
+        var typeScope = otherScopes.Select(s => s.TypeScope).Aggregate((scope1, scope2) => scope1.Aggregate(scope2));
+        scopes.Add(new Scope(referenceScope, functionScope, typeScope));
     }
 
     public List<Scope> GetScopes()

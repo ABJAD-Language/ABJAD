@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Types;
+﻿using System.Diagnostics.Contracts;
+using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.ScopeManagement;
 
@@ -58,5 +59,25 @@ public class ReferenceScope : IReferenceScope
     {
         var stateClone = state.ToDictionary(pair => pair.Key, pair => pair.Value);
         return new ReferenceScope(stateClone);
+    }
+
+    [Pure]
+    public IReferenceScope Aggregate(IReferenceScope referenceScope)
+    {
+        var otherScope = (ReferenceScope) referenceScope;
+        var newState = state.ToDictionary(pair => pair.Key, pair => pair.Value);
+        foreach (var key in otherScope.state.Keys)
+        {
+            if (newState.ContainsKey(key))
+            {
+                newState[key] = otherScope.state[key];
+            }
+            else
+            {
+                newState.Add(key, otherScope.state[key]);
+            }
+        }
+
+        return new ReferenceScope(newState);
     }
 }
