@@ -23,7 +23,14 @@ public class PrintInterpretationStrategy : StatementInterpretationStrategy
         {
             throw new OperationOnUndefinedValueException();
         }
-        
-        writer.WriteLine(evaluatedResult.Value);
+
+        if (evaluatedResult.Type.IsBool())
+        {
+            writer.WriteLine((bool)evaluatedResult.Value ? "صحيح" : "خطأ");
+        }
+        else
+        {
+            writer.WriteLine(evaluatedResult.Value);
+        }
     }
 }
