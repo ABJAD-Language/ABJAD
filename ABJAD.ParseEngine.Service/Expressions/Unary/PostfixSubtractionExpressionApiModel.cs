@@ -2,7 +2,7 @@
 
 public class PostfixSubtractionExpressionApiModel : UnaryExpressionApiModel
 {
-    public PostfixSubtractionExpressionApiModel(ExpressionApiModel target) : base("expression.postfix.subtraction", target)
+    public PostfixSubtractionExpressionApiModel(ExpressionApiModel target) : base("postfix.subtraction", target)
     {
     }
 }

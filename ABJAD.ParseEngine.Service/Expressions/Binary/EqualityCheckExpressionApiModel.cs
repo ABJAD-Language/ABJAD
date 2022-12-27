@@ -2,7 +2,7 @@
 
 public class EqualityCheckExpressionApiModel : BinaryExpressionApiModel
 {
-    public EqualityCheckExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("expression.equalityCheck", firstOperand, secondOperand)
+    public EqualityCheckExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("equalityCheck", firstOperand, secondOperand)
     {
     }
 }

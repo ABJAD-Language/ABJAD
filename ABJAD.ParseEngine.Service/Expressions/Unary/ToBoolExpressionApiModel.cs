@@ -2,7 +2,7 @@
 
 public class ToBoolExpressionApiModel : UnaryExpressionApiModel
 {
-    public ToBoolExpressionApiModel(ExpressionApiModel target) : base("expression.toBool", target)
+    public ToBoolExpressionApiModel(ExpressionApiModel target) : base("toBool", target)
     {
     }
 }

@@ -116,9 +116,9 @@ public static class ExpressionApiModelMapper
         return new AdditionExpressionApiModel(Map(additionExpression.FirstOperand), Map(additionExpression.SecondOperand));
     }
 
-    private static TypeofExpressionApiModel Map(TypeOfExpression typeOfExpression)
+    private static TypeOfExpressionApiModel Map(TypeOfExpression typeOfExpression)
     {
-        return new TypeofExpressionApiModel(Map(typeOfExpression.Target));
+        return new TypeOfExpressionApiModel(Map(typeOfExpression.Target));
     }
 
     private static ToStringExpressionApiModel Map(ToStringExpression toStringExpression)

@@ -18,13 +18,13 @@
           "target": {
             "firstOperand": {
               "value": "ع",
-              "_type": "primitive.identifier"
+              "_type": "expression.primitive.identifier"
             },
             "secondOperand": {
               "value": "س",
-              "_type": "primitive.identifier"
+              "_type": "expression.primitive.identifier"
             },
-            "_type": "expression.addition"
+            "_type": "expression.binary.addition"
           },
           "_type": "statement.return"
         }

@@ -2,7 +2,7 @@
 
 public class NegativeExpressionApiModel : UnaryExpressionApiModel
 {
-    public NegativeExpressionApiModel(ExpressionApiModel target) : base("expression.negative", target)
+    public NegativeExpressionApiModel(ExpressionApiModel target) : base("negative", target)
     {
     }
 }

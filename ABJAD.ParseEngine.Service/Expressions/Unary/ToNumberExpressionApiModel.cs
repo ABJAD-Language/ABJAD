@@ -2,7 +2,7 @@
 
 public class ToNumberExpressionApiModel : UnaryExpressionApiModel
 {
-    public ToNumberExpressionApiModel(ExpressionApiModel target) : base("expression.toNumber", target)
+    public ToNumberExpressionApiModel(ExpressionApiModel target) : base("toNumber", target)
     {
     }
 }

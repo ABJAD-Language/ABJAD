@@ -2,7 +2,7 @@
 
 public class SubtractionExpressionApiModel : BinaryExpressionApiModel
 {
-    public SubtractionExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("expression.subtraction", firstOperand, secondOperand)
+    public SubtractionExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("subtraction", firstOperand, secondOperand)
     {
     }
 }

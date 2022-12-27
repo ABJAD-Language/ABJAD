@@ -7,6 +7,6 @@ public abstract class UnaryExpressionApiModel : ExpressionApiModel
     protected UnaryExpressionApiModel(string type, ExpressionApiModel target)
     {
         Target = target;
-        Type = type;
+        Type = $"expression.unary.{type}";
     }
 }

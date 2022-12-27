@@ -2,8 +2,7 @@
 
 public class NullPrimitiveApiModel : PrimitiveExpressionApiModel
 {
-    public NullPrimitiveApiModel()
+    public NullPrimitiveApiModel() : base("null")
     {
-        Type = "primitive.null";
     }
 }

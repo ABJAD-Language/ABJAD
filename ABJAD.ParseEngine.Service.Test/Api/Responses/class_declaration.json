@@ -32,7 +32,7 @@
                 "target": "الاسم",
                 "value": {
                   "value": "اسم",
-                  "_type": "primitive.identifier"
+                  "_type": "expression.primitive.identifier"
                 },
                 "_type": "statement.assignment"
               },
@@ -40,7 +40,7 @@
                 "target": "العمر",
                 "value": {
                   "value": "عمر",
-                  "_type": "primitive.identifier"
+                  "_type": "expression.primitive.identifier"
                 },
                 "_type": "statement.assignment"
               }
@@ -62,31 +62,31 @@
                       "firstOperand": {
                         "firstOperand": {
                           "value": "انسان[الاسم: ",
-                          "_type": "primitive.string"
+                          "_type": "expression.primitive.string"
                         },
                         "secondOperand": {
                           "value": "الاسم",
-                          "_type": "primitive.identifier"
+                          "_type": "expression.primitive.identifier"
                         },
-                        "_type": "expression.addition"
+                        "_type": "expression.binary.addition"
                       },
                       "secondOperand": {
                         "value": "العمر: ",
-                        "_type": "primitive.string"
+                        "_type": "expression.primitive.string"
                       },
-                      "_type": "expression.addition"
+                      "_type": "expression.binary.addition"
                     },
                     "secondOperand": {
                       "value": "العمر",
-                      "_type": "primitive.identifier"
+                      "_type": "expression.primitive.identifier"
                     },
-                    "_type": "expression.addition"
+                    "_type": "expression.binary.addition"
                   },
                   "secondOperand": {
                     "value": "]",
-                    "_type": "primitive.string"
+                    "_type": "expression.primitive.string"
                   },
-                  "_type": "expression.addition"
+                  "_type": "expression.binary.addition"
                 },
                 "_type": "statement.print"
               }

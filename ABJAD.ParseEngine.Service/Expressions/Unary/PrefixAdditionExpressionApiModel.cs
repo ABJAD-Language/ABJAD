@@ -2,7 +2,7 @@
 
 public class PrefixAdditionExpressionApiModel : UnaryExpressionApiModel
 {
-    public PrefixAdditionExpressionApiModel(ExpressionApiModel target) : base("expression.prefix.addition", target)
+    public PrefixAdditionExpressionApiModel(ExpressionApiModel target) : base("prefix.addition", target)
     {
     }
 }

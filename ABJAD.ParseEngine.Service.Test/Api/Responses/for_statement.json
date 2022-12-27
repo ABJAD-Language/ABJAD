@@ -5,7 +5,7 @@
       "name": "ا",
       "value": {
         "value": 0.0,
-        "_type": "primitive.number"
+        "_type": "expression.primitive.number"
       },
       "_type": "declaration.variable"
     },
@@ -13,29 +13,29 @@
       "expression": {
         "firstOperand": {
           "value": "ا",
-          "_type": "primitive.identifier"
+          "_type": "expression.primitive.identifier"
         },
         "secondOperand": {
           "value": 10.0,
-          "_type": "primitive.number"
+          "_type": "expression.primitive.number"
         },
-        "_type": "expression.lessCheck"
+        "_type": "expression.binary.lessCheck"
       },
       "_type": "statement.expression"
     },
     "targetCallback": {
       "target": {
         "value": "ا",
-        "_type": "primitive.identifier"
+        "_type": "expression.primitive.identifier"
       },
-      "_type": "expression.postfix.addition"
+      "_type": "expression.unary.postfix.addition"
     },
     "body": {
       "bindings": [
         {
           "target": {
             "value": "مرحبا بالعالم!",
-            "_type": "primitive.string"
+            "_type": "expression.primitive.string"
           },
           "_type": "statement.print"
         }

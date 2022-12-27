@@ -2,7 +2,7 @@
 
 public class AndOperationExpressionApiModel : BinaryExpressionApiModel
 {
-    public AndOperationExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("expression.and", firstOperand, secondOperand)
+    public AndOperationExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("and", firstOperand, secondOperand)
     {
     }
 }

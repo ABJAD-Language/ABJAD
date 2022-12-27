@@ -2,7 +2,7 @@
 
 public class DivisionExpressionApiModel : BinaryExpressionApiModel
 {
-    public DivisionExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("expression.division", firstOperand, secondOperand)
+    public DivisionExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("division", firstOperand, secondOperand)
     {
     }
 }

@@ -2,7 +2,7 @@
 
 public class OrOperationExpressionApiModel : BinaryExpressionApiModel
 {
-    public OrOperationExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("expression.or", firstOperand, secondOperand)
+    public OrOperationExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("or", firstOperand, secondOperand)
     {
     }
 }

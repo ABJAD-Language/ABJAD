@@ -2,7 +2,7 @@
 
 public class LessCheckExpressionApiModel : BinaryExpressionApiModel
 {
-    public LessCheckExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("expression.lessCheck", firstOperand, secondOperand)
+    public LessCheckExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("lessCheck", firstOperand, secondOperand)
     {
     }
 }

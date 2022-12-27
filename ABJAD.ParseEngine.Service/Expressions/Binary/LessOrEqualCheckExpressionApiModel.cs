@@ -2,7 +2,7 @@
 
 public class LessOrEqualCheckExpressionApiModel : BinaryExpressionApiModel
 {
-    public LessOrEqualCheckExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("expression.lessOrEqualCheck", firstOperand, secondOperand)
+    public LessOrEqualCheckExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("lessOrEqualCheck", firstOperand, secondOperand)
     {
     }
 }

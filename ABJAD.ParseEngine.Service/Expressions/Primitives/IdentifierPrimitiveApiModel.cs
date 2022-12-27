@@ -4,9 +4,8 @@ public class IdentifierPrimitiveApiModel : PrimitiveExpressionApiModel
 {
     public String Value { get; }
 
-    public IdentifierPrimitiveApiModel(string value)
+    public IdentifierPrimitiveApiModel(string value) : base("identifier")
     {
         Value = value;
-        Type = "primitive.identifier";
     }
 }

@@ -178,7 +178,7 @@ public class ExpressionApiModelMapperTest
     public void maps_typeof_expression_correctly()
     {
         var expressionApiModel = Map(new TypeOfExpression(new PrimitiveExpression(IdentifierPrimitive.From("target"))));
-        var expectedApiModel = new TypeofExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
+        var expectedApiModel = new TypeOfExpressionApiModel(new IdentifierPrimitiveApiModel("target"));
         expressionApiModel.Should().BeEquivalentTo(expectedApiModel, options => options.RespectingRuntimeTypes());
     }
 

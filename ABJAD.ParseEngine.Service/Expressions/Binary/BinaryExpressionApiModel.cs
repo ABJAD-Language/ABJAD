@@ -9,6 +9,6 @@ public abstract class BinaryExpressionApiModel : ExpressionApiModel
     {
         FirstOperand = firstOperand;
         SecondOperand = secondOperand;
-        Type = type;
+        Type = $"expression.binary.{type}";
     }
 }

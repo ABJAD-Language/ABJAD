@@ -2,7 +2,7 @@
 
 public class GreaterOrEqualCheckExpressionApiModel : BinaryExpressionApiModel
 {
-    public GreaterOrEqualCheckExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("expression.greaterOrEqualCheck", firstOperand, secondOperand)
+    public GreaterOrEqualCheckExpressionApiModel(ExpressionApiModel firstOperand, ExpressionApiModel secondOperand) : base("greaterOrEqualCheck", firstOperand, secondOperand)
     {
     }
 }
