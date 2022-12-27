@@ -9,6 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{FF6642
 		.github\workflows\ci.yml = .github\workflows\ci.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.InterpretEngine.Service", "ABJAD.InterpretEngine.Service\ABJAD.InterpretEngine.Service.csproj", "{2A701C53-4EED-4810-9518-C5DC2E2AF614}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.InterpretEngine.Service.Test", "ABJAD.InterpretEngine.Service.Test\ABJAD.InterpretEngine.Service.Test.csproj", "{A93C4E3D-87F1-4787-95C4-32CC211EFFAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,5 +27,13 @@ Global
 		{D980847E-32EF-42C7-9BF1-ECFB505020D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D980847E-32EF-42C7-9BF1-ECFB505020D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D980847E-32EF-42C7-9BF1-ECFB505020D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A701C53-4EED-4810-9518-C5DC2E2AF614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A701C53-4EED-4810-9518-C5DC2E2AF614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A701C53-4EED-4810-9518-C5DC2E2AF614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A701C53-4EED-4810-9518-C5DC2E2AF614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A93C4E3D-87F1-4787-95C4-32CC211EFFAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A93C4E3D-87F1-4787-95C4-32CC211EFFAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A93C4E3D-87F1-4787-95C4-32CC211EFFAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A93C4E3D-87F1-4787-95C4-32CC211EFFAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
