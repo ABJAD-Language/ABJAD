@@ -1,15 +1,15 @@
 [
   {
     "name": "احسب",
-    "returnType": "NUMBER",
+    "returnType": "رقم",
     "parameters": [
       {
         "name": "ع",
-        "type": "NUMBER"
+        "type": "رقم"
       },
       {
         "name": "س",
-        "type": "NUMBER"
+        "type": "رقم"
       }
     ],
     "body": {

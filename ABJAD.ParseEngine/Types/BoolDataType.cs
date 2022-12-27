@@ -4,6 +4,6 @@ public class BoolDataType : DataType
 {
     public string GetValue()
     {
-        return "BOOL";
+        return "منطق";
     }
 }

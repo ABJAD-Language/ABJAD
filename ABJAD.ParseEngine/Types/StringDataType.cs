@@ -4,6 +4,6 @@ public class StringDataType : DataType
 {
     public string GetValue()
     {
-        return "STRING";
+        return "مقطع";
     }
 }

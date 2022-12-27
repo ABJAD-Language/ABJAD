@@ -116,13 +116,13 @@ public class ParserTest
                     new List<DeclarationBinding>
                     {
                         new(
-                            new VariableDeclaration("NUMBER", "field", null)
+                            new VariableDeclaration("رقم", "field", null)
                         ),
                         new(
                             new ConstructorDeclaration(
                                 new List<FunctionParameter>
                                 {
-                                    new FunctionParameter("STRING", "param")
+                                    new FunctionParameter("مقطع", "param")
                                 },
                                 new BlockStatement(
                                     new List<Binding>
@@ -137,7 +137,7 @@ public class ParserTest
                         ),
                         new(
                             new FunctionDeclaration(
-                                "getField", "STRING", new List<FunctionParameter>(),
+                                "getField", "مقطع", new List<FunctionParameter>(),
                                 new BlockStatement(
                                     new List<Binding>
                                     {

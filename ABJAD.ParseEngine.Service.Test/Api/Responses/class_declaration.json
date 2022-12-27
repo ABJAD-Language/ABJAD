@@ -4,13 +4,13 @@
     "body": {
       "declarations": [
         {
-          "type": "STRING",
+          "type": "مقطع",
           "name": "الاسم",
           "value": null,
           "_type": "declaration.variable"
         },
         {
-          "type": "NUMBER",
+          "type": "رقم",
           "name": "العمر",
           "value": null,
           "_type": "declaration.variable"
@@ -19,11 +19,11 @@
           "parameters": [
             {
               "name": "اسم",
-              "type": "STRING"
+              "type": "مقطع"
             },
             {
               "name": "عمر",
-              "type": "NUMBER"
+              "type": "رقم"
             }
           ],
           "body": {
@@ -51,7 +51,7 @@
         },
         {
           "name": "تعريف",
-          "returnType": "VOID",
+          "returnType": null,
           "parameters": [],
           "body": {
             "bindings": [

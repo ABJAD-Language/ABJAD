@@ -8,6 +8,6 @@ public class StringDataTypeTest
     [Fact]
     private void ReturnsStringValue()
     {
-        Assert.Equal("STRING", new StringDataType().GetValue());
+        Assert.Equal("مقطع", new StringDataType().GetValue());
     }
 }

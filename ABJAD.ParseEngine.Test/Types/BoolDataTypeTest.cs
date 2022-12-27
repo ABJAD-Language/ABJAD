@@ -8,6 +8,6 @@ public class BoolDataTypeTest
     [Fact]
     private void ReturnsBoolValue()
     {
-        Assert.Equal("BOOL", new BoolDataType().GetValue());
+        Assert.Equal("منطق", new BoolDataType().GetValue());
     }
 }

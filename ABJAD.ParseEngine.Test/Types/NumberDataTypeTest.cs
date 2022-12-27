@@ -8,6 +8,6 @@ public class NumberDataTypeTest
     [Fact]
     private void ReturnsNumberValue()
     {
-        Assert.Equal("NUMBER", new NumberDataType().GetValue());
+        Assert.Equal("رقم", new NumberDataType().GetValue());
     }
 }

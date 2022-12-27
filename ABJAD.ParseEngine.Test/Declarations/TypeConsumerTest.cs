@@ -26,7 +26,7 @@ public class TypeConsumerTest
         var type = GetConsumer().Consume();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.STRING));
-        Assert.Equal("STRING", type.GetValue());
+        Assert.Equal("مقطع", type.GetValue());
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class TypeConsumerTest
         var type = GetConsumer().Consume();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.NUMBER));
-        Assert.Equal("NUMBER", type.GetValue());
+        Assert.Equal("رقم", type.GetValue());
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class TypeConsumerTest
         var type = GetConsumer().Consume();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.BOOL));
-        Assert.Equal("BOOL", type.GetValue());
+        Assert.Equal("منطق", type.GetValue());
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class TypeConsumerTest
         var type = GetConsumer().ConsumeTypeOrVoid();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.STRING));
-        Assert.Equal("STRING", type.GetValue());
+        Assert.Equal("مقطع", type.GetValue());
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public class TypeConsumerTest
         var type = GetConsumer().ConsumeTypeOrVoid();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.NUMBER));
-        Assert.Equal("NUMBER", type.GetValue());
+        Assert.Equal("رقم", type.GetValue());
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public class TypeConsumerTest
         var type = GetConsumer().ConsumeTypeOrVoid();
 
         tokenConsumer.Verify(c => c.Consume(TokenType.BOOL));
-        Assert.Equal("BOOL", type.GetValue());
+        Assert.Equal("منطق", type.GetValue());
     }
 
     [Fact]

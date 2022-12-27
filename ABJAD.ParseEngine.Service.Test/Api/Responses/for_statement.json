@@ -1,7 +1,7 @@
 [
   {
     "target": {
-      "type": "NUMBER",
+      "type": "رقم",
       "name": "ا",
       "value": {
         "value": 0.0,

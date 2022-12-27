@@ -4,6 +4,6 @@ public class NumberDataType : DataType
 {
     public string GetValue()
     {
-        return "NUMBER";
+        return "رقم";
     }
 }

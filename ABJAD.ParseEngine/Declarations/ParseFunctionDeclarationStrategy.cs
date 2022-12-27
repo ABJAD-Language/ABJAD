@@ -1,5 +1,6 @@
 using ABJAD.ParseEngine.Shared;
 using ABJAD.ParseEngine.Statements;
+using ABJAD.ParseEngine.Types;
 using Ardalis.GuardClauses;
 
 namespace ABJAD.ParseEngine.Declarations;
@@ -37,9 +38,9 @@ public class ParseFunctionDeclarationStrategy : ParseDeclarationStrategy
         tokenConsumer.Consume(TokenType.COLON);
 
         var returnType = typeConsumer.ConsumeTypeOrVoid();
-
+        
         var body = blockStatementParser.Parse();
 
-        return new FunctionDeclaration(name, returnType.GetValue(), parameters, body as BlockStatement);
+        return new FunctionDeclaration(name, returnType is VoidDataType ? null : returnType.GetValue(), parameters, body as BlockStatement);
     }
 }
