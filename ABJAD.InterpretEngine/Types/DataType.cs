@@ -28,6 +28,17 @@ public interface DataType
     {
         return new CustomDataType(value);
     }
+
+    static DataType From(string type)
+    {
+        return type switch
+        {
+            "رقم" => Number(),
+            "مقطع" => String(),
+            "منطق" => Bool(),
+            _ => Custom(type)
+        };
+    }
     
     bool IsNumber()
     {
