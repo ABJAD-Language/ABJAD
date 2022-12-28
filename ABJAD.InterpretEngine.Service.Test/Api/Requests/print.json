@@ -1,0 +1,11 @@
+{
+  "bindings": [
+    {
+      "_type": "statement.print",
+      "target": {
+        "_type": "expression.primitive.string",
+        "value": "hello world"
+      }
+    }
+  ]
+}

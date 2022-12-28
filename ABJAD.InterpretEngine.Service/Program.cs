@@ -23,3 +23,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+namespace ABJAD.InterpretEngine.Service
+{
+    public partial class Program { }
+}

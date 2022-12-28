@@ -87,7 +87,7 @@ public class Environment : ScopeFacade
 
     public bool TypeHasConstructor(string className, params DataType[] parameterTypes)
     {
-        return scopes.Single(s => s.TypeScope.TypeExists(className)).TypeScope.HasConstructor("type", parameterTypes);
+        return scopes.Single(s => s.TypeScope.TypeExists(className)).TypeScope.HasConstructor(className, parameterTypes);
     }
 
     public ClassElement GetType(string name)

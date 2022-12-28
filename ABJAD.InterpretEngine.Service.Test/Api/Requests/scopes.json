@@ -1,0 +1,92 @@
+﻿{
+  "bindings": [
+    {
+      "_type": "declaration.variable",
+      "name": "id",
+      "type": "رقم",
+      "value": {
+        "_type": "expression.primitive.number",
+        "value": 0.0
+      }
+    },
+    {
+      "_type": "declaration.function",
+      "name": "foo",
+      "parameters": [],
+      "body": {
+        "_type": "statement.block",
+        "bindings": [
+          {
+            "_type": "statement.for",
+            "target": {
+              "_type": "declaration.variable",
+              "name": "i",
+              "type": "رقم",
+              "value": {
+                "_type": "expression.primitive.number",
+                "value": 0.0
+              }
+            },
+            "condition": {
+              "_type": "statement.expression",
+              "expression": {
+                "_type": "expression.binary.lessOrEqualCheck",
+                "firstOperand": {
+                  "_type": "expression.primitive.identifier",
+                  "value": "i"
+                },
+                "secondOperand": {
+                  "_type": "expression.primitive.number",
+                  "value": 10.0
+                }
+              }
+            },
+            "targetCallback": {
+              "_type": "expression.assignment.addition",
+              "target": "i",
+              "value": {
+                "_type": "expression.primitive.number",
+                "value": 2.0
+              }
+            },
+            "body": {
+              "_type": "statement.expression",
+              "expression": {
+                "_type": "expression.unary.postfix.addition",
+                "target": {
+                  "_type": "expression.primitive.identifier",
+                  "value": "id"
+                }
+              }
+            }
+          },
+          {
+            "_type": "statement.print",
+            "target": {
+              "_type": "expression.primitive.identifier",
+              "value": "id"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "_type": "statement.expression",
+      "expression": {
+        "_type": "expression.call",
+        "method": {
+          "_type": "expression.primitive.identifier",
+          "value": "foo"
+        },
+        "arguments": []
+      }
+    },
+    {
+      "_type": "statement.print",
+      "target": {
+        "_type": "expression.primitive.identifier",
+        "value": "id"
+      }
+    }
+  ]
+}
