@@ -1,0 +1,114 @@
+﻿{
+  "bindings": [
+    {
+      "_type": "declaration.class",
+      "name": "انسان",
+      "body": {
+        "declarations": [
+          {
+            "_type": "declaration.variable",
+            "name": "العمر",
+            "type": "رقم"
+          },
+          {
+            "_type": "declaration.constructor",
+            "parameters": [
+              {
+                "name": "عمر",
+                "type": "رقم"
+              }
+            ],
+            "body": {
+              "_type": "statement.block",
+              "bindings": [
+                {
+                  "_type": "statement.assignment",
+                  "target": "العمر",
+                  "value": {
+                    "_type": "expression.primitive.identifier",
+                    "value": "عمر"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "_type": "declaration.function",
+            "name": "اكتب_العمر",
+            "parameters": [],
+            "body": {
+              "_type": "statement.block",
+              "bindings": [
+                {
+                  "_type": "statement.print",
+                  "target": {
+                    "_type": "expression.binary.addition",
+                    "firstOperand": {
+                      "_type": "expression.primitive.string",
+                      "value": "العمر هو: "
+                    },
+                    "secondOperand": {
+                      "_type": "expression.primitive.identifier",
+                      "value": "العمر"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "_type": "declaration.variable",
+      "name": "شخص",
+      "type": "انسان",
+      "value": {
+        "_type": "expression.instantiation",
+        "class": {
+          "_type": "expression.primitive.string",
+          "value": "انسان"
+        },
+        "arguments": [
+          {
+            "_type": "expression.primitive.number",
+            "value": 10.0
+          }
+        ]
+      }
+    },
+    {
+      "_type": "statement.expression",
+      "expression": {
+        "_type": "expression.instanceMethodCall",
+        "instances": [
+          {
+            "_type": "expression.primitive.identifier",
+            "value": "شخص"
+          }
+        ],
+        "method": {
+          "_type": "expression.primitive.identifier",
+          "value": "اكتب_العمر"
+        },
+        "arguments": []
+      }
+    },
+    {
+      "_type": "statement.print",
+      "target": {
+        "_type": "expression.instanceField",
+        "instance": {
+          "_type": "expression.primitive.identifier",
+          "value": "شخص"
+        },
+        "fields": [
+          {
+            "_type": "expression.primitive.identifier",
+            "value": "العمر"
+          }
+        ]
+      }
+    }
+  ]
+}

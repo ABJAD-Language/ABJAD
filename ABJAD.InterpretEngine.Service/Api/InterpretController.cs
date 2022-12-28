@@ -1,5 +1,8 @@
-﻿using ABJAD.InterpretEngine.Service.Mappers;
-using ABJAD.InterpretEngine.Shared.Expressions.Primitives;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.ScopeManagement;
+using ABJAD.InterpretEngine.Service.Mappers;
+using ABJAD.InterpretEngine.Shared;
+using ABJAD.InterpretEngine.Statements;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABJAD.InterpretEngine.Service.Api;
@@ -11,15 +14,26 @@ public class InterpretController : ControllerBase
     [HttpPost]
     public ActionResult<string> Interpret([FromBody] InterpretBindingsRequest request)
     {
-        foreach (var requestBinding in request.bindings)
-        {
-            if (JsonUtils.GetType(requestBinding) == "expression.primitive.number")
-            {
-                var expression = ExpressionMapper.Map(requestBinding);
-                Console.WriteLine(((NumberPrimitive)expression).Value);
-            }
-        }
+        var bindings = request.bindings.Select(MapBinding).ToList();
 
-        return null;
+        var environment = EnvironmentFactory.NewEnvironment();
+        var writer = new StringWriter();
+        var statementInterpreter = new StatementInterpreter(environment, writer);
+        var declarationInterpreter = new DeclarationInterpreter(environment, writer);
+        var interpreter = new BindingInterpreter(statementInterpreter, declarationInterpreter);
+
+        interpreter.Interpret(bindings);
+
+        return Ok(writer.ToString());
+    }
+
+    private static Binding MapBinding(object requestBinding)
+    {
+        var type = JsonUtils.GetType(requestBinding).Split(".")[0];
+        return type switch
+        {
+            "declaration" => DeclarationMapper.Map(requestBinding),
+            "statement" => StatementMapper.Map(requestBinding)
+        };
     }
 }

@@ -102,7 +102,7 @@ public static class StatementMapper
         return type switch
         {
             "statement" => Map(o),
-            // TODO declarations
+            "declaration" => DeclarationMapper.Map(o)
         };
     }
 
