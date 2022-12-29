@@ -7,6 +7,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{FF66425F-432B-48D8-8831-0BC1ECFF9A97}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\ci.yml = .github\workflows\ci.yml
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABJAD.InterpretEngine.Service", "ABJAD.InterpretEngine.Service\ABJAD.InterpretEngine.Service.csproj", "{2A701C53-4EED-4810-9518-C5DC2E2AF614}"
