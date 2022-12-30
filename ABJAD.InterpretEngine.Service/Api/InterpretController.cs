@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Declarations;
+﻿using System.Net;
+using ABJAD.InterpretEngine.Declarations;
 using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Service.Mappers;
 using ABJAD.InterpretEngine.Shared;
@@ -12,6 +13,8 @@ namespace ABJAD.InterpretEngine.Service.Api;
 public class InterpretController : ControllerBase
 {
     [HttpPost]
+    [InterpretationFailureFilter]
+    [ProducesResponseType((int) HttpStatusCode.OK, Type = typeof(List<InterpretBindingResponse>))]
     public ActionResult<InterpretBindingResponse> Interpret([FromBody] InterpretBindingsRequest request)
     {
         var bindings = request.bindings.Select(MapBinding).ToList();
