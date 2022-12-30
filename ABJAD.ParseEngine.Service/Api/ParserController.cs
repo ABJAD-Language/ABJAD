@@ -13,6 +13,7 @@ namespace ABJAD.ParseEngine.Service.Api;
 public class ParserController : ControllerBase
 {
     [HttpPost]
+    [ParsingFailureFilter]
     [ProducesResponseType((int) HttpStatusCode.OK)]
     public ActionResult<List<BindingApiModel>> Parse([FromBody] ParseTokensRequest request)
     {
