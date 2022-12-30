@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mime;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ABJAD.InterpretEngine.Service.Test.Api;
@@ -18,25 +19,25 @@ public class InterpretControllerIntegrationTest
     [Fact(DisplayName = "interprets print statement")]
     public async Task interprets_print_statement()
     {
-        await ValidateRequest("print.json", "print.txt");
+        await ValidateRequest("print.json", "print.json");
     }
 
     [Fact(DisplayName = "interprets class instantiation")]
     public async Task interprets_class_instantiation()
     {
-        await ValidateRequest("class_instantiation.json", "class_instantiation.txt");
+        await ValidateRequest("class_instantiation.json", "class_instantiation.json");
     }
 
     [Fact(DisplayName = "interprets changing value from a global scope")]
     public async Task interprets_changing_value_from_a_global_scope()
     {
-        await ValidateRequest("scopes.json", "scopes.txt");
+        await ValidateRequest("scopes.json", "scopes.json");
     }
 
     [Fact(DisplayName = "references are always passed by value to the method calls")]
     public async Task references_are_always_passed_by_value_to_the_method_calls()
     {
-        await ValidateRequest("references.json", "references.txt");
+        await ValidateRequest("references.json", "references.json");
 
     }
 
@@ -47,11 +48,16 @@ public class InterpretControllerIntegrationTest
         var response = await client.PostAsync("/", body);
         var content = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(ReadFile("Responses/" + responseTextFileName), content);
+        Assert.Equal(RemoveWhiteSpaces(ReadFile("Responses/" + responseTextFileName)), content.Replace("\\r", ""));
     }
 
     private static string ReadFile(string fileName)
     {
         return File.ReadAllText("../../../Api/" + fileName);
+    }
+
+    private static string RemoveWhiteSpaces(string content)
+    {
+        return Regex.Replace(content, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");
     }
 }
