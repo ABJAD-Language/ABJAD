@@ -1,0 +1,30 @@
+﻿{
+  "bindings": [
+    {
+      "condition": {
+        "firstOperand": {
+          "value": 1.0,
+          "_type": "expression.primitive.number"
+        },
+        "secondOperand": {
+          "value": 1.0,
+          "_type": "expression.primitive.number"
+        },
+        "_type": "expression.binary.equalityCheck"
+      },
+      "body": {
+        "bindings": [
+          {
+            "target": {
+              "value": "صحيح",
+              "_type": "expression.primitive.string"
+            },
+            "_type": "statement.print"
+          }
+        ],
+        "_type": "statement.block"
+      },
+      "_type": "statement.if"
+    }
+  ]
+}
