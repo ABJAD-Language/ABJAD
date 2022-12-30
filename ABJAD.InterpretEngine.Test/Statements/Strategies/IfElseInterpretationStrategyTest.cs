@@ -193,4 +193,20 @@ public class IfElseInterpretationStrategyTest
             statementInterpreter.Interpret(elseBody);
         });
     }
+
+    [Fact(DisplayName = "does not interpret anything when the main condition is false and there is no else body")]
+    public void does_not_interpret_anything_when_the_main_condition_is_false_and_there_is_no_else_body()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainBody = Substitute.For<Statement>();
+        var mainConditional = new Conditional() { Condition = mainCondition, Body = mainBody };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
+
+        var ifElse = new IfElse { MainConditional = mainConditional, OtherConditionals = new List<Conditional>(), ElseBody = null };
+        var strategy = new IfElseInterpretationStrategy(ifElse, statementInterpreter, expressionEvaluator);
+        strategy.Apply();
+        
+        expressionEvaluator.Evaluate(mainCondition);
+        statementInterpreter.DidNotReceiveWithAnyArgs().Interpret(Arg.Any<Statement>());
+    }
 }

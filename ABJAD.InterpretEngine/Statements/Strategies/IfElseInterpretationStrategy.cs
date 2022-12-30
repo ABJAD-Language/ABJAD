@@ -35,8 +35,11 @@ public class IfElseInterpretationStrategy : StatementInterpretationStrategy
                 return;
             }
         }
-        
-        statementInterpreter.Interpret(ifElse.ElseBody);
+
+        if (ifElse.ElseBody != null)
+        {
+            statementInterpreter.Interpret(ifElse.ElseBody);
+        }
     }
 
     private bool EvaluateCondition(Expression conditionExpression)

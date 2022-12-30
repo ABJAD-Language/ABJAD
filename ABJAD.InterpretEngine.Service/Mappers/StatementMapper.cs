@@ -17,6 +17,7 @@ public static class StatementMapper
             "block" => MapBlock(jsonObject),
             "expression" => MapExpression(jsonObject),
             "for" => MapForLoop(jsonObject),
+            "if" => MapIf(jsonObject),
             "ifElse" => MapIfElse(jsonObject),
             "print" => MapPrint(jsonObject),
             "return" => MapReturn(jsonObject),
@@ -46,6 +47,17 @@ public static class StatementMapper
         var apiModel = JsonUtils.Deserialize<PrintApiModel>(jsonObject);
 
         return new Print() { Target = ExpressionMapper.Map(apiModel.Target) };
+    }
+
+    private static Statement MapIf(object jsonObject)
+    {
+        var apiModel = JsonUtils.Deserialize<IfApiModel>(jsonObject);
+        return new IfElse()
+        {
+            MainConditional = MapCondition(apiModel),
+            OtherConditionals = new List<Conditional>(),
+            ElseBody = null
+        };
     }
 
     private static Statement MapIfElse(object jsonObject)

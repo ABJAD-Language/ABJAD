@@ -38,7 +38,12 @@ public class InterpretControllerIntegrationTest
     public async Task references_are_always_passed_by_value_to_the_method_calls()
     {
         await ValidateRequest("references.json", "references.json");
+    }
 
+    [Fact(DisplayName = "runs nested for loops as expected")]
+    public async Task runs_nested_for_loops_as_expected()
+    {
+        await ValidateRequest("if_without_else.json", "if_without_else.json");
     }
 
     private async Task ValidateRequest(string requestJsonFileName, string responseTextFileName)
