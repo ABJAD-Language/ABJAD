@@ -12,7 +12,7 @@ namespace ABJAD.InterpretEngine.Service.Api;
 public class InterpretController : ControllerBase
 {
     [HttpPost]
-    public ActionResult<string> Interpret([FromBody] InterpretBindingsRequest request)
+    public ActionResult<InterpretBindingResponse> Interpret([FromBody] InterpretBindingsRequest request)
     {
         var bindings = request.bindings.Select(MapBinding).ToList();
 
@@ -24,7 +24,7 @@ public class InterpretController : ControllerBase
 
         interpreter.Interpret(bindings);
 
-        return Ok(writer.ToString());
+        return Ok(new InterpretBindingResponse() { Output = writer.ToString() });
     }
 
     private static Binding MapBinding(object requestBinding)
