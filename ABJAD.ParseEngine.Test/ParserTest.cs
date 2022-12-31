@@ -223,4 +223,40 @@ public class ParserTest
 
         Assert.NotNull(Record.Exception(() => new Parser(tokens).Parse()));
     }
+
+    [Fact(DisplayName = "skips comments when found")]
+    public void skips_comments_when_found()
+    {
+        var tokens = new List<Token>
+        {
+            new() { Type = TokenType.IF },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.TRUE },
+            new() { Type = TokenType.CLOSE_PAREN },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.OPEN_BRACE },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.COMMENT },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.PRINT },
+            new() { Type = TokenType.OPEN_PAREN },
+            new() { Type = TokenType.STRING_CONST, Content = "hello"},
+            new() { Type = TokenType.CLOSE_PAREN },
+            new() { Type = TokenType.SEMICOLON },
+            new() { Type = TokenType.WHITE_SPACE },
+            new() { Type = TokenType.CLOSE_BRACE }
+        };
+
+        var expectedBinding = new StatementBinding(new IfStatement(
+            new PrimitiveExpression(BoolPrimitive.True()),
+            new BlockStatement(new List<Binding>
+            {
+                new StatementBinding(new PrintStatement(new PrimitiveExpression(StringPrimitive.From("hello"))))
+            })
+        ));
+        
+        var bindings = new Parser(tokens).Parse();
+        Assert.Single(bindings);
+        bindings[0].Should().BeEquivalentTo(expectedBinding, options => options.RespectingRuntimeTypes());
+    }
 }

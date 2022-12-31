@@ -204,6 +204,19 @@ public class TokenConsumerTest
             var tokenConsumer = new TokenConsumer(new List<Token> { token }, 1);
             Assert.Throws<ArgumentOutOfRangeException>(() => tokenConsumer.Peek());
         }
+
+        [Fact(DisplayName = "should not return the comment token if it is the head")]
+        public void should_not_return_the_comment_token_if_it_is_the_head()
+        {
+            var tokens = new List<Token>
+            {
+                new() { Type = TokenType.COMMENT },
+                new() { Type = TokenType.IF }
+            };
+
+            var tokenConsumer = new TokenConsumer(tokens, 0);
+            Assert.Equal(TokenType.IF, tokenConsumer.Peek().Type);
+        }
     }
 
     public class LookAheadTest
@@ -232,6 +245,16 @@ public class TokenConsumerTest
             var token2 = new Token { Type = TokenType.NUMBER, Line = 4, Index = 2, Content = "3" };
             var tokenConsumer = new TokenConsumer(new List<Token> { token1, token2 }, 1);
             Assert.Throws<ArgumentException>(() => tokenConsumer.LookAhead(-1));
+        }
+
+        [Fact(DisplayName = "should skip comment token")]
+        public void should_skip_comment_token()
+        {
+            var token1 = new Token { Type = TokenType.ID, Line = 10, Index = 13, Content = "ب" };
+            var token2 = new Token { Type = TokenType.COMMENT, Line = 12, Index = 2, Content = "ignore" };
+            var token3 = new Token { Type = TokenType.NUMBER, Line = 13, Index = 2, Content = "3" };
+            var tokenConsumer = new TokenConsumer(new List<Token> { token1, token2, token3 }, 0);
+            Assert.Equal(token3, tokenConsumer.LookAhead(1));
         }
     }
 

@@ -12,7 +12,7 @@ public class TokenConsumer : ITokenConsumer
     {
         Guard.Against.NullOrEmpty(tokens);
         Guard.Against.Negative(headIndex);
-        this.tokens = tokens.Where(t => t.Type != TokenType.WHITE_SPACE).ToList();
+        this.tokens = tokens.Where(t => t.Type != TokenType.WHITE_SPACE && t.Type != TokenType.COMMENT).ToList();
         Guard.Against.NullOrEmpty(this.tokens);
 
         this.headIndex = headIndex;
