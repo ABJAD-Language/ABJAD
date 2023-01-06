@@ -102,7 +102,7 @@ public class MethodCallEvaluationStrategyTest
         Received.InOrder(() =>
         {
             declarationInterpreter.Interpret(declaration);
-            statementInterpreter.Interpret(statement);
+            statementInterpreter.Interpret(statement, true);
         });
     }
 

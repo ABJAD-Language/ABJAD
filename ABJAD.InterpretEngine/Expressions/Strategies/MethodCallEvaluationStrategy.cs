@@ -55,7 +55,7 @@ public class MethodCallEvaluationStrategy : ExpressionEvaluationStrategy
                     break;
                 }
 
-                statementInterpreter.Interpret(statement);
+                statementInterpreter.Interpret(statement, true);
             }
         }
 

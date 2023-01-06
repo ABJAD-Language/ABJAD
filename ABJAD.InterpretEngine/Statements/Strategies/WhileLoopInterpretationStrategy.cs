@@ -7,14 +7,16 @@ namespace ABJAD.InterpretEngine.Statements.Strategies;
 public class WhileLoopInterpretationStrategy : StatementInterpretationStrategy
 {
     private readonly WhileLoop whileLoop;
+    private readonly bool functionContext;
     private readonly IExpressionEvaluator expressionEvaluator;
     private readonly IStatementInterpreter statementInterpreter;
 
-    public WhileLoopInterpretationStrategy(WhileLoop whileLoop, IExpressionEvaluator expressionEvaluator, IStatementInterpreter statementInterpreter)
+    public WhileLoopInterpretationStrategy(WhileLoop whileLoop, bool functionContext, IExpressionEvaluator expressionEvaluator, IStatementInterpreter statementInterpreter)
     {
         this.whileLoop = whileLoop;
         this.expressionEvaluator = expressionEvaluator;
         this.statementInterpreter = statementInterpreter;
+        this.functionContext = functionContext;
     }
 
     public void Apply()
@@ -23,7 +25,7 @@ public class WhileLoopInterpretationStrategy : StatementInterpretationStrategy
 
         while (condition)
         {
-            statementInterpreter.Interpret(whileLoop.Body);
+            statementInterpreter.Interpret(whileLoop.Body, functionContext); // TODO handle the cae of a return
             condition = EvaluateCondition();
         }
     }
