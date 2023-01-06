@@ -31,4 +31,14 @@ public class PrintInterpretationStrategyTest
         strategy.Apply();
         textWriter.Received(1).WriteLine(value);
     }
+
+    [Fact(DisplayName = "returns a returning result with the flag set to false")]
+    public void returns_a_returning_result_with_the_flag_set_to_false()
+    {
+        var print = new Print() { Target = Substitute.For<Expression>() };
+        expressionEvaluator.Evaluate(print.Target).Returns(new EvaluatedResult { Type = Substitute.For<DataType>(), Value = new object() });
+        var strategy = new PrintInterpretationStrategy(print, textWriter, expressionEvaluator);
+        var result = strategy.Apply();
+        Assert.False(result.Returned);
+    }
 }

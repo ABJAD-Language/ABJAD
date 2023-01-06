@@ -14,8 +14,10 @@ public class ExpressionStatementInterpretationStrategy : StatementInterpretation
         this.expressionEvaluator = expressionEvaluator;
     }
 
-    public void Apply()
+    public StatementInterpretationResult Apply()
     {
         expressionEvaluator.Evaluate(expressionStatement.Target);
+
+        return StatementInterpretationResult.GetNotReturned();
     }
 }

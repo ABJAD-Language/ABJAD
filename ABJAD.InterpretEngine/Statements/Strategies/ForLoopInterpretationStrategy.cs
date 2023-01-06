@@ -23,18 +23,25 @@ public class ForLoopInterpretationStrategy : StatementInterpretationStrategy
         this.functionContext = functionContext;
     }
 
-    public void Apply()
+    public StatementInterpretationResult Apply()
     {
         HandleTargetDefinition();
 
         var condition = EvaluateCondition();
         while (condition)
         {
-            statementInterpreter.Interpret(forLoop.Body, functionContext); // TODO handle the case of a return
+            var result = statementInterpreter.Interpret(forLoop.Body, functionContext);
+            if (result.Returned)
+            {
+                return result;
+            }
+            
             expressionEvaluator.Evaluate(forLoop.Callback);
 
             condition = EvaluateCondition();
         }
+
+        return StatementInterpretationResult.GetNotReturned();
     }
 
     private bool EvaluateCondition()

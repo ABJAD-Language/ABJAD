@@ -78,6 +78,52 @@ public class IfElseInterpretationStrategyTest
         });
     }
 
+    [Fact(DisplayName = "returns a returning result when the main body does so")]
+    public void returns_a_returning_result_when_the_main_body_does_so()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainBody = Substitute.For<Statement>();
+        var mainConditional = new Conditional() { Condition = mainCondition, Body = mainBody };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true });
+
+        var evaluatedResult = new EvaluatedResult();
+        statementInterpreter.Interpret(mainBody, true).Returns(StatementInterpretationResult.GetReturned(evaluatedResult));
+        
+        var ifElse = new IfElse()
+        {
+            MainConditional = mainConditional, 
+            OtherConditionals = new List<Conditional>(),
+        };
+        var strategy = new IfElseInterpretationStrategy(ifElse, true, statementInterpreter, expressionEvaluator);
+        var result = strategy.Apply();
+        
+        Assert.True(result.Returned);
+        Assert.True(result.IsValueReturned);
+        Assert.Equal(evaluatedResult, result.ReturnedValue);
+    }
+
+    [Fact(DisplayName = "returns a non returning result when the main body does so")]
+    public void returns_a_non_returning_result_when_the_main_body_does_so()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainBody = Substitute.For<Statement>();
+        var mainConditional = new Conditional() { Condition = mainCondition, Body = mainBody };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true });
+
+        var evaluatedResult = new EvaluatedResult();
+        statementInterpreter.Interpret(mainBody, true).Returns(StatementInterpretationResult.GetNotReturned());
+        
+        var ifElse = new IfElse()
+        {
+            MainConditional = mainConditional, 
+            OtherConditionals = new List<Conditional>(),
+        };
+        var strategy = new IfElseInterpretationStrategy(ifElse, true, statementInterpreter, expressionEvaluator);
+        var result = strategy.Apply();
+        
+        Assert.False(result.Returned);
+    }
+
     [Fact(DisplayName = "checks the second condition when the main condition evaluates to false")]
     public void checks_the_second_condition_when_the_main_condition_evaluates_to_false()
     {
@@ -194,6 +240,55 @@ public class IfElseInterpretationStrategyTest
         });
     }
 
+    [Fact(DisplayName = "returns a retuning result when the body does so")]
+    public void returns_a_retuning_result_when_the_body_does_so()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainConditional = new Conditional() { Condition = mainCondition };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
+        
+        var minorCondition = Substitute.For<Expression>();
+        var minorBody = Substitute.For<Statement>();
+        expressionEvaluator.Evaluate(minorCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true });
+        var minorConditional = new Conditional() { Condition = minorCondition, Body = minorBody };
+
+        statementInterpreter.Interpret(minorBody, true).Returns(StatementInterpretationResult.GetReturned());
+
+        var ifElse = new IfElse()
+        {
+            MainConditional = mainConditional, 
+            OtherConditionals = new List<Conditional> { minorConditional },
+        };
+        var strategy = new IfElseInterpretationStrategy(ifElse, true, statementInterpreter, expressionEvaluator);
+        var result = strategy.Apply();
+        Assert.True(result.Returned);
+        Assert.False(result.IsValueReturned);
+    }
+
+    [Fact(DisplayName = "returns a non returning result when the body does so")]
+    public void returns_a_non_returning_result_when_the_body_does_so()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainConditional = new Conditional() { Condition = mainCondition };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
+        
+        var minorCondition = Substitute.For<Expression>();
+        var minorBody = Substitute.For<Statement>();
+        expressionEvaluator.Evaluate(minorCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true });
+        var minorConditional = new Conditional() { Condition = minorCondition, Body = minorBody };
+
+        statementInterpreter.Interpret(minorBody, true).Returns(StatementInterpretationResult.GetNotReturned());
+
+        var ifElse = new IfElse()
+        {
+            MainConditional = mainConditional, 
+            OtherConditionals = new List<Conditional> { minorConditional },
+        };
+        var strategy = new IfElseInterpretationStrategy(ifElse, true, statementInterpreter, expressionEvaluator);
+        var result = strategy.Apply();
+        Assert.False(result.Returned);
+    }
+
     [Fact(DisplayName = "interprets the else body when all the minor conditions evaluate to false")]
     public void interprets_the_else_body_when_all_the_minor_conditions_evaluate_to_false()
     {
@@ -267,6 +362,41 @@ public class IfElseInterpretationStrategyTest
         });
     }
 
+    [Fact(DisplayName = "returns a returning result when the else body does so")]
+    public void returns_a_returning_result_when_the_else_body_does_so()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainConditional = new Conditional() { Condition = mainCondition };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
+        
+        var elseBody = Substitute.For<Statement>();
+        statementInterpreter.Interpret(elseBody, true).Returns(StatementInterpretationResult.GetReturned());
+
+        var ifElse = new IfElse { MainConditional = mainConditional, OtherConditionals = new List<Conditional>(), ElseBody = elseBody };
+        var strategy = new IfElseInterpretationStrategy(ifElse, true, statementInterpreter, expressionEvaluator);
+        var result = strategy.Apply();
+        
+        Assert.True(result.Returned);
+        Assert.False(result.IsValueReturned);
+    }
+
+    [Fact(DisplayName = "returns a non returning result when the else body does so")]
+    public void returns_a_non_returning_result_when_the_else_body_does_so()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainConditional = new Conditional() { Condition = mainCondition };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
+        
+        var elseBody = Substitute.For<Statement>();
+        statementInterpreter.Interpret(elseBody, true).Returns(StatementInterpretationResult.GetNotReturned());
+
+        var ifElse = new IfElse { MainConditional = mainConditional, OtherConditionals = new List<Conditional>(), ElseBody = elseBody };
+        var strategy = new IfElseInterpretationStrategy(ifElse, true, statementInterpreter, expressionEvaluator);
+        var result = strategy.Apply();
+        
+        Assert.False(result.Returned);
+    }
+
     [Fact(DisplayName = "does not interpret anything when the main condition is false and there is no else body")]
     public void does_not_interpret_anything_when_the_main_condition_is_false_and_there_is_no_else_body()
     {
@@ -281,5 +411,20 @@ public class IfElseInterpretationStrategyTest
         
         expressionEvaluator.Evaluate(mainCondition);
         statementInterpreter.DidNotReceiveWithAnyArgs().Interpret(Arg.Any<Statement>());
+    }
+
+    [Fact(DisplayName = "returns a non returning result when the main condition is false and there is no else body")]
+    public void returns_a_non_returning_result_when_the_main_condition_is_false_and_there_is_no_else_body()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainBody = Substitute.For<Statement>();
+        var mainConditional = new Conditional() { Condition = mainCondition, Body = mainBody };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
+
+        var ifElse = new IfElse { MainConditional = mainConditional, OtherConditionals = new List<Conditional>(), ElseBody = null };
+        var strategy = new IfElseInterpretationStrategy(ifElse, false, statementInterpreter, expressionEvaluator);
+        var result = strategy.Apply();
+        
+        Assert.False(result.Returned);
     }
 }

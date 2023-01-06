@@ -19,15 +19,21 @@ public class WhileLoopInterpretationStrategy : StatementInterpretationStrategy
         this.functionContext = functionContext;
     }
 
-    public void Apply()
+    public StatementInterpretationResult Apply()
     {
         var condition = EvaluateCondition();
 
         while (condition)
         {
-            statementInterpreter.Interpret(whileLoop.Body, functionContext); // TODO handle the cae of a return
+            var result = statementInterpreter.Interpret(whileLoop.Body, functionContext);
+            if (result.Returned)
+            {
+                return result;
+            }
             condition = EvaluateCondition();
         }
+
+        return StatementInterpretationResult.GetNotReturned();
     }
 
     private bool EvaluateCondition()
