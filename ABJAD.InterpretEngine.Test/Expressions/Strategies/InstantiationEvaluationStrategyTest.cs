@@ -106,8 +106,9 @@ public class InstantiationEvaluationStrategyTest
         {
             globalScope.AddNewScope();
             globalScope.DefineVariable("param", argType, argValue);
+            statementInterpreter.Received(1).Interpret(constructorBody);
+            globalScope.RemoveLastScope();
         });
-        statementInterpreter.Received(1).Interpret(constructorBody);
     }
 
     [Fact(DisplayName = "returns an instance element with the local scope included")]

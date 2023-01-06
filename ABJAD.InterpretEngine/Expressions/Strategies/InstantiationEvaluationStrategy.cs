@@ -49,6 +49,8 @@ public class InstantiationEvaluationStrategy : ExpressionEvaluationStrategy
             AddConstructorArgumentsToScope(constructorElement, arguments);
 
             statementInterpreter.Interpret(constructorElement.Body);
+            
+            RemoveArgumentsValuesFromScope();
         }
         else if (constructorParameterTypes.Length == 0)
         {
@@ -65,6 +67,11 @@ public class InstantiationEvaluationStrategy : ExpressionEvaluationStrategy
             Type = DataType.Custom(instantiation.ClassName),
             Value = new InstanceElement { Scope = localScope }
         };
+    }
+
+    private void RemoveArgumentsValuesFromScope()
+    {
+        globalScope.RemoveLastScope();
     }
 
     private void AddConstructorArgumentsToScope(ConstructorElement constructorElement, List<EvaluatedResult> arguments)

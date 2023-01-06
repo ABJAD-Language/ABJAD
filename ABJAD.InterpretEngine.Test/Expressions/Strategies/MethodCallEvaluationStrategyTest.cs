@@ -135,6 +135,34 @@ public class MethodCallEvaluationStrategyTest
         declarationInterpreter.DidNotReceive().Interpret(declaration2);
     }
 
+    [Fact(DisplayName = "removes the defined parameter values from the scope after finishing")]
+    public void removes_the_defined_parameter_values_from_the_scope_after_finishing()
+    {
+        var arg = Substitute.For<Expression>();
+
+        var argType = Substitute.For<DataType>();
+        var argValue = new object();
+        expressionEvaluator.Evaluate(arg).Returns(new EvaluatedResult { Type = argType, Value = argValue});
+
+        scope.FunctionExists("method", argType).Returns(true);
+        var declaration = Substitute.For<Declaration>();
+        scope.GetFunction("method", argType).Returns(new FunctionElement()
+        {
+            Parameters = new List<FunctionParameter> { new() { Type = argType, Name = "param" } },
+            Body = new Block() { Bindings = new List<Binding>() { declaration } }
+        });
+        
+        var methodCall = new MethodCall() { MethodName = "method", Arguments = new List<Expression> { arg }};
+        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
+        strategy.Apply();
+        
+        Received.InOrder(() =>
+        {
+            declarationInterpreter.Interpret(declaration);
+            scope.RemoveLastScope();
+        });
+    }
+
     [Fact(DisplayName = "throws error if the method was supposed to return a value but no statement returned a returning result")]
     public void throws_error_if_the_method_was_supposed_to_return_a_value_but_no_statement_returned_a_returning_result()
     {
