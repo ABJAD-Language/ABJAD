@@ -1,5 +1,7 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 using ABJAD.InterpretEngine.Statements.Strategies;
 using ABJAD.InterpretEngine.Types;
 using NSubstitute;
@@ -8,8 +10,8 @@ namespace ABJAD.InterpretEngine.Test.Statements.Strategies;
 
 public class IfElseInterpretationStrategyTest
 {
-    private readonly Interpreter<Statement> statementInterpreter = Substitute.For<Interpreter<Statement>>();
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly IStatementInterpreter statementInterpreter = Substitute.For<IStatementInterpreter>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
 
     [Fact(DisplayName = "throws error if the main condition was not bool")]
     public void throws_error_if_the_main_condition_was_not_bool()

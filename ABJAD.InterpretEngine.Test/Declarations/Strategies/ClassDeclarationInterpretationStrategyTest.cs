@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Declarations.Strategies;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Declarations.Strategies;
 using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Statements;
@@ -9,7 +10,7 @@ namespace ABJAD.InterpretEngine.Test.Declarations.Strategies;
 
 public class ClassDeclarationInterpretationStrategyTest
 {
-    private readonly Interpreter<Declaration> declarationInterpreter = Substitute.For<Interpreter<Declaration>>();
+    private readonly IDeclarationInterpreter declarationInterpreter = Substitute.For<IDeclarationInterpreter>();
     private readonly ScopeFacade scope = Substitute.For<ScopeFacade>();
 
     [Fact(DisplayName = "throws error if a class with the same name exists in the scope")]

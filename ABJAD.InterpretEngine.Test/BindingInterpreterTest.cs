@@ -1,14 +1,16 @@
-﻿using ABJAD.InterpretEngine.Shared;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Shared;
 using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 using NSubstitute;
 
 namespace ABJAD.InterpretEngine.Test;
 
 public class BindingInterpreterTest
 {
-    private readonly Interpreter<Statement> statementInterpreter = Substitute.For<Interpreter<Statement>>();
-    private readonly Interpreter<Declaration> declarationInterpreter = Substitute.For<Interpreter<Declaration>>();
+    private readonly IStatementInterpreter statementInterpreter = Substitute.For<IStatementInterpreter>();
+    private readonly IDeclarationInterpreter declarationInterpreter = Substitute.For<IDeclarationInterpreter>();
     private readonly BindingInterpreter interpreter;
 
     public BindingInterpreterTest()

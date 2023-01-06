@@ -1,14 +1,14 @@
-﻿using ABJAD.InterpretEngine.Expressions;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.Expressions.Strategies;
 using ABJAD.InterpretEngine.ScopeManagement;
-using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Assignments;
 using ABJAD.InterpretEngine.Shared.Expressions.Binary;
 using ABJAD.InterpretEngine.Shared.Expressions.Fixes;
 using ABJAD.InterpretEngine.Shared.Expressions.Primitives;
 using ABJAD.InterpretEngine.Shared.Expressions.Unary;
-using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 using ABJAD.InterpretEngine.Types;
 using NSubstitute;
 
@@ -97,7 +97,7 @@ public class ExpressionEvaluatorTest
         var instantiation = new Instantiation();
         var strategy = Substitute.For<ExpressionEvaluationStrategy>();
         expressionStrategyFactory.GetInstantiationEvaluationStrategy(instantiation, Arg.Any<ScopeFacade>(), 
-            Arg.Any<ScopeFacade>(), expressionEvaluator, Arg.Any<Interpreter<Statement>>(), Arg.Any<Interpreter<Declaration>>()).Returns(strategy);
+            Arg.Any<ScopeFacade>(), expressionEvaluator, Arg.Any<IStatementInterpreter>(), Arg.Any<IDeclarationInterpreter>()).Returns(strategy);
         
         var expectedResult = new EvaluatedResult { Type = Substitute.For<DataType>(), Value = new object() };
         strategy.Apply().Returns(expectedResult);
@@ -128,7 +128,7 @@ public class ExpressionEvaluatorTest
         var instanceMethodCall = new InstanceMethodCall();
         var strategy = Substitute.For<ExpressionEvaluationStrategy>();
         expressionStrategyFactory.GetInstanceFieldMethodCallEvaluationStrategy(instanceMethodCall,
-            Arg.Any<ScopeFacade>(), Arg.Any<Evaluator<Expression>>(), Arg.Any<TextWriter>()).Returns(strategy);
+            Arg.Any<ScopeFacade>(), Arg.Any<IExpressionEvaluator>(), Arg.Any<TextWriter>()).Returns(strategy);
         
         var expectedResult = new EvaluatedResult { Type = Substitute.For<DataType>(), Value = new object() };
         strategy.Apply().Returns(expectedResult);
@@ -144,8 +144,8 @@ public class ExpressionEvaluatorTest
         var methodCall = new MethodCall();
         var strategy = Substitute.For<ExpressionEvaluationStrategy>();
         expressionStrategyFactory.GetMethodCallEvaluationStrategy(methodCall,
-            Arg.Any<ScopeFacade>(), Arg.Any<Evaluator<Expression>>(), Arg.Any<Interpreter<Statement>>(),
-            Arg.Any<Interpreter<Declaration>>()).Returns(strategy);
+            Arg.Any<ScopeFacade>(), Arg.Any<IExpressionEvaluator>(), Arg.Any<IStatementInterpreter>(),
+            Arg.Any<IDeclarationInterpreter>()).Returns(strategy);
         
         var expectedResult = new EvaluatedResult { Type = Substitute.For<DataType>(), Value = new object() };
         strategy.Apply().Returns(expectedResult);

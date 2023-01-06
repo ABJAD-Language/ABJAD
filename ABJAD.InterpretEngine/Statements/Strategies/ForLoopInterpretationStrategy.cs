@@ -1,5 +1,6 @@
-﻿using ABJAD.InterpretEngine.Shared.Declarations;
-using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Statements;
 using ABJAD.InterpretEngine.Types;
 
@@ -8,11 +9,11 @@ namespace ABJAD.InterpretEngine.Statements.Strategies;
 public class ForLoopInterpretationStrategy : StatementInterpretationStrategy
 {
     private readonly ForLoop forLoop;
-    private readonly Interpreter<Statement> statementInterpreter;
-    private readonly Interpreter<Declaration> declarationInterpreter;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IStatementInterpreter statementInterpreter;
+    private readonly IDeclarationInterpreter declarationInterpreter;
+    private readonly IExpressionEvaluator expressionEvaluator;
 
-    public ForLoopInterpretationStrategy(ForLoop forLoop, Interpreter<Statement> statementInterpreter, Interpreter<Declaration> declarationInterpreter, Evaluator<Expression> expressionEvaluator)
+    public ForLoopInterpretationStrategy(ForLoop forLoop, IStatementInterpreter statementInterpreter, IDeclarationInterpreter declarationInterpreter, IExpressionEvaluator expressionEvaluator)
     {
         this.forLoop = forLoop;
         this.statementInterpreter = statementInterpreter;

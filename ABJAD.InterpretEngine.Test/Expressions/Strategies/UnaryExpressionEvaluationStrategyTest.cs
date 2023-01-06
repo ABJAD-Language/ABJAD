@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Expressions.Strategies;
+﻿using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.Expressions.Strategies;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Unary;
 using ABJAD.InterpretEngine.Types;
@@ -8,7 +9,7 @@ namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
 public class UnaryExpressionEvaluationStrategyTest
 {
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
     private readonly Expression target = Substitute.For<Expression>();
 
     [Fact(DisplayName = "throws error if the value of target is undefined")]
@@ -22,7 +23,7 @@ public class UnaryExpressionEvaluationStrategyTest
     
     public class NegationInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression target = Substitute.For<Expression>();
         private readonly DataType type = Substitute.For<DataType>();
 
@@ -63,7 +64,7 @@ public class UnaryExpressionEvaluationStrategyTest
 
     public class NegativeInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression target = Substitute.For<Expression>();
         private readonly DataType type = Substitute.For<DataType>();
 
@@ -104,7 +105,7 @@ public class UnaryExpressionEvaluationStrategyTest
 
     public class ToBoolInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression target = Substitute.For<Expression>();
         private readonly DataType type = Substitute.For<DataType>();
 
@@ -165,7 +166,7 @@ public class UnaryExpressionEvaluationStrategyTest
 
     public class ToNumberInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression target = Substitute.For<Expression>();
         private readonly DataType type = Substitute.For<DataType>();
 
@@ -238,7 +239,7 @@ public class UnaryExpressionEvaluationStrategyTest
 
     public class ToStringInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression target = Substitute.For<Expression>();
         private readonly DataType type = Substitute.For<DataType>();
 
@@ -290,7 +291,7 @@ public class UnaryExpressionEvaluationStrategyTest
 
     public class TypeOfInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression target = Substitute.For<Expression>();
 
         [Fact(DisplayName = "returns undefined when the type of target is unknown yet")]

@@ -1,6 +1,5 @@
 ﻿using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.ScopeManagement;
-using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 using ABJAD.InterpretEngine.Types;
 
@@ -10,9 +9,9 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
 {
     private readonly Assignment assignment;
     private readonly ScopeFacade scopeFacade;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
 
-    public AssignmentInterpretationStrategy(Assignment assignment, ScopeFacade scopeFacade, Evaluator<Expression> expressionEvaluator)
+    public AssignmentInterpretationStrategy(Assignment assignment, ScopeFacade scopeFacade, IExpressionEvaluator expressionEvaluator)
     {
         this.assignment = assignment;
         this.scopeFacade = scopeFacade;

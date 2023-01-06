@@ -11,7 +11,7 @@ using Environment = ABJAD.InterpretEngine.ScopeManagement.Environment;
 
 namespace ABJAD.InterpretEngine.Expressions;
 
-public class ExpressionEvaluator : Evaluator<Expression>
+public class ExpressionEvaluator : IExpressionEvaluator
 {
     private readonly IExpressionStrategyFactory expressionStrategyFactory;
     private readonly ScopeFacade scopeFacade;

@@ -11,12 +11,12 @@ namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 public class AssignmentEvaluationStrategyTest
 {
     private readonly ScopeFacade scopeFacade;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
 
     public AssignmentEvaluationStrategyTest()
     {
         scopeFacade = Substitute.For<ScopeFacade>();
-        expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        expressionEvaluator = Substitute.For<IExpressionEvaluator>();
     }
 
     [Fact(DisplayName = "throws error if the target reference did not exist")]

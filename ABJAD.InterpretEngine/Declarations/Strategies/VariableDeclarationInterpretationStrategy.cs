@@ -1,6 +1,6 @@
-﻿using ABJAD.InterpretEngine.ScopeManagement;
+﻿using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Declarations;
-using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Declarations.Strategies;
@@ -9,9 +9,9 @@ public class VariableDeclarationInterpretationStrategy : DeclarationInterpretati
 {
     private readonly VariableDeclaration declaration;
     private readonly ScopeFacade scope;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
 
-    public VariableDeclarationInterpretationStrategy(VariableDeclaration declaration, ScopeFacade scope, Evaluator<Expression> expressionEvaluator)
+    public VariableDeclarationInterpretationStrategy(VariableDeclaration declaration, ScopeFacade scope, IExpressionEvaluator expressionEvaluator)
     {
         this.declaration = declaration;
         this.scope = scope;

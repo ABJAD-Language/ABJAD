@@ -2,14 +2,13 @@
 using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Declarations;
-using ABJAD.InterpretEngine.Shared.Expressions;
 
 namespace ABJAD.InterpretEngine.Declarations;
 
-public class DeclarationInterpreter : Interpreter<Declaration>
+public class DeclarationInterpreter : IDeclarationInterpreter
 {
     private readonly ScopeFacade scope;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
 
     public DeclarationInterpreter(ScopeFacade scope, TextWriter writer)
     {

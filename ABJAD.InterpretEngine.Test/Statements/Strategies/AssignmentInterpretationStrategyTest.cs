@@ -10,7 +10,7 @@ namespace ABJAD.InterpretEngine.Test.Statements.Strategies;
 
 public class AssignmentInterpretationStrategyTest
 {
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
     private readonly ScopeFacade scopeFacade = Substitute.For<ScopeFacade>();
 
     [Fact(DisplayName = "throws error if target reference does not exist in scope")]

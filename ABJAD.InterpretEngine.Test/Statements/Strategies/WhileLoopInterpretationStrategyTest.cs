@@ -1,5 +1,7 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 using ABJAD.InterpretEngine.Statements.Strategies;
 using ABJAD.InterpretEngine.Types;
 using NSubstitute;
@@ -8,8 +10,8 @@ namespace ABJAD.InterpretEngine.Test.Statements.Strategies;
 
 public class WhileLoopInterpretationStrategyTest
 {
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
-    private readonly Interpreter<Statement> statementInterpreter = Substitute.For<Interpreter<Statement>>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
+    private readonly IStatementInterpreter statementInterpreter = Substitute.For<IStatementInterpreter>();
 
     [Fact(DisplayName = "throws error if the condition is not of type bool")]
     public void throws_error_if_the_condition_is_not_of_type_bool()

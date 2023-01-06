@@ -1,16 +1,15 @@
 ﻿using ABJAD.InterpretEngine.Declarations;
 using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.ScopeManagement;
-using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 using ABJAD.InterpretEngine.Statements.Strategies;
 
 namespace ABJAD.InterpretEngine.Statements;
 
-public class StatementInterpreter : Interpreter<Statement>
+public class StatementInterpreter : IStatementInterpreter
 {
     private readonly ScopeFacade scope;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
     private readonly DeclarationInterpreter declarationInterpreter;
     private readonly TextWriter writer;
 

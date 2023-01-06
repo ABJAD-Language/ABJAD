@@ -7,11 +7,11 @@ public class InstanceFieldMethodCallEvaluationStrategy : ExpressionEvaluationStr
 {
     private readonly InstanceMethodCall instanceMethodCall;
     private readonly ScopeFacade scope;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
     private readonly IExpressionEvaluatorFactory expressionEvaluatorFactory;
     private readonly TextWriter writer;
 
-    public InstanceFieldMethodCallEvaluationStrategy(InstanceMethodCall instanceMethodCall, ScopeFacade scope, Evaluator<Expression> expressionEvaluator, IExpressionEvaluatorFactory expressionEvaluatorFactory, TextWriter writer)
+    public InstanceFieldMethodCallEvaluationStrategy(InstanceMethodCall instanceMethodCall, ScopeFacade scope, IExpressionEvaluator expressionEvaluator, IExpressionEvaluatorFactory expressionEvaluatorFactory, TextWriter writer)
     {
         this.instanceMethodCall = instanceMethodCall;
         this.scope = scope;
@@ -20,7 +20,7 @@ public class InstanceFieldMethodCallEvaluationStrategy : ExpressionEvaluationStr
         this.writer = writer;
     }
 
-    public InstanceFieldMethodCallEvaluationStrategy(InstanceMethodCall instanceMethodCall, ScopeFacade scope, Evaluator<Expression> expressionEvaluator, TextWriter writer)
+    public InstanceFieldMethodCallEvaluationStrategy(InstanceMethodCall instanceMethodCall, ScopeFacade scope, IExpressionEvaluator expressionEvaluator, TextWriter writer)
     {
         this.instanceMethodCall = instanceMethodCall;
         this.scope = scope;
@@ -47,7 +47,7 @@ public class InstanceFieldMethodCallEvaluationStrategy : ExpressionEvaluationStr
         return result;
     }
 
-    private EvaluatedResult EvaluateMethodCall(Evaluator<Expression> localExpressionEvaluator)
+    private EvaluatedResult EvaluateMethodCall(IExpressionEvaluator localExpressionEvaluator)
     {
         var methodCall = new MethodCall()
         {

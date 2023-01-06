@@ -1,4 +1,4 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 
 namespace ABJAD.InterpretEngine.Statements.Strategies;
@@ -7,9 +7,9 @@ public class PrintInterpretationStrategy : StatementInterpretationStrategy
 {
     private readonly Print print;
     private readonly TextWriter writer;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
 
-    public PrintInterpretationStrategy(Print print, TextWriter writer, Evaluator<Expression> expressionEvaluator)
+    public PrintInterpretationStrategy(Print print, TextWriter writer, IExpressionEvaluator expressionEvaluator)
     {
         this.print = print;
         this.writer = writer;
