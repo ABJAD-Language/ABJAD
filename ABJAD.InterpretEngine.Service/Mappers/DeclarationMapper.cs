@@ -51,7 +51,7 @@ public static class DeclarationMapper
         return new FunctionDeclaration()
         {
             Name = apiModel.Name,
-            ReturnType = DataType.From(apiModel.ReturnType),
+            ReturnType = apiModel.ReturnType == null ? null : DataType.From(apiModel.ReturnType),
             Parameters = apiModel.Parameters.Select(MapParameter).ToList(),
             Body = (Block)StatementMapper.Map(apiModel.Body)
         };

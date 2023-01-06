@@ -97,6 +97,7 @@ public class MethodCallEvaluationStrategyTest
         
         var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
         var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
+        statementInterpreter.Interpret(statement, true).Returns(StatementInterpretationResult.GetNotReturned());
         strategy.Apply();
         
         Received.InOrder(() =>
@@ -106,13 +107,173 @@ public class MethodCallEvaluationStrategyTest
         });
     }
 
-    [Fact(DisplayName = "does not call the statement interpreter on a return statement")]
-    public void does_not_call_the_statement_interpreter_on_a_return_statement()
+    [Fact(DisplayName = "does not continue with the interpretation if a returning value was returned")]
+    public void does_not_continue_with_the_interpretation_if_a_returning_value_was_returned()
     {
-        var returnTarget = Substitute.For<Expression>();
-        expressionEvaluator.Evaluate(returnTarget).Returns(new EvaluatedResult() { Type = DataType.String() });
-        var returnStatement = new Return() { Target = returnTarget};
-        var functionBody = new Block() { Bindings = new List<Binding> { returnStatement } };
+        var declaration1 = Substitute.For<Declaration>();
+        var declaration2 = Substitute.For<Declaration>();
+        var statement1 = Substitute.For<Statement>();
+        var statement2 = Substitute.For<Statement>();
+        var functionBody = new Block() { Bindings = new List<Binding> { declaration1, statement1, statement2, declaration2 } };
+        var functionElement = new FunctionElement
+        {
+            Parameters = new List<FunctionParameter>(),
+            Body = functionBody
+        };
+        scope.FunctionExists("method").Returns(true);
+        scope.GetFunction("method").Returns(functionElement);
+
+        statementInterpreter.Interpret(statement1, true).Returns(StatementInterpretationResult.GetReturned());
+        
+        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
+        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
+        strategy.Apply();
+        
+        declarationInterpreter.Received(1).Interpret(declaration1);
+        statementInterpreter.Received(1).Interpret(statement1, true);
+        statementInterpreter.DidNotReceive().Interpret(statement2, true);
+        declarationInterpreter.DidNotReceive().Interpret(declaration2);
+    }
+
+    [Fact(DisplayName = "throws error if the method was supposed to return a value but no statement returned a returning result")]
+    public void throws_error_if_the_method_was_supposed_to_return_a_value_but_no_statement_returned_a_returning_result()
+    {
+        var statement = Substitute.For<Statement>();
+        var functionBody = new Block() { Bindings = new List<Binding> { statement } };
+        var functionElement = new FunctionElement
+        {
+            Parameters = new List<FunctionParameter>(),
+            ReturnType = Substitute.For<DataType>(),
+            Body = functionBody
+        };
+        scope.FunctionExists("method").Returns(true);
+        scope.GetFunction("method").Returns(functionElement);
+
+        statementInterpreter.Interpret(statement, true).Returns(StatementInterpretationResult.GetNotReturned());
+        
+        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
+        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
+        Assert.Throws<NoValueReturnedException>(() => strategy.Apply());
+    }
+
+    [Fact(DisplayName = "throws an error if the method was not supposed to return a value but did anyway")]
+    public void throws_an_error_if_the_method_was_not_supposed_to_return_a_value_but_did_anyway()
+    {
+        var statement = Substitute.For<Statement>();
+        var functionBody = new Block() { Bindings = new List<Binding> { statement } };
+        var functionElement = new FunctionElement
+        {
+            Parameters = new List<FunctionParameter>(),
+            Body = functionBody
+        };
+        scope.FunctionExists("method").Returns(true);
+        scope.GetFunction("method").Returns(functionElement);
+
+        statementInterpreter.Interpret(statement, true).Returns(StatementInterpretationResult.GetReturned(new EvaluatedResult()));
+        
+        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
+        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
+        Assert.Throws<InvalidVoidReturnStatementException>(() => strategy.Apply());
+    }
+
+    [Fact(DisplayName = "does throw an error if the method is not supposed to return a value but a statement returned a returning result with no value")]
+    public void does_throw_an_error_if_the_method_is_not_supposed_to_return_a_value_but_a_statement_returned_a_returning_result_with_no_value()
+    {
+        var statement = Substitute.For<Statement>();
+        var functionBody = new Block() { Bindings = new List<Binding> { statement } };
+        var functionElement = new FunctionElement
+        {
+            Parameters = new List<FunctionParameter>(),
+            Body = functionBody
+        };
+        scope.FunctionExists("method").Returns(true);
+        scope.GetFunction("method").Returns(functionElement);
+
+        statementInterpreter.Interpret(statement, true).Returns(StatementInterpretationResult.GetReturned());
+        
+        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
+        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter); 
+        strategy.Apply();
+    }
+
+    [Fact(DisplayName = "throws error if the returned value is of a different type than the expected one to be returned by the function")]
+    public void throws_error_if_the_returned_value_is_of_a_different_type_than_the_expected_one_to_be_returned_by_the_function()
+    {
+        var statement = Substitute.For<Statement>();
+        var functionBody = new Block() { Bindings = new List<Binding> { statement } };
+        var returnType = Substitute.For<DataType>();
+        var functionElement = new FunctionElement
+        {
+            Parameters = new List<FunctionParameter>(),
+            Body = functionBody,
+            ReturnType = returnType
+        };
+        scope.FunctionExists("method").Returns(true);
+        scope.GetFunction("method").Returns(functionElement);
+
+        var returnedValueType = Substitute.For<DataType>();
+        var evaluatedResult = new EvaluatedResult() { Type = returnedValueType };
+        statementInterpreter.Interpret(statement, true).Returns(StatementInterpretationResult.GetReturned(evaluatedResult));
+        
+        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
+        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter); 
+        Assert.Throws<InvalidTypeException>(() => strategy.Apply());
+    }
+
+    [Fact(DisplayName = "returns the value of the returning result when it appears and matching the function return type")]
+    public void returns_the_value_of_the_returning_result_when_it_appears_and_matching_the_function_return_type()
+    {
+        var statement = Substitute.For<Statement>();
+        var functionBody = new Block() { Bindings = new List<Binding> { statement } };
+        var returnType = Substitute.For<DataType>();
+        var functionElement = new FunctionElement
+        {
+            Parameters = new List<FunctionParameter>(),
+            Body = functionBody,
+            ReturnType = returnType
+        };
+        scope.FunctionExists("method").Returns(true);
+        scope.GetFunction("method").Returns(functionElement);
+
+        var returnedValueType = Substitute.For<DataType>();
+        var evaluatedResult = new EvaluatedResult() { Type = returnedValueType };
+        statementInterpreter.Interpret(statement, true).Returns(StatementInterpretationResult.GetReturned(evaluatedResult));
+
+        returnType.Is(returnedValueType).Returns(true);
+        
+        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
+        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter); 
+        
+        Assert.Equal(evaluatedResult, strategy.Apply());
+    }
+
+    [Fact(DisplayName = "returns an undefined type and value when the function does not have a return type")]
+    public void returns_an_undefined_type_and_value_when_the_function_does_not_have_a_return_type()
+    {
+        var statement = Substitute.For<Statement>();
+        var functionBody = new Block() { Bindings = new List<Binding> { statement } };
+        var functionElement = new FunctionElement
+        {
+            Parameters = new List<FunctionParameter>(),
+            Body = functionBody,
+        };
+        scope.FunctionExists("method").Returns(true);
+        scope.GetFunction("method").Returns(functionElement);
+        
+        statementInterpreter.Interpret(statement, true).Returns(StatementInterpretationResult.GetNotReturned());
+
+        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
+        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
+        var evaluatedResult = strategy.Apply();
+        Assert.True(evaluatedResult.Type.IsUndefined());
+        Assert.Equal(SpecialValues.UNDEFINED, evaluatedResult.Value);
+    }
+
+    [Fact(DisplayName = "returns a result with special value null when the returned result from the body was so")]
+    public void returns_a_result_with_special_value_null_when_the_returned_result_from_the_body_was_so()
+    {
+        var statement = Substitute.For<Statement>();
+        var functionBody = new Block() { Bindings = new List<Binding> { statement } };
         var functionElement = new FunctionElement
         {
             Parameters = new List<FunctionParameter>(),
@@ -121,100 +282,15 @@ public class MethodCallEvaluationStrategyTest
         };
         scope.FunctionExists("method").Returns(true);
         scope.GetFunction("method").Returns(functionElement);
-        
-        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
-        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
-        strategy.Apply();
-        
-        statementInterpreter.DidNotReceive().Interpret(returnStatement);
-    }
 
-    [Fact(DisplayName = "throws error if the expression to return evaluates to a different type from the function return type")]
-    public void throws_error_if_the_expression_to_return_evaluates_to_a_different_type_from_the_function_return_type()
-    {
-        var returnTarget = Substitute.For<Expression>();
-        var returnTargetType = Substitute.For<DataType>();
-        expressionEvaluator.Evaluate(returnTarget).Returns(new EvaluatedResult() { Type = returnTargetType });
-        var returnStatement = new Return() { Target = returnTarget};
-        var functionBody = new Block() { Bindings = new List<Binding> { returnStatement } };
-        var returnType = Substitute.For<DataType>();
-        var functionElement = new FunctionElement
-        {
-            Parameters = new List<FunctionParameter>(),
-            Body = functionBody,
-            ReturnType = returnType
-        };
-        returnTargetType.Is(returnType).Returns(false);
-        scope.FunctionExists("method").Returns(true);
-        scope.GetFunction("method").Returns(functionElement);
-        
-        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
-        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
-        Assert.Throws<InvalidTypeException>(() => strategy.Apply());
-    }
+        var result = new EvaluatedResult() { Type = DataType.Undefined(), Value = SpecialValues.NULL};
+        statementInterpreter.Interpret(statement, true).Returns(StatementInterpretationResult.GetReturned(result));
 
-    [Fact(DisplayName = "throws error if the function does not have a return type but the return statement has a target expression")]
-    public void throws_error_if_the_function_does_not_have_a_return_type_but_the_return_statement_has_a_target_expression()
-    {
-        var returnTarget = Substitute.For<Expression>();
-        var returnStatement = new Return() { Target = returnTarget};
-        var functionBody = new Block() { Bindings = new List<Binding> { returnStatement } };
-        var functionElement = new FunctionElement
-        {
-            Parameters = new List<FunctionParameter>(),
-            Body = functionBody
-        };
-        scope.FunctionExists("method").Returns(true);
-        scope.GetFunction("method").Returns(functionElement);
-        
-        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
-        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
-        Assert.Throws<InvalidVoidReturnStatementException>(() => strategy.Apply());
-    }
-
-    [Fact(DisplayName = "returns the evaluation of the return target expression")]
-    public void returns_the_evaluation_of_the_return_target_expression()
-    {
-        var returnTarget = Substitute.For<Expression>();
-        var returnTargetType = Substitute.For<DataType>();
-        returnTargetType.Is(returnTargetType).Returns(true);
-        var returnTargetValue = new object();
-        expressionEvaluator.Evaluate(returnTarget).Returns(new EvaluatedResult() { Type = returnTargetType, Value = returnTargetValue});
-        var returnStatement = new Return() { Target = returnTarget};
-        var functionBody = new Block() { Bindings = new List<Binding> { returnStatement } };
-        var functionElement = new FunctionElement
-        {
-            Parameters = new List<FunctionParameter>(),
-            Body = functionBody,
-            ReturnType =returnTargetType
-        };
-        scope.FunctionExists("method").Returns(true);
-        scope.GetFunction("method").Returns(functionElement);
-        
         var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
         var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
         var evaluatedResult = strategy.Apply();
-        Assert.Equal(returnTargetType, evaluatedResult.Type);
-        Assert.Equal(returnTargetValue, evaluatedResult.Value);
-    }
-
-    [Fact(DisplayName = "returns an undefined type and value when the function does not have a return type")]
-    public void returns_an_undefined_type_and_value_when_the_function_does_not_have_a_return_type()
-    {
-        var returnStatement = new Return();
-        var functionBody = new Block() { Bindings = new List<Binding> { returnStatement } };
-        var functionElement = new FunctionElement
-        {
-            Parameters = new List<FunctionParameter>(),
-            Body = functionBody
-        };
-        scope.FunctionExists("method").Returns(true);
-        scope.GetFunction("method").Returns(functionElement);
         
-        var methodCall = new MethodCall { MethodName = "method", Arguments = new List<Expression>() };
-        var strategy = new MethodCallEvaluationStrategy(methodCall, scope, expressionEvaluator, statementInterpreter, declarationInterpreter);
-        var evaluatedResult = strategy.Apply();
-        Assert.True(evaluatedResult.Type.IsUndefined());
-        Assert.Equal(SpecialValues.UNDEFINED, evaluatedResult.Value);
+        Assert.True(evaluatedResult.Type.IsString());
+        Assert.Equal(SpecialValues.NULL, evaluatedResult.Value);
     }
 }
