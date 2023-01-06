@@ -48,6 +48,7 @@ public class WhileLoopInterpretationStrategyTest
             new EvaluatedResult { Type = DataType.Bool(), Value = true },
             new EvaluatedResult { Type = DataType.Bool(), Value = false }
         );
+        statementInterpreter.Interpret(body).Returns(StatementInterpretationResult.GetNotReturned());
         var strategy = new WhileLoopInterpretationStrategy(whileLoop, false, expressionEvaluator, statementInterpreter);
         strategy.Apply();
         Received.InOrder(() =>
@@ -70,6 +71,7 @@ public class WhileLoopInterpretationStrategyTest
             new EvaluatedResult { Type = DataType.Bool(), Value = true },
             new EvaluatedResult { Type = DataType.Bool(), Value = false }
         );
+        statementInterpreter.Interpret(body, true).Returns(StatementInterpretationResult.GetNotReturned());
         var strategy = new WhileLoopInterpretationStrategy(whileLoop, true, expressionEvaluator, statementInterpreter);
         strategy.Apply();
         Received.InOrder(() =>
@@ -78,5 +80,48 @@ public class WhileLoopInterpretationStrategyTest
             statementInterpreter.Interpret(body, true);
             expressionEvaluator.Evaluate(condition);
         });
+    }
+
+    [Fact(DisplayName = "returns a returning result and stops the loop when the statement returns a returning result")]
+    public void returns_a_returning_result_and_stops_the_loop_when_the_statement_returns_a_returning_result()
+    {
+        var condition = Substitute.For<Expression>();
+        var body = Substitute.For<Statement>();
+        var whileLoop = new WhileLoop { Condition = condition, Body = body};
+        expressionEvaluator.Evaluate(condition).Returns(
+            new EvaluatedResult { Type = DataType.Bool(), Value = true },
+            new EvaluatedResult { Type = DataType.Bool(), Value = true },
+            new EvaluatedResult { Type = DataType.Bool(), Value = false }
+        );
+        statementInterpreter.Interpret(body, true).Returns(StatementInterpretationResult.GetReturned());
+        var strategy = new WhileLoopInterpretationStrategy(whileLoop, true, expressionEvaluator, statementInterpreter);
+        var result = strategy.Apply();
+
+        statementInterpreter.Received(1).Interpret(body, true);
+        expressionEvaluator.Received(1).Evaluate(condition);
+        
+        Assert.True(result.Returned);
+        Assert.False(result.IsValueReturned);
+    }
+
+    [Fact(DisplayName = "returns a non returning result if the loop finishes normally")]
+    public void returns_a_non_returning_result_if_the_loop_finishes_normally()
+    {
+        var condition = Substitute.For<Expression>();
+        var body = Substitute.For<Statement>();
+        var whileLoop = new WhileLoop { Condition = condition, Body = body};
+        expressionEvaluator.Evaluate(condition).Returns(
+            new EvaluatedResult { Type = DataType.Bool(), Value = true },
+            new EvaluatedResult { Type = DataType.Bool(), Value = true },
+            new EvaluatedResult { Type = DataType.Bool(), Value = false }
+        );
+        statementInterpreter.Interpret(body, true).Returns(StatementInterpretationResult.GetNotReturned());
+        var strategy = new WhileLoopInterpretationStrategy(whileLoop, true, expressionEvaluator, statementInterpreter);
+        var result = strategy.Apply();
+
+        statementInterpreter.Received(2).Interpret(body, true);
+        expressionEvaluator.Received(3).Evaluate(condition);
+        
+        Assert.False(result.Returned);
     }
 }

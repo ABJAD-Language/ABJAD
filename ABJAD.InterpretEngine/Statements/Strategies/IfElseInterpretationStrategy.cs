@@ -20,14 +20,12 @@ public class IfElseInterpretationStrategy : StatementInterpretationStrategy
         this.functionContext = functionContext;
     }
 
-    public void Apply()
+    public StatementInterpretationResult Apply()
     {
-        // TODO handle case of return statement
         var mainCondition = EvaluateCondition(ifElse.MainConditional.Condition);
         if (mainCondition)
         {
-            statementInterpreter.Interpret(ifElse.MainConditional.Body, functionContext);
-            return;
+            return statementInterpreter.Interpret(ifElse.MainConditional.Body, functionContext);
         }
         
         foreach (var conditional in ifElse.OtherConditionals)
@@ -35,15 +33,16 @@ public class IfElseInterpretationStrategy : StatementInterpretationStrategy
             var condition = EvaluateCondition(conditional.Condition);
             if (condition)
             {
-                statementInterpreter.Interpret(conditional.Body, functionContext);
-                return;
+                return statementInterpreter.Interpret(conditional.Body, functionContext);
             }
         }
 
         if (ifElse.ElseBody != null)
         {
-            statementInterpreter.Interpret(ifElse.ElseBody, functionContext);
+            return statementInterpreter.Interpret(ifElse.ElseBody, functionContext);
         }
+
+        return StatementInterpretationResult.GetNotReturned();
     }
 
     private bool EvaluateCondition(Expression conditionExpression)

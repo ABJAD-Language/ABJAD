@@ -21,11 +21,13 @@ public class StatementInterpreter : IStatementInterpreter
         declarationInterpreter = new DeclarationInterpreter(scope, writer);
     }
 
-    public void Interpret(Statement target, bool functionContext = false)
+    public StatementInterpretationResult Interpret(Statement target, bool functionContext = false)
     {
         scope.AddNewScope();
-        GetStrategy(target, functionContext).Apply();
+        var result = GetStrategy(target, functionContext).Apply();
         scope.RemoveLastScope();
+
+        return result;
     }
 
     private StatementInterpretationStrategy GetStrategy(Statement target, bool functionContext)
@@ -39,6 +41,7 @@ public class StatementInterpreter : IStatementInterpreter
             WhileLoop whileLoop => new WhileLoopInterpretationStrategy(whileLoop, functionContext, expressionEvaluator, this),
             Print print => new PrintInterpretationStrategy(print, writer, expressionEvaluator),
             IfElse ifElse => new IfElseInterpretationStrategy(ifElse, functionContext, this, expressionEvaluator),
+            Return @return => new ReturnInterpretationStrategy(@return, functionContext, expressionEvaluator),
             _ => throw new ArgumentException()
         };
     }

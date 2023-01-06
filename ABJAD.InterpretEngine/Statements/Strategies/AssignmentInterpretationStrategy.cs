@@ -18,16 +18,17 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
         this.expressionEvaluator = expressionEvaluator;
     }
 
-    public void Apply()
+    public StatementInterpretationResult Apply()
     {
         ValidateTargetExists();
-        // TODO validate target is a variable
 
         var evaluatedResult = expressionEvaluator.Evaluate(assignment.Value);
         ValidateValueTypeMatchesTargetType(evaluatedResult);
         ValidateValueIsNotUndefined(evaluatedResult);
 
         scopeFacade.UpdateReference(assignment.Target, evaluatedResult.Value);
+
+        return StatementInterpretationResult.GetNotReturned();
     }
 
     private static void ValidateValueIsNotUndefined(EvaluatedResult evaluatedResult)

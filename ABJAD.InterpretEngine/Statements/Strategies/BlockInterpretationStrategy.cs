@@ -19,7 +19,7 @@ public class BlockInterpretationStrategy : StatementInterpretationStrategy
         this.declarationInterpreter = declarationInterpreter;
     }
 
-    public void Apply()
+    public StatementInterpretationResult Apply()
     {
         foreach (var binding in block.Bindings)
         {
@@ -29,8 +29,14 @@ public class BlockInterpretationStrategy : StatementInterpretationStrategy
             }
             else if (binding is Statement statement)
             {
-                statementInterpreter.Interpret(statement, functionContext);  // TODO handle case of return statement
+                var result = statementInterpreter.Interpret(statement, functionContext);
+                if (result.Returned)
+                {
+                    return result;
+                }
             }
         }
+
+        return StatementInterpretationResult.GetNotReturned();
     }
 }

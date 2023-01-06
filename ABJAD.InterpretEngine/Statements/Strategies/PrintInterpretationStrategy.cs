@@ -16,7 +16,7 @@ public class PrintInterpretationStrategy : StatementInterpretationStrategy
         this.expressionEvaluator = expressionEvaluator;
     }
 
-    public void Apply()
+    public StatementInterpretationResult Apply()
     {
         var evaluatedResult = expressionEvaluator.Evaluate(print.Target);
         if (evaluatedResult.Value.Equals(SpecialValues.UNDEFINED))
@@ -32,5 +32,7 @@ public class PrintInterpretationStrategy : StatementInterpretationStrategy
         {
             writer.WriteLine(evaluatedResult.Value);
         }
+
+        return StatementInterpretationResult.GetNotReturned();
     }
 }

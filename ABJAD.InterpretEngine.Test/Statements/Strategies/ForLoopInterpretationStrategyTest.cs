@@ -95,6 +95,7 @@ public class ForLoopInterpretationStrategyTest
                 new EvaluatedResult { Type = DataType.Bool(), Value = true },
                 new EvaluatedResult { Type = DataType.Bool(), Value = false });
         var strategy = new ForLoopInterpretationStrategy(forLoop, false, statementInterpreter, declarationInterpreter, expressionEvaluator);
+        statementInterpreter.Interpret(body, false).Returns(StatementInterpretationResult.GetNotReturned());
         strategy.Apply();
         
         Received.InOrder(() =>
@@ -122,6 +123,7 @@ public class ForLoopInterpretationStrategyTest
             .Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true },
                 new EvaluatedResult { Type = DataType.Bool(), Value = false });
         var strategy = new ForLoopInterpretationStrategy(forLoop, true, statementInterpreter, declarationInterpreter, expressionEvaluator);
+        statementInterpreter.Interpret(body, true).Returns(StatementInterpretationResult.GetNotReturned());
         strategy.Apply();
         
         Received.InOrder(() =>
@@ -129,6 +131,65 @@ public class ForLoopInterpretationStrategyTest
             statementInterpreter.Interpret(body, true);
             expressionEvaluator.Evaluate(callback);
         });
+    }
+
+    [Fact(DisplayName = "returns a returning result when it is the case")]
+    public void returns_a_returning_result_when_it_is_the_case()
+    {
+        var condition = Substitute.For<Expression>();
+        var body = Substitute.For<Statement>();
+        var callback = Substitute.For<Expression>();
+        var forLoop = new ForLoop
+        {
+            TargetDefinition = new Assignment(), 
+            Condition = new ExpressionStatement() { Target = condition },
+            Body = body, Callback = callback
+        };
+        expressionEvaluator.Evaluate(condition)
+            .Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true },
+                new EvaluatedResult { Type = DataType.Bool(), Value = true },
+                new EvaluatedResult { Type = DataType.Bool(), Value = false });
+        var strategy = new ForLoopInterpretationStrategy(forLoop, true, statementInterpreter, declarationInterpreter, expressionEvaluator);
+
+        var evaluatedResult = new EvaluatedResult();
+        statementInterpreter.Interpret(body, true).Returns(StatementInterpretationResult.GetReturned(evaluatedResult));
+
+        var result = strategy.Apply();
+        
+        statementInterpreter.Received(1).Interpret(body, true);
+        expressionEvaluator.DidNotReceive().Evaluate(callback);
+
+        Assert.True(result.Returned);
+        Assert.True(result.IsValueReturned);
+        Assert.Equal(evaluatedResult, result.ReturnedValue);
+    }
+
+    [Fact(DisplayName = "returns a non returning result when it is the case")]
+    public void returns_a_non_returning_result_when_it_is_the_case()
+    {
+        var condition = Substitute.For<Expression>();
+        var body = Substitute.For<Statement>();
+        var callback = Substitute.For<Expression>();
+        var forLoop = new ForLoop
+        {
+            TargetDefinition = new Assignment(), 
+            Condition = new ExpressionStatement() { Target = condition },
+            Body = body, Callback = callback
+        };
+        expressionEvaluator.Evaluate(condition)
+            .Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true },
+                new EvaluatedResult { Type = DataType.Bool(), Value = true },
+                new EvaluatedResult { Type = DataType.Bool(), Value = false });
+        var strategy = new ForLoopInterpretationStrategy(forLoop, true, statementInterpreter, declarationInterpreter, expressionEvaluator);
+
+        statementInterpreter.Interpret(body, true).Returns(StatementInterpretationResult.GetNotReturned());
+
+        var result = strategy.Apply();
+        
+        statementInterpreter.Received(2).Interpret(body, true);
+        expressionEvaluator.Received(2).Evaluate(callback);
+
+        Assert.False(result.Returned);
     }
 }
 

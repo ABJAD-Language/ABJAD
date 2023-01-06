@@ -71,4 +71,23 @@ public class AssignmentInterpretationStrategyTest
         strategy.Apply();
         scopeFacade.Received(1).UpdateReference("id", newValue);
     }
+
+    [Fact(DisplayName = "returns a returning result with the flag set to false")]
+    public void returns_a_returning_result_with_the_flag_set_to_false()
+    {
+        scopeFacade.ReferenceExists("id").Returns(true);
+        var targetType = Substitute.For<DataType>();
+        scopeFacade.GetReferenceType("id").Returns(targetType);
+        var valueExpression = Substitute.For<Expression>();
+        var valueType = Substitute.For<DataType>();
+        var newValue = new object();
+        expressionEvaluator.Evaluate(valueExpression).Returns(new EvaluatedResult { Type = valueType, Value = newValue });
+        targetType.Is(valueType).Returns(true);
+
+        var assignment = new Assignment { Target = "id", Value = valueExpression };
+        var strategy = new AssignmentInterpretationStrategy(assignment, scopeFacade, expressionEvaluator);
+        var result = strategy.Apply();
+        
+        Assert.False(result.Returned);
+    }
 }

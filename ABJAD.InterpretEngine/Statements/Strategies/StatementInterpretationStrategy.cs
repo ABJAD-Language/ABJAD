@@ -2,5 +2,5 @@
 
 public interface StatementInterpretationStrategy
 {
-    void Apply();
+    StatementInterpretationResult Apply();
 }
