@@ -11,7 +11,7 @@ namespace ABJAD.InterpretEngine.Expressions.Strategies;
 public class MethodCallEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly MethodCall methodCall;
-    private ScopeFacade scope;
+    private readonly ScopeFacade scope;
     private readonly IExpressionEvaluator expressionEvaluator;
     private readonly IStatementInterpreter statementInterpreter;
     private readonly IDeclarationInterpreter declarationInterpreter;
@@ -33,11 +33,19 @@ public class MethodCallEvaluationStrategy : ExpressionEvaluationStrategy
         ValidateMethodExists(argsTypes);
 
         var function = scope.GetFunction(methodCall.MethodName, argsTypes);
+
         AddArgumentsToScope(function.Parameters, args);
 
         var evaluatedResult = InterpretBody(function);
+        
+        RemoveArgumentsValuesFromScope();
 
         return evaluatedResult;
+    }
+
+    private void RemoveArgumentsValuesFromScope()
+    {
+        scope.RemoveLastScope();
     }
 
     private EvaluatedResult InterpretBody(FunctionElement function)
