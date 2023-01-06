@@ -21,32 +21,32 @@ public class StatementInterpreter : IStatementInterpreter
         declarationInterpreter = new DeclarationInterpreter(scope, writer);
     }
 
-    public void Interpret(Statement target)
+    public void Interpret(Statement target, bool functionContext = false)
     {
         scope.AddNewScope();
-        GetStrategy(target).Apply();
+        GetStrategy(target, functionContext).Apply();
         scope.RemoveLastScope();
     }
 
-    private StatementInterpretationStrategy GetStrategy(Statement target)
+    private StatementInterpretationStrategy GetStrategy(Statement target, bool functionContext)
     {
         return target switch
         {
             ExpressionStatement expressionStatement => new ExpressionStatementInterpretationStrategy(expressionStatement, expressionEvaluator),
             Assignment assignment => new AssignmentInterpretationStrategy(assignment, scope, expressionEvaluator),
-            Block block => HandleBlock(block),
-            ForLoop forLoop => new ForLoopInterpretationStrategy(forLoop, this, declarationInterpreter, expressionEvaluator),
-            WhileLoop whileLoop => new WhileLoopInterpretationStrategy(whileLoop, expressionEvaluator, this),
+            Block block => HandleBlock(block, functionContext),
+            ForLoop forLoop => new ForLoopInterpretationStrategy(forLoop, functionContext,this, declarationInterpreter, expressionEvaluator),
+            WhileLoop whileLoop => new WhileLoopInterpretationStrategy(whileLoop, functionContext, expressionEvaluator, this),
             Print print => new PrintInterpretationStrategy(print, writer, expressionEvaluator),
-            IfElse ifElse => new IfElseInterpretationStrategy(ifElse, this, expressionEvaluator),
+            IfElse ifElse => new IfElseInterpretationStrategy(ifElse, functionContext, this, expressionEvaluator),
             _ => throw new ArgumentException()
         };
     }
 
-    private StatementInterpretationStrategy HandleBlock(Block block)
+    private StatementInterpretationStrategy HandleBlock(Block block, bool functionContext)
     {
         var statementInterpreter = new StatementInterpreter(scope, writer);
         var declarationInterpreter = new DeclarationInterpreter(scope, writer);
-        return new BlockInterpretationStrategy(block, statementInterpreter, declarationInterpreter);
+        return new BlockInterpretationStrategy(block, functionContext, statementInterpreter, declarationInterpreter);
     }
 }

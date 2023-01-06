@@ -21,7 +21,7 @@ public class IfElseInterpretationStrategyTest
         var conditionType = Substitute.For<DataType>();
         expressionEvaluator.Evaluate(condition).Returns(new EvaluatedResult { Type = conditionType });
         conditionType.IsBool().Returns(false);
-        var strategy = new IfElseInterpretationStrategy(ifElse, statementInterpreter, expressionEvaluator);
+        var strategy = new IfElseInterpretationStrategy(ifElse, false, statementInterpreter, expressionEvaluator);
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
 
@@ -45,13 +45,36 @@ public class IfElseInterpretationStrategyTest
             OtherConditionals = new List<Conditional> { minorConditional },
             ElseBody = elseBody
         };
-        var strategy = new IfElseInterpretationStrategy(ifElse, statementInterpreter, expressionEvaluator);
+        var strategy = new IfElseInterpretationStrategy(ifElse, false, statementInterpreter, expressionEvaluator);
         strategy.Apply();
         
         Received.InOrder(() =>
         {
             expressionEvaluator.Evaluate(mainCondition);
             statementInterpreter.Interpret(mainBody);
+        });
+    }
+
+    [Fact(DisplayName = "interpret the main body with function context set to true when it is the case")]
+    public void interpret_the_main_body_with_function_context_set_to_true_when_it_is_the_case()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainBody = Substitute.For<Statement>();
+        var mainConditional = new Conditional() { Condition = mainCondition, Body = mainBody };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true });
+        
+        var ifElse = new IfElse()
+        {
+            MainConditional = mainConditional, 
+            OtherConditionals = new List<Conditional>(),
+        };
+        var strategy = new IfElseInterpretationStrategy(ifElse, true, statementInterpreter, expressionEvaluator);
+        strategy.Apply();
+        
+        Received.InOrder(() =>
+        {
+            expressionEvaluator.Evaluate(mainCondition);
+            statementInterpreter.Interpret(mainBody, true);
         });
     }
 
@@ -75,7 +98,7 @@ public class IfElseInterpretationStrategyTest
             OtherConditionals = new List<Conditional> { minorConditional },
             ElseBody = elseBody
         };
-        var strategy = new IfElseInterpretationStrategy(ifElse, statementInterpreter, expressionEvaluator);
+        var strategy = new IfElseInterpretationStrategy(ifElse, false, statementInterpreter, expressionEvaluator);
         strategy.Apply();
         
         Received.InOrder(() =>
@@ -107,7 +130,7 @@ public class IfElseInterpretationStrategyTest
             OtherConditionals = new List<Conditional> { minorConditional },
             ElseBody = elseBody
         };
-        var strategy = new IfElseInterpretationStrategy(ifElse, statementInterpreter, expressionEvaluator);
+        var strategy = new IfElseInterpretationStrategy(ifElse, false, statementInterpreter, expressionEvaluator);
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
 
@@ -132,7 +155,7 @@ public class IfElseInterpretationStrategyTest
             OtherConditionals = new List<Conditional> { minorConditional },
             ElseBody = elseBody
         };
-        var strategy = new IfElseInterpretationStrategy(ifElse, statementInterpreter, expressionEvaluator);
+        var strategy = new IfElseInterpretationStrategy(ifElse, false, statementInterpreter, expressionEvaluator);
         strategy.Apply();
         
         Received.InOrder(() =>
@@ -140,6 +163,34 @@ public class IfElseInterpretationStrategyTest
             expressionEvaluator.Evaluate(mainCondition);
             expressionEvaluator.Evaluate(minorCondition);
             statementInterpreter.Interpret(minorBody);
+        });
+    }
+
+    [Fact(DisplayName = "interprets the body of the second conditional with function context set to true when it is the case")]
+    public void interprets_the_body_of_the_second_conditional_with_function_context_set_to_true_when_it_is_the_case()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainConditional = new Conditional() { Condition = mainCondition };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
+        
+        var minorCondition = Substitute.For<Expression>();
+        var minorBody = Substitute.For<Statement>();
+        expressionEvaluator.Evaluate(minorCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true });
+        var minorConditional = new Conditional() { Condition = minorCondition, Body = minorBody };
+
+        var ifElse = new IfElse()
+        {
+            MainConditional = mainConditional, 
+            OtherConditionals = new List<Conditional> { minorConditional },
+        };
+        var strategy = new IfElseInterpretationStrategy(ifElse, true, statementInterpreter, expressionEvaluator);
+        strategy.Apply();
+        
+        Received.InOrder(() =>
+        {
+            expressionEvaluator.Evaluate(mainCondition);
+            expressionEvaluator.Evaluate(minorCondition);
+            statementInterpreter.Interpret(minorBody, true);
         });
     }
 
@@ -164,7 +215,7 @@ public class IfElseInterpretationStrategyTest
             OtherConditionals = new List<Conditional> { minorConditional },
             ElseBody = elseBody
         };
-        var strategy = new IfElseInterpretationStrategy(ifElse, statementInterpreter, expressionEvaluator);
+        var strategy = new IfElseInterpretationStrategy(ifElse, false, statementInterpreter, expressionEvaluator);
         strategy.Apply();
         
         Received.InOrder(() =>
@@ -186,13 +237,33 @@ public class IfElseInterpretationStrategyTest
         var elseBody = Substitute.For<Statement>();
 
         var ifElse = new IfElse { MainConditional = mainConditional, OtherConditionals = new List<Conditional>(), ElseBody = elseBody };
-        var strategy = new IfElseInterpretationStrategy(ifElse, statementInterpreter, expressionEvaluator);
+        var strategy = new IfElseInterpretationStrategy(ifElse, false, statementInterpreter, expressionEvaluator);
         strategy.Apply();
         
         Received.InOrder(() =>
         {
             expressionEvaluator.Evaluate(mainCondition);
             statementInterpreter.Interpret(elseBody);
+        });
+    }
+
+    [Fact(DisplayName = "interprets the else body with function context set to true when it is the case")]
+    public void interprets_the_else_body_with_function_context_set_to_true_when_it_is_the_case()
+    {
+        var mainCondition = Substitute.For<Expression>();
+        var mainConditional = new Conditional() { Condition = mainCondition };
+        expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
+        
+        var elseBody = Substitute.For<Statement>();
+
+        var ifElse = new IfElse { MainConditional = mainConditional, OtherConditionals = new List<Conditional>(), ElseBody = elseBody };
+        var strategy = new IfElseInterpretationStrategy(ifElse, true, statementInterpreter, expressionEvaluator);
+        strategy.Apply();
+        
+        Received.InOrder(() =>
+        {
+            expressionEvaluator.Evaluate(mainCondition);
+            statementInterpreter.Interpret(elseBody, true);
         });
     }
 
@@ -205,7 +276,7 @@ public class IfElseInterpretationStrategyTest
         expressionEvaluator.Evaluate(mainCondition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
 
         var ifElse = new IfElse { MainConditional = mainConditional, OtherConditionals = new List<Conditional>(), ElseBody = null };
-        var strategy = new IfElseInterpretationStrategy(ifElse, statementInterpreter, expressionEvaluator);
+        var strategy = new IfElseInterpretationStrategy(ifElse, false, statementInterpreter, expressionEvaluator);
         strategy.Apply();
         
         expressionEvaluator.Evaluate(mainCondition);

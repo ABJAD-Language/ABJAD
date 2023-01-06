@@ -9,16 +9,18 @@ namespace ABJAD.InterpretEngine.Statements.Strategies;
 public class ForLoopInterpretationStrategy : StatementInterpretationStrategy
 {
     private readonly ForLoop forLoop;
+    private readonly bool functionContext;
     private readonly IStatementInterpreter statementInterpreter;
     private readonly IDeclarationInterpreter declarationInterpreter;
     private readonly IExpressionEvaluator expressionEvaluator;
 
-    public ForLoopInterpretationStrategy(ForLoop forLoop, IStatementInterpreter statementInterpreter, IDeclarationInterpreter declarationInterpreter, IExpressionEvaluator expressionEvaluator)
+    public ForLoopInterpretationStrategy(ForLoop forLoop, bool functionContext, IStatementInterpreter statementInterpreter, IDeclarationInterpreter declarationInterpreter, IExpressionEvaluator expressionEvaluator)
     {
         this.forLoop = forLoop;
         this.statementInterpreter = statementInterpreter;
         this.declarationInterpreter = declarationInterpreter;
         this.expressionEvaluator = expressionEvaluator;
+        this.functionContext = functionContext;
     }
 
     public void Apply()
@@ -28,7 +30,7 @@ public class ForLoopInterpretationStrategy : StatementInterpretationStrategy
         var condition = EvaluateCondition();
         while (condition)
         {
-            statementInterpreter.Interpret(forLoop.Body);
+            statementInterpreter.Interpret(forLoop.Body, functionContext); // TODO handle the case of a return
             expressionEvaluator.Evaluate(forLoop.Callback);
 
             condition = EvaluateCondition();

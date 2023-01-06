@@ -4,5 +4,5 @@ namespace ABJAD.InterpretEngine.Statements;
 
 public interface IStatementInterpreter
 {
-    void Interpret(Statement target);
+    void Interpret(Statement target, bool functionContext = false);
 }

@@ -21,7 +21,7 @@ public class WhileLoopInterpretationStrategyTest
         var conditionType = Substitute.For<DataType>();
         expressionEvaluator.Evaluate(condition).Returns(new EvaluatedResult { Type = conditionType });
         conditionType.IsBool().Returns(false);
-        var strategy = new WhileLoopInterpretationStrategy(whileLoop, expressionEvaluator, statementInterpreter);
+        var strategy = new WhileLoopInterpretationStrategy(whileLoop, false, expressionEvaluator, statementInterpreter);
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
 
@@ -32,7 +32,7 @@ public class WhileLoopInterpretationStrategyTest
         var body = Substitute.For<Statement>();
         var whileLoop = new WhileLoop { Condition = condition, Body = body};
         expressionEvaluator.Evaluate(condition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
-        var strategy = new WhileLoopInterpretationStrategy(whileLoop, expressionEvaluator, statementInterpreter);
+        var strategy = new WhileLoopInterpretationStrategy(whileLoop, false, expressionEvaluator, statementInterpreter);
         strategy.Apply();
         statementInterpreter.DidNotReceive().Interpret(body);
     }
@@ -48,7 +48,7 @@ public class WhileLoopInterpretationStrategyTest
             new EvaluatedResult { Type = DataType.Bool(), Value = true },
             new EvaluatedResult { Type = DataType.Bool(), Value = false }
         );
-        var strategy = new WhileLoopInterpretationStrategy(whileLoop, expressionEvaluator, statementInterpreter);
+        var strategy = new WhileLoopInterpretationStrategy(whileLoop, false, expressionEvaluator, statementInterpreter);
         strategy.Apply();
         Received.InOrder(() =>
         {
@@ -56,6 +56,26 @@ public class WhileLoopInterpretationStrategyTest
             statementInterpreter.Interpret(body);
             expressionEvaluator.Evaluate(condition);
             statementInterpreter.Interpret(body);
+            expressionEvaluator.Evaluate(condition);
+        });
+    }
+
+    [Fact(DisplayName = "interprets the body with function context set to true when it is the case")]
+    public void interprets_the_body_with_function_context_set_to_true_when_it_is_the_case()
+    {
+        var condition = Substitute.For<Expression>();
+        var body = Substitute.For<Statement>();
+        var whileLoop = new WhileLoop { Condition = condition, Body = body};
+        expressionEvaluator.Evaluate(condition).Returns(
+            new EvaluatedResult { Type = DataType.Bool(), Value = true },
+            new EvaluatedResult { Type = DataType.Bool(), Value = false }
+        );
+        var strategy = new WhileLoopInterpretationStrategy(whileLoop, true, expressionEvaluator, statementInterpreter);
+        strategy.Apply();
+        Received.InOrder(() =>
+        {
+            expressionEvaluator.Evaluate(condition);
+            statementInterpreter.Interpret(body, true);
             expressionEvaluator.Evaluate(condition);
         });
     }

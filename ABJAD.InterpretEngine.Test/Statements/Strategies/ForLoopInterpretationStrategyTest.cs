@@ -22,7 +22,7 @@ public class ForLoopInterpretationStrategyTest
     {
         var targetDefinition = new VariableDeclaration();
         var forLoop = new ForLoop() { TargetDefinition = targetDefinition, Condition = new ExpressionStatement() };
-        var strategy = new ForLoopInterpretationStrategy(forLoop, statementInterpreter, declarationInterpreter, expressionEvaluator);
+        var strategy = new ForLoopInterpretationStrategy(forLoop, false, statementInterpreter, declarationInterpreter, expressionEvaluator);
         expressionEvaluator.Evaluate(Arg.Any<Expression>()).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false});
         strategy.Apply();
         declarationInterpreter.Received(1).Interpret(targetDefinition);
@@ -33,7 +33,7 @@ public class ForLoopInterpretationStrategyTest
     {
         var targetDefinition = new Assignment();
         var forLoop = new ForLoop() { TargetDefinition = targetDefinition, Condition = new ExpressionStatement()};
-        var strategy = new ForLoopInterpretationStrategy(forLoop, statementInterpreter, declarationInterpreter, expressionEvaluator);
+        var strategy = new ForLoopInterpretationStrategy(forLoop, false, statementInterpreter, declarationInterpreter, expressionEvaluator);
         expressionEvaluator.Evaluate(Arg.Any<Expression>()).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
         strategy.Apply();
         statementInterpreter.Received(1).Interpret(targetDefinition);
@@ -43,7 +43,7 @@ public class ForLoopInterpretationStrategyTest
     public void throws_error_if_target_definition_is_neither_variable_declaration_nor_assignment_statement()
     {
         var forLoop = new ForLoop() { TargetDefinition = Substitute.For<Binding>() };
-        var strategy = new ForLoopInterpretationStrategy(forLoop, statementInterpreter, declarationInterpreter, expressionEvaluator);
+        var strategy = new ForLoopInterpretationStrategy(forLoop, false, statementInterpreter, declarationInterpreter, expressionEvaluator);
         Assert.Throws<ForLoopInvalidTargetDefinitionException>(() => strategy.Apply());
     }
 
@@ -55,7 +55,7 @@ public class ForLoopInterpretationStrategyTest
         var conditionType = Substitute.For<DataType>();
         expressionEvaluator.Evaluate(condition).Returns(new EvaluatedResult { Type = conditionType });
         conditionType.IsBool().Returns(false);
-        var strategy = new ForLoopInterpretationStrategy(forLoop, statementInterpreter, declarationInterpreter, expressionEvaluator);
+        var strategy = new ForLoopInterpretationStrategy(forLoop, false, statementInterpreter, declarationInterpreter, expressionEvaluator);
         Assert.Throws<InvalidTypeException>(() => strategy.Apply());
     }
 
@@ -72,7 +72,7 @@ public class ForLoopInterpretationStrategyTest
             Body = body, Callback = callback
         };
         expressionEvaluator.Evaluate(condition).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = false });
-        var strategy = new ForLoopInterpretationStrategy(forLoop, statementInterpreter, declarationInterpreter, expressionEvaluator);
+        var strategy = new ForLoopInterpretationStrategy(forLoop, false, statementInterpreter, declarationInterpreter, expressionEvaluator);
         strategy.Apply();
         statementInterpreter.DidNotReceive().Interpret(body);
         expressionEvaluator.DidNotReceive().Evaluate(callback);
@@ -94,7 +94,7 @@ public class ForLoopInterpretationStrategyTest
             .Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true },
                 new EvaluatedResult { Type = DataType.Bool(), Value = true },
                 new EvaluatedResult { Type = DataType.Bool(), Value = false });
-        var strategy = new ForLoopInterpretationStrategy(forLoop, statementInterpreter, declarationInterpreter, expressionEvaluator);
+        var strategy = new ForLoopInterpretationStrategy(forLoop, false, statementInterpreter, declarationInterpreter, expressionEvaluator);
         strategy.Apply();
         
         Received.InOrder(() =>
@@ -102,6 +102,31 @@ public class ForLoopInterpretationStrategyTest
             statementInterpreter.Interpret(body);
             expressionEvaluator.Evaluate(callback);
             statementInterpreter.Interpret(body);
+            expressionEvaluator.Evaluate(callback);
+        });
+    }
+
+    [Fact(DisplayName = "executes the body with function context set to true when it is the case")]
+    public void executes_the_body_with_function_context_set_to_true_when_it_is_the_case()
+    {
+        var condition = Substitute.For<Expression>();
+        var body = Substitute.For<Statement>();
+        var callback = Substitute.For<Expression>();
+        var forLoop = new ForLoop
+        {
+            TargetDefinition = new Assignment(), 
+            Condition = new ExpressionStatement() { Target = condition },
+            Body = body, Callback = callback
+        };
+        expressionEvaluator.Evaluate(condition)
+            .Returns(new EvaluatedResult { Type = DataType.Bool(), Value = true },
+                new EvaluatedResult { Type = DataType.Bool(), Value = false });
+        var strategy = new ForLoopInterpretationStrategy(forLoop, true, statementInterpreter, declarationInterpreter, expressionEvaluator);
+        strategy.Apply();
+        
+        Received.InOrder(() =>
+        {
+            statementInterpreter.Interpret(body, true);
             expressionEvaluator.Evaluate(callback);
         });
     }
