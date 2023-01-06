@@ -1,0 +1,73 @@
+{
+  "bindings": [
+    {
+      "type": "رقم",
+      "name": "ا",
+      "value": {
+        "value": 1.0,
+        "_type": "expression.primitive.number"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "name": "فو",
+      "body": {
+        "declarations": [],
+        "_type": "declaration.block"
+      },
+      "_type": "declaration.class"
+    },
+    {
+      "type": "رقم",
+      "name": "ب",
+      "value": {
+        "value": 2.0,
+        "_type": "expression.primitive.number"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "type": "فو",
+      "name": "بار",
+      "value": {
+        "class": {
+          "value": "فو",
+          "_type": "expression.primitive.identifier"
+        },
+        "arguments": [],
+        "_type": "expression.instantiation"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "type": "رقم",
+      "name": "ت",
+      "value": {
+        "value": 3.0,
+        "_type": "expression.primitive.number"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "target": {
+        "value": "ا",
+        "_type": "expression.primitive.identifier"
+      },
+      "_type": "statement.print"
+    },
+    {
+      "target": {
+        "value": "ب",
+        "_type": "expression.primitive.identifier"
+      },
+      "_type": "statement.print"
+    },
+    {
+      "target": {
+        "value": "ت",
+        "_type": "expression.primitive.identifier"
+      },
+      "_type": "statement.print"
+    }
+  ]
+}

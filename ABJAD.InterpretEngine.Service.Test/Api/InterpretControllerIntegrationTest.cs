@@ -16,46 +16,40 @@ public class InterpretControllerIntegrationTest
         client = applicationFactory.CreateClient();
     }
 
-    [Fact(DisplayName = "interprets print statement")]
-    public async Task interprets_print_statement()
+    [Theory]
+    [MemberData(nameof(GetTestResources))]
+    public async Task AssertBehavior(string resourceFileName)
     {
-        await ValidateRequest("print.json", "print.json");
+        await ValidateRequest(resourceFileName, resourceFileName);
     }
 
-    [Fact(DisplayName = "interprets class instantiation")]
-    public async Task interprets_class_instantiation()
+    [Theory]
+    [MemberData(nameof(GetErroneousTestResources))]
+    public async Task AssertBadRequest(string resourceFileName)
     {
-        await ValidateRequest("class_instantiation.json", "class_instantiation.json");
+        await ValidateBadRequest(resourceFileName, resourceFileName);
     }
-
-    [Fact(DisplayName = "interprets changing value from a global scope")]
-    public async Task interprets_changing_value_from_a_global_scope()
+    
+    private static IEnumerable<object[]> GetTestResources()
     {
-        await ValidateRequest("scopes.json", "scopes.json");
+        var directory = new DirectoryInfo("../../../Api/Requests");
+        return directory.GetFiles("*.json", SearchOption.AllDirectories)
+            .Select(f => f.FullName)
+            .Where(name => !name.Contains("expected_error"))
+            .Select(file => file[(file.IndexOf("Requests", StringComparison.Ordinal) + 9)..])
+            .Select(file => new object[] {file})
+            .ToArray();
     }
-
-    [Fact(DisplayName = "references are always passed by value to the method calls")]
-    public async Task references_are_always_passed_by_value_to_the_method_calls()
+    
+    private static IEnumerable<object[]> GetErroneousTestResources()
     {
-        await ValidateRequest("references.json", "references.json");
-    }
-
-    [Fact(DisplayName = "runs nested for loops as expected")]
-    public async Task runs_nested_for_loops_as_expected()
-    {
-        await ValidateRequest("if_without_else.json", "if_without_else.json");
-    }
-
-    [Fact(DisplayName = "test methods calling each other")]
-    public async Task test_methods_calling_each_other()
-    {
-        await ValidateRequest("methods_reference.json", "methods_reference.json");
-    }
-
-    [Fact(DisplayName = "run recursive algorithm", Skip = "hello")]
-    public async Task run_recursive_algorithm()
-    {
-        await ValidateRequest("recursion.json", "recursion.json");
+        var directory = new DirectoryInfo("../../../Api/Requests");
+        return directory.GetFiles("*.json", SearchOption.AllDirectories)
+            .Select(f => f.FullName)
+            .Where(name => name.Contains("expected_error"))
+            .Select(file => file[(file.IndexOf("Requests", StringComparison.Ordinal) + 9)..])
+            .Select(file => new object[] {file})
+            .ToArray();
     }
 
     private async Task ValidateRequest(string requestJsonFileName, string responseTextFileName)
@@ -66,6 +60,15 @@ public class InterpretControllerIntegrationTest
         var content = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal(RemoveWhiteSpaces(ReadFile("Responses/" + responseTextFileName)), content.Replace("\\r", ""));
+    }
+
+    private async Task ValidateBadRequest(string requestJsonFileName, string responseTextFileName)
+    {
+        var request = ReadFile("Requests/" + requestJsonFileName);
+        var body = new StringContent(request, Encoding.UTF8, MediaTypeNames.Application.Json);
+        var response = await client.PostAsync("/", body);
+        var content = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     private static string ReadFile(string fileName)

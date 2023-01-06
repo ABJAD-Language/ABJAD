@@ -1,0 +1,42 @@
+{
+  "bindings": [
+    {
+      "name": "فو",
+      "body": {
+        "declarations": [
+          {
+            "type": "مقطع",
+            "name": "اسم",
+            "value": {
+              "value": "اسم",
+              "_type": "expression.primitive.string"
+            },
+            "_type": "declaration.variable"
+          }
+        ],
+        "_type": "declaration.block"
+      },
+      "_type": "declaration.class"
+    },
+    {
+      "type": "فو",
+      "name": "بار",
+      "value": {
+        "class": {
+          "value": "فو",
+          "_type": "expression.primitive.identifier"
+        },
+        "arguments": [],
+        "_type": "expression.instantiation"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "target": {
+        "value": "اسم",
+        "_type": "expression.primitive.identifier"
+      },
+      "_type": "statement.print"
+    }
+  ]
+}

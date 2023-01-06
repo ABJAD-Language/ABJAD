@@ -1,0 +1,201 @@
+{
+  "bindings": [
+    {
+      "type": "رقم",
+      "name": "ا",
+      "value": {
+        "value": 4.0,
+        "_type": "expression.primitive.number"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "name": "فو",
+      "returnType": null,
+      "parameters": [
+        {
+          "name": "ا",
+          "type": "رقم"
+        }
+      ],
+      "body": {
+        "bindings": [
+          {
+            "target": "ا",
+            "value": {
+              "value": 5.0,
+              "_type": "expression.primitive.number"
+            },
+            "_type": "statement.assignment"
+          },
+          {
+            "target": {
+              "firstOperand": {
+                "value": "فو - ",
+                "_type": "expression.primitive.string"
+              },
+              "secondOperand": {
+                "value": "ا",
+                "_type": "expression.primitive.identifier"
+              },
+              "_type": "expression.binary.addition"
+            },
+            "_type": "statement.print"
+          },
+          {
+            "expression": {
+              "method": {
+                "value": "بار",
+                "_type": "expression.primitive.identifier"
+              },
+              "arguments": [
+                {
+                  "firstOperand": {
+                    "value": "ا",
+                    "_type": "expression.primitive.identifier"
+                  },
+                  "secondOperand": {
+                    "value": 1.0,
+                    "_type": "expression.primitive.number"
+                  },
+                  "_type": "expression.binary.subtraction"
+                }
+              ],
+              "_type": "expression.call"
+            },
+            "_type": "statement.expression"
+          }
+        ],
+        "_type": "statement.block"
+      },
+      "_type": "declaration.function"
+    },
+    {
+      "name": "بار",
+      "returnType": null,
+      "parameters": [
+        {
+          "name": "ا",
+          "type": "رقم"
+        }
+      ],
+      "body": {
+        "bindings": [
+          {
+            "expression": {
+              "target": {
+                "value": "ا",
+                "_type": "expression.primitive.identifier"
+              },
+              "_type": "expression.unary.postfix.addition"
+            },
+            "_type": "statement.expression"
+          },
+          {
+            "target": {
+              "firstOperand": {
+                "value": "بار - ",
+                "_type": "expression.primitive.string"
+              },
+              "secondOperand": {
+                "value": "ا",
+                "_type": "expression.primitive.identifier"
+              },
+              "_type": "expression.binary.addition"
+            },
+            "_type": "statement.print"
+          },
+          {
+            "expression": {
+              "method": {
+                "value": "جو",
+                "_type": "expression.primitive.identifier"
+              },
+              "arguments": [
+                {
+                  "firstOperand": {
+                    "value": "ا",
+                    "_type": "expression.primitive.identifier"
+                  },
+                  "secondOperand": {
+                    "value": 2.0,
+                    "_type": "expression.primitive.number"
+                  },
+                  "_type": "expression.binary.subtraction"
+                }
+              ],
+              "_type": "expression.call"
+            },
+            "_type": "statement.expression"
+          }
+        ],
+        "_type": "statement.block"
+      },
+      "_type": "declaration.function"
+    },
+    {
+      "name": "جو",
+      "returnType": null,
+      "parameters": [
+        {
+          "name": "ا",
+          "type": "رقم"
+        }
+      ],
+      "body": {
+        "bindings": [
+          {
+            "expression": {
+              "target": "ا",
+              "value": {
+                "value": 3.0,
+                "_type": "expression.primitive.number"
+              },
+              "_type": "expression.assignment.subtraction"
+            },
+            "_type": "statement.expression"
+          },
+          {
+            "target": {
+              "firstOperand": {
+                "value": "جو - ",
+                "_type": "expression.primitive.string"
+              },
+              "secondOperand": {
+                "value": "ا",
+                "_type": "expression.primitive.identifier"
+              },
+              "_type": "expression.binary.addition"
+            },
+            "_type": "statement.print"
+          }
+        ],
+        "_type": "statement.block"
+      },
+      "_type": "declaration.function"
+    },
+    {
+      "expression": {
+        "method": {
+          "value": "فو",
+          "_type": "expression.primitive.identifier"
+        },
+        "arguments": [
+          {
+            "value": 10.0,
+            "_type": "expression.primitive.number"
+          }
+        ],
+        "_type": "expression.call"
+      },
+      "_type": "statement.expression"
+    },
+    {
+      "target": {
+        "value": "ا",
+        "_type": "expression.primitive.identifier"
+      },
+      "_type": "statement.print"
+    }
+  ]
+}
