@@ -1,0 +1,104 @@
+{
+  "bindings": [
+    {
+      "name": "احسب_الاس",
+      "returnType": "رقم",
+      "parameters": [
+        {
+          "name": "الاساس",
+          "type": "رقم"
+        },
+        {
+          "name": "الاس",
+          "type": "رقم"
+        }
+      ],
+      "body": {
+        "bindings": [
+          {
+            "condition": {
+              "firstOperand": {
+                "value": "الاس",
+                "_type": "expression.primitive.identifier"
+              },
+              "secondOperand": {
+                "value": 1.0,
+                "_type": "expression.primitive.number"
+              },
+              "_type": "expression.binary.equalityCheck"
+            },
+            "body": {
+              "bindings": [
+                {
+                  "target": {
+                    "value": "الاساس",
+                    "_type": "expression.primitive.identifier"
+                  },
+                  "_type": "statement.return"
+                }
+              ],
+              "_type": "statement.block"
+            },
+            "_type": "statement.if"
+          },
+          {
+            "target": {
+              "firstOperand": {
+                "value": "الاساس",
+                "_type": "expression.primitive.identifier"
+              },
+              "secondOperand": {
+                "method": {
+                  "value": "احسب_الاس",
+                  "_type": "expression.primitive.identifier"
+                },
+                "arguments": [
+                  {
+                    "value": "الاساس",
+                    "_type": "expression.primitive.identifier"
+                  },
+                  {
+                    "firstOperand": {
+                      "value": "الاس",
+                      "_type": "expression.primitive.identifier"
+                    },
+                    "secondOperand": {
+                      "value": 1.0,
+                      "_type": "expression.primitive.number"
+                    },
+                    "_type": "expression.binary.subtraction"
+                  }
+                ],
+                "_type": "expression.call"
+              },
+              "_type": "expression.binary.multiplication"
+            },
+            "_type": "statement.return"
+          }
+        ],
+        "_type": "statement.block"
+      },
+      "_type": "declaration.function"
+    },
+    {
+      "target": {
+        "method": {
+          "value": "احسب_الاس",
+          "_type": "expression.primitive.identifier"
+        },
+        "arguments": [
+          {
+            "value": 2.0,
+            "_type": "expression.primitive.number"
+          },
+          {
+            "value": 6.0,
+            "_type": "expression.primitive.number"
+          }
+        ],
+        "_type": "expression.call"
+      },
+      "_type": "statement.print"
+    }
+  ]
+}

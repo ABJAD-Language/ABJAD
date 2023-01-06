@@ -1,0 +1,92 @@
+{
+  "bindings": [
+    {
+      "name": "احسب_المضروب",
+      "returnType": "رقم",
+      "parameters": [
+        {
+          "name": "ا",
+          "type": "رقم"
+        }
+      ],
+      "body": {
+        "bindings": [
+          {
+            "condition": {
+              "firstOperand": {
+                "value": "ا",
+                "_type": "expression.primitive.identifier"
+              },
+              "secondOperand": {
+                "value": 0.0,
+                "_type": "expression.primitive.number"
+              },
+              "_type": "expression.binary.equalityCheck"
+            },
+            "body": {
+              "bindings": [
+                {
+                  "target": {
+                    "value": 1.0,
+                    "_type": "expression.primitive.number"
+                  },
+                  "_type": "statement.return"
+                }
+              ],
+              "_type": "statement.block"
+            },
+            "_type": "statement.if"
+          },
+          {
+            "target": {
+              "firstOperand": {
+                "value": "ا",
+                "_type": "expression.primitive.identifier"
+              },
+              "secondOperand": {
+                "method": {
+                  "value": "احسب_المضروب",
+                  "_type": "expression.primitive.identifier"
+                },
+                "arguments": [
+                  {
+                    "firstOperand": {
+                      "value": "ا",
+                      "_type": "expression.primitive.identifier"
+                    },
+                    "secondOperand": {
+                      "value": 1.0,
+                      "_type": "expression.primitive.number"
+                    },
+                    "_type": "expression.binary.subtraction"
+                  }
+                ],
+                "_type": "expression.call"
+              },
+              "_type": "expression.binary.multiplication"
+            },
+            "_type": "statement.return"
+          }
+        ],
+        "_type": "statement.block"
+      },
+      "_type": "declaration.function"
+    },
+    {
+      "target": {
+        "method": {
+          "value": "احسب_المضروب",
+          "_type": "expression.primitive.identifier"
+        },
+        "arguments": [
+          {
+            "value": 5.0,
+            "_type": "expression.primitive.number"
+          }
+        ],
+        "_type": "expression.call"
+      },
+      "_type": "statement.print"
+    }
+  ]
+}

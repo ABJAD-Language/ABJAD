@@ -1,0 +1,102 @@
+{
+  "bindings": [
+    {
+      "type": "مقطع",
+      "name": "اسم",
+      "value": {
+        "value": "مرحبا",
+        "_type": "expression.primitive.string"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "name": "فو",
+      "body": {
+        "declarations": [
+          {
+            "type": "مقطع",
+            "name": "اسم",
+            "value": {
+              "value": "اسم",
+              "_type": "expression.primitive.string"
+            },
+            "_type": "declaration.variable"
+          },
+          {
+            "name": "اكتب_الاسم",
+            "returnType": null,
+            "parameters": [],
+            "body": {
+              "bindings": [
+                {
+                  "target": {
+                    "value": "اسم",
+                    "_type": "expression.primitive.identifier"
+                  },
+                  "_type": "statement.print"
+                }
+              ],
+              "_type": "statement.block"
+            },
+            "_type": "declaration.function"
+          }
+        ],
+        "_type": "declaration.block"
+      },
+      "_type": "declaration.class"
+    },
+    {
+      "type": "فو",
+      "name": "بار",
+      "value": {
+        "class": {
+          "value": "فو",
+          "_type": "expression.primitive.identifier"
+        },
+        "arguments": [],
+        "_type": "expression.instantiation"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "target": {
+        "instance": {
+          "value": "بار",
+          "_type": "expression.primitive.identifier"
+        },
+        "fields": [
+          {
+            "value": "اسم",
+            "_type": "expression.primitive.identifier"
+          }
+        ],
+        "_type": "expression.instanceField"
+      },
+      "_type": "statement.print"
+    },
+    {
+      "expression": {
+        "instances": [
+          {
+            "value": "بار",
+            "_type": "expression.primitive.identifier"
+          }
+        ],
+        "method": {
+          "value": "اكتب_الاسم",
+          "_type": "expression.primitive.identifier"
+        },
+        "arguments": [],
+        "_type": "expression.instanceMethodCall"
+      },
+      "_type": "statement.expression"
+    },
+    {
+      "target": {
+        "value": "اسم",
+        "_type": "expression.primitive.identifier"
+      },
+      "_type": "statement.print"
+    }
+  ]
+}
