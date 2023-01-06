@@ -123,6 +123,27 @@ public class DeclarationMapperTest
         declaration.Should().BeEquivalentTo(expectedDeclaration, options => options.RespectingRuntimeTypes());
     }
 
+    [Fact(DisplayName = "maps function declaration correctly when it does not have a return type")]
+    public void maps_function_declaration_correctly_when_it_does_not_have_a_return_type()
+    {
+        var jsonObject = new
+        {
+            _type = "declaration.function",
+            name = "func",
+            parameters = new List<object>(),
+            body = new
+            {
+                _type = "statement.block",
+                bindings = new List<object>()
+            }
+        };
+
+        var declaration = Map(jsonObject) as FunctionDeclaration;
+        
+        Assert.NotNull(declaration);
+        Assert.Null(declaration.ReturnType);
+    }
+
     [Fact(DisplayName = "maps class declaration")]
     public void maps_class_declaration()
     {

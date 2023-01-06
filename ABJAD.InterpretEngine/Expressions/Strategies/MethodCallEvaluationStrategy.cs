@@ -11,7 +11,7 @@ namespace ABJAD.InterpretEngine.Expressions.Strategies;
 public class MethodCallEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly MethodCall methodCall;
-    private readonly ScopeFacade scope;
+    private ScopeFacade scope;
     private readonly IExpressionEvaluator expressionEvaluator;
     private readonly IStatementInterpreter statementInterpreter;
     private readonly IDeclarationInterpreter declarationInterpreter;
@@ -35,12 +35,14 @@ public class MethodCallEvaluationStrategy : ExpressionEvaluationStrategy
         var function = scope.GetFunction(methodCall.MethodName, argsTypes);
         AddArgumentsToScope(function.Parameters, args);
 
-        return InterpretBody(function);
+        var evaluatedResult = InterpretBody(function);
+
+        return evaluatedResult;
     }
 
     private EvaluatedResult InterpretBody(FunctionElement function)
     {
-        var result = new EvaluatedResult() { Type = DataType.Undefined(), Value = SpecialValues.UNDEFINED };
+        EvaluatedResult? result = null;
         foreach (var binding in function.Body.Bindings)
         {
             if (binding is Declaration declaration)
@@ -49,24 +51,23 @@ public class MethodCallEvaluationStrategy : ExpressionEvaluationStrategy
             }
             else if (binding is Statement statement)
             {
-                if (statement is Return returnStatement)
+                var interpretationResult = statementInterpreter.Interpret(statement, true);
+                if (interpretationResult.Returned)
                 {
-                    result = HandleReturnStatement(function, returnStatement);
+                    result = interpretationResult.ReturnedValue;
                     break;
                 }
-
-                statementInterpreter.Interpret(statement, true);
             }
         }
 
-        return result;
+        return ValidateReturnType(function, result);
     }
 
-    private EvaluatedResult HandleReturnStatement(FunctionElement function, Return returnStatement)
+    private EvaluatedResult ValidateReturnType(FunctionElement function, EvaluatedResult? result)
     {
         if (function.ReturnType == null)
         {
-            if (returnStatement.Target != null)
+            if (result != null)
             {
                 throw new InvalidVoidReturnStatementException(methodCall.MethodName);
             }
@@ -74,19 +75,32 @@ public class MethodCallEvaluationStrategy : ExpressionEvaluationStrategy
             return new EvaluatedResult() { Type = DataType.Undefined(), Value = SpecialValues.UNDEFINED };
         }
 
-        return EvaluateReturnTarget(function, returnStatement);
-    }
-
-    private EvaluatedResult EvaluateReturnTarget(FunctionElement function, Return returnStatement)
-    {
-        var returnTarget = expressionEvaluator.Evaluate(returnStatement.Target);
-
-        if (!returnTarget.Type.Is(function.ReturnType))
+        if (result == null)
         {
-            throw new InvalidTypeException(returnTarget.Type, function.ReturnType);
+            throw new NoValueReturnedException(methodCall.MethodName, function.ReturnType);
         }
 
-        return returnTarget;
+        ValidateTypesMatch(function, result);
+
+        if (IsValueNull(result))
+        {
+            result.Type = function.ReturnType;
+        }
+
+        return result;
+    }
+
+    private static void ValidateTypesMatch(FunctionElement function, EvaluatedResult result)
+    {
+        if (!function.ReturnType!.Is(result.Type) && !IsValueNull(result))
+        {
+            throw new InvalidTypeException(result.Type, function.ReturnType);
+        }
+    }
+
+    private static bool IsValueNull(EvaluatedResult result)
+    {
+        return result.Type.IsUndefined() && result.Value.Equals(SpecialValues.NULL);
     }
 
     private List<EvaluatedResult> EvaluateArguments()

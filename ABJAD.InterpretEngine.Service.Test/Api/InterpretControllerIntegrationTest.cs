@@ -46,10 +46,16 @@ public class InterpretControllerIntegrationTest
         await ValidateRequest("if_without_else.json", "if_without_else.json");
     }
 
-    [Fact(DisplayName = "test methods calling each other", Skip = "will be fixed soon")]
+    [Fact(DisplayName = "test methods calling each other")]
     public async Task test_methods_calling_each_other()
     {
         await ValidateRequest("methods_reference.json", "methods_reference.json");
+    }
+
+    [Fact(DisplayName = "run recursive algorithm", Skip = "hello")]
+    public async Task run_recursive_algorithm()
+    {
+        await ValidateRequest("recursion.json", "recursion.json");
     }
 
     private async Task ValidateRequest(string requestJsonFileName, string responseTextFileName)

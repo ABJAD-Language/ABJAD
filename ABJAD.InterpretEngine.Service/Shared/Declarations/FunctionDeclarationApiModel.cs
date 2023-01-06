@@ -3,7 +3,7 @@
 public class FunctionDeclarationApiModel
 {
     public string Name { get; }
-    public string ReturnType { get; }
+    public string? ReturnType { get; }
     public List<ParameterApiModel> Parameters { get; }
     public object Body { get; }
 
