@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Expressions.Strategies;
+﻿using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.Expressions.Strategies;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Binary;
 using ABJAD.InterpretEngine.Types;
@@ -8,7 +9,7 @@ namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
 public class BinaryExpressionEvaluationStrategyTest
 {
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
     private readonly Expression firstOperand = Substitute.For<Expression>();
     private readonly Expression secondOperand = Substitute.For<Expression>();
     
@@ -38,7 +39,7 @@ public class BinaryExpressionEvaluationStrategyTest
     
     public class AdditionInterpretingTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -188,7 +189,7 @@ public class BinaryExpressionEvaluationStrategyTest
 
     public class SubtractionInterpretingTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -235,7 +236,7 @@ public class BinaryExpressionEvaluationStrategyTest
     
     public class MultiplicationInterpretingTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -282,7 +283,7 @@ public class BinaryExpressionEvaluationStrategyTest
     
     public class DivisionInterpretingTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -341,7 +342,7 @@ public class BinaryExpressionEvaluationStrategyTest
     
     public class ModuloInterpretingTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -388,7 +389,7 @@ public class BinaryExpressionEvaluationStrategyTest
 
     public class LogicalAndInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -483,7 +484,7 @@ public class BinaryExpressionEvaluationStrategyTest
 
     public class LogicalOrInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -578,7 +579,7 @@ public class BinaryExpressionEvaluationStrategyTest
 
     public class GreaterCheckInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -661,7 +662,7 @@ public class BinaryExpressionEvaluationStrategyTest
 
     public class GreaterOrEqualCheckInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -744,7 +745,7 @@ public class BinaryExpressionEvaluationStrategyTest
 
     public class LessCheckInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -827,7 +828,7 @@ public class BinaryExpressionEvaluationStrategyTest
 
     public class LessOrEqualCheckInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -910,7 +911,7 @@ public class BinaryExpressionEvaluationStrategyTest
 
     public class EqualityCheckInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();
@@ -1036,7 +1037,7 @@ public class BinaryExpressionEvaluationStrategyTest
 
     public class InequalityCheckInterpretationTest
     {
-        private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
         private readonly Expression firstOperand = Substitute.For<Expression>();
         private readonly Expression secondOperand = Substitute.For<Expression>();
         private readonly DataType firstOperandDataType = Substitute.For<DataType>();

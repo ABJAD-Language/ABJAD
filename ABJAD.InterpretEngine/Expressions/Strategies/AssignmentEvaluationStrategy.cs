@@ -1,5 +1,4 @@
 ﻿using ABJAD.InterpretEngine.ScopeManagement;
-using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Expressions.Assignments;
 using ABJAD.InterpretEngine.Types;
 
@@ -9,9 +8,9 @@ public class AssignmentEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly AssignmentExpression assignmentExpression;
     private readonly ScopeFacade scopeFacade;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
 
-    public AssignmentEvaluationStrategy(AssignmentExpression assignmentExpression, ScopeFacade scopeFacade, Evaluator<Expression> expressionEvaluator)
+    public AssignmentEvaluationStrategy(AssignmentExpression assignmentExpression, ScopeFacade scopeFacade, IExpressionEvaluator expressionEvaluator)
     {
         this.assignmentExpression = assignmentExpression;
         this.scopeFacade = scopeFacade;

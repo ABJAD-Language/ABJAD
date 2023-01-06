@@ -1,4 +1,5 @@
 ﻿using ABJAD.InterpretEngine.Declarations.Strategies;
+using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Expressions;
@@ -9,7 +10,7 @@ namespace ABJAD.InterpretEngine.Test.Declarations.Strategies;
 
 public class VariableDeclarationInterpretationStrategyTest
 {
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
     private readonly ScopeFacade scope = Substitute.For<ScopeFacade>();
 
     

@@ -10,7 +10,7 @@ namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 public class InstanceFieldMethodCallEvaluationStrategyTest
 {
 
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
     private readonly ScopeFacade scope = Substitute.For<ScopeFacade>();
     private readonly IExpressionEvaluatorFactory expressionEvaluatorFactory = Substitute.For<IExpressionEvaluatorFactory>();
     private readonly TextWriter writer = Substitute.For<TextWriter>();
@@ -86,7 +86,7 @@ public class InstanceFieldMethodCallEvaluationStrategyTest
         var instance = new InstanceElement() { Scope = instanceScope} ;
         scope.GetReference("instance").Returns(instance);
 
-        var localExpressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        var localExpressionEvaluator = Substitute.For<IExpressionEvaluator>();
         expressionEvaluatorFactory.NewExpressionEvaluator(scope, writer).Returns(localExpressionEvaluator);
 
         var strategy = new InstanceFieldMethodCallEvaluationStrategy(instanceMethodCall, scope, expressionEvaluator, expressionEvaluatorFactory, writer);
@@ -120,7 +120,7 @@ public class InstanceFieldMethodCallEvaluationStrategyTest
         var instance = new InstanceElement() { Scope = instanceScope} ;
         scope.GetReference("instance").Returns(instance);
 
-        var localExpressionEvaluator = Substitute.For<Evaluator<Expression>>();
+        var localExpressionEvaluator = Substitute.For<IExpressionEvaluator>();
         expressionEvaluatorFactory.NewExpressionEvaluator(scope, writer).Returns(localExpressionEvaluator);
 
         var evaluatedResult = new EvaluatedResult();

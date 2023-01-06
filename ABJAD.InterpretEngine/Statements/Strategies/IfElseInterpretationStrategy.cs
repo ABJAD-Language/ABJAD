@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 using ABJAD.InterpretEngine.Types;
 
@@ -7,10 +8,10 @@ namespace ABJAD.InterpretEngine.Statements.Strategies;
 public class IfElseInterpretationStrategy : StatementInterpretationStrategy
 {
     private readonly IfElse ifElse;
-    private readonly Interpreter<Statement> statementInterpreter;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IStatementInterpreter statementInterpreter;
+    private readonly IExpressionEvaluator expressionEvaluator;
 
-    public IfElseInterpretationStrategy(IfElse ifElse, Interpreter<Statement> statementInterpreter, Evaluator<Expression> expressionEvaluator)
+    public IfElseInterpretationStrategy(IfElse ifElse, IStatementInterpreter statementInterpreter, IExpressionEvaluator expressionEvaluator)
     {
         this.ifElse = ifElse;
         this.statementInterpreter = statementInterpreter;

@@ -1,4 +1,6 @@
-﻿using ABJAD.InterpretEngine.Shared;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.Shared;
 using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
@@ -11,9 +13,9 @@ namespace ABJAD.InterpretEngine.Test.Statements.Strategies;
 
 public class ForLoopInterpretationStrategyTest
 {
-    private readonly Interpreter<Statement> statementInterpreter = Substitute.For<Interpreter<Statement>>();
-    private readonly Interpreter<Declaration> declarationInterpreter = Substitute.For<Interpreter<Declaration>>();
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly IStatementInterpreter statementInterpreter = Substitute.For<IStatementInterpreter>();
+    private readonly IDeclarationInterpreter declarationInterpreter = Substitute.For<IDeclarationInterpreter>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
 
     [Fact(DisplayName = "calls the declaration interpreter when target is a variable declaration")]
     public void calls_the_declaration_interpreter_when_target_is_a_variable_declaration()

@@ -1,4 +1,5 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 using ABJAD.InterpretEngine.Statements.Strategies;
 using ABJAD.InterpretEngine.Types;
@@ -9,7 +10,7 @@ namespace ABJAD.InterpretEngine.Test.Statements.Strategies;
 public class PrintInterpretationStrategyTest
 {
     private readonly TextWriter textWriter = Substitute.For<TextWriter>();
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
 
     [Fact(DisplayName = "throws error when target has undefined value")]
     public void throws_error_when_target_has_undefined_value()

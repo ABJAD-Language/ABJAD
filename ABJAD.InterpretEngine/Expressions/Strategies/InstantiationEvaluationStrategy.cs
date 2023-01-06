@@ -1,7 +1,7 @@
-﻿using ABJAD.InterpretEngine.ScopeManagement;
-using ABJAD.InterpretEngine.Shared.Declarations;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Expressions;
-using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
@@ -11,17 +11,17 @@ public class InstantiationEvaluationStrategy : ExpressionEvaluationStrategy
     private readonly Instantiation instantiation;
     private readonly ScopeFacade globalScope;
     private readonly ScopeFacade localScope;
-    private readonly Evaluator<Expression> expressionEvaluator;
-    private readonly Interpreter<Statement> statementInterpreter;
-    private readonly Interpreter<Declaration> declarationInterpreter;
+    private readonly IExpressionEvaluator expressionEvaluator;
+    private readonly IStatementInterpreter statementInterpreter;
+    private readonly IDeclarationInterpreter declarationInterpreter;
 
     public InstantiationEvaluationStrategy(
         Instantiation instantiation, 
         ScopeFacade globalScope,
         ScopeFacade localScope, 
-        Evaluator<Expression> expressionEvaluator, 
-        Interpreter<Statement> statementInterpreter, 
-        Interpreter<Declaration> declarationInterpreter)
+        IExpressionEvaluator expressionEvaluator, 
+        IStatementInterpreter statementInterpreter, 
+        IDeclarationInterpreter declarationInterpreter)
     {
         this.instantiation = instantiation;
         this.globalScope = globalScope;

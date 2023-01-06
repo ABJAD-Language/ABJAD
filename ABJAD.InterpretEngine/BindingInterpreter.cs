@@ -1,15 +1,17 @@
-﻿using ABJAD.InterpretEngine.Shared;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Shared;
 using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 
 namespace ABJAD.InterpretEngine;
 
-public class BindingInterpreter : Interpreter<Binding>
+public class BindingInterpreter : Interpreter
 {
-    private readonly Interpreter<Statement> statementInterpreter;
-    private readonly Interpreter<Declaration> declarationInterpreter;
+    private readonly IStatementInterpreter statementInterpreter;
+    private readonly IDeclarationInterpreter declarationInterpreter;
 
-    public BindingInterpreter(Interpreter<Statement> statementInterpreter, Interpreter<Declaration> declarationInterpreter)
+    public BindingInterpreter(IStatementInterpreter statementInterpreter, IDeclarationInterpreter declarationInterpreter)
     {
         this.statementInterpreter = statementInterpreter;
         this.declarationInterpreter = declarationInterpreter;

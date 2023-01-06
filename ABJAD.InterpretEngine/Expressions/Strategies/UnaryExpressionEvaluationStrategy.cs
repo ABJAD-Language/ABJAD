@@ -1,5 +1,4 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
-using ABJAD.InterpretEngine.Shared.Expressions.Unary;
+﻿using ABJAD.InterpretEngine.Shared.Expressions.Unary;
 using ABJAD.InterpretEngine.Types;
 using _ToString =  ABJAD.InterpretEngine.Shared.Expressions.Unary.ToString;
 
@@ -8,9 +7,9 @@ namespace ABJAD.InterpretEngine.Expressions.Strategies;
 public class UnaryExpressionEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly UnaryExpression unaryExpression;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
 
-    public UnaryExpressionEvaluationStrategy(UnaryExpression unaryExpression, Evaluator<Expression> expressionEvaluator)
+    public UnaryExpressionEvaluationStrategy(UnaryExpression unaryExpression, IExpressionEvaluator expressionEvaluator)
     {
         this.unaryExpression = unaryExpression;
         this.expressionEvaluator = expressionEvaluator;

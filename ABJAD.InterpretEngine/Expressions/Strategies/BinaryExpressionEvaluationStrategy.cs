@@ -1,5 +1,4 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
-using ABJAD.InterpretEngine.Shared.Expressions.Binary;
+﻿using ABJAD.InterpretEngine.Shared.Expressions.Binary;
 using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
@@ -7,10 +6,10 @@ namespace ABJAD.InterpretEngine.Expressions.Strategies;
 public class BinaryExpressionEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly BinaryExpression expression;
-    private readonly Evaluator<Expression> expressionEvaluator;
+    private readonly IExpressionEvaluator expressionEvaluator;
     private static readonly double NumberComparisonTolerance = 10e-100;
 
-    public BinaryExpressionEvaluationStrategy(BinaryExpression expression, Evaluator<Expression> expressionEvaluator)
+    public BinaryExpressionEvaluationStrategy(BinaryExpression expression, IExpressionEvaluator expressionEvaluator)
     {
         this.expression = expression;
         this.expressionEvaluator = expressionEvaluator;

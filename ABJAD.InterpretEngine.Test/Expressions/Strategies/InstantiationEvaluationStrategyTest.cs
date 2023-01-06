@@ -1,8 +1,11 @@
-﻿using ABJAD.InterpretEngine.Expressions.Strategies;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Expressions;
+using ABJAD.InterpretEngine.Expressions.Strategies;
 using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 using ABJAD.InterpretEngine.Types;
 using NSubstitute;
 
@@ -10,11 +13,11 @@ namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 
 public class InstantiationEvaluationStrategyTest
 {
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
     private readonly ScopeFacade globalScope = Substitute.For<ScopeFacade>();
     private readonly ScopeFacade localScope = Substitute.For<ScopeFacade>();
-    private readonly Interpreter<Statement> statementInterpreter = Substitute.For<Interpreter<Statement>>();
-    private readonly Interpreter<Declaration> declarationInterpreter = Substitute.For<Interpreter<Declaration>>();
+    private readonly IStatementInterpreter statementInterpreter = Substitute.For<IStatementInterpreter>();
+    private readonly IDeclarationInterpreter declarationInterpreter = Substitute.For<IDeclarationInterpreter>();
 
     [Fact(DisplayName = "throws error if class does not exist")]
     public void throws_error_if_class_does_not_exist()

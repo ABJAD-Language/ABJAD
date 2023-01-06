@@ -1,7 +1,9 @@
-﻿using ABJAD.InterpretEngine.ScopeManagement;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
@@ -10,11 +12,11 @@ public class MethodCallEvaluationStrategy : ExpressionEvaluationStrategy
 {
     private readonly MethodCall methodCall;
     private readonly ScopeFacade scope;
-    private readonly Evaluator<Expression> expressionEvaluator;
-    private readonly Interpreter<Statement> statementInterpreter;
-    private readonly Interpreter<Declaration> declarationInterpreter;
+    private readonly IExpressionEvaluator expressionEvaluator;
+    private readonly IStatementInterpreter statementInterpreter;
+    private readonly IDeclarationInterpreter declarationInterpreter;
 
-    public MethodCallEvaluationStrategy(MethodCall methodCall, ScopeFacade scope, Evaluator<Expression> expressionEvaluator, Interpreter<Statement> statementInterpreter, Interpreter<Declaration> declarationInterpreter)
+    public MethodCallEvaluationStrategy(MethodCall methodCall, ScopeFacade scope, IExpressionEvaluator expressionEvaluator, IStatementInterpreter statementInterpreter, IDeclarationInterpreter declarationInterpreter)
     {
         this.methodCall = methodCall;
         this.scope = scope;

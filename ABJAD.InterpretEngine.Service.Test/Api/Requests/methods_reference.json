@@ -1,0 +1,164 @@
+{
+  "bindings": [
+    {
+      "name": "فو",
+      "returnType": "رقم",
+      "parameters": [
+        {
+          "name": "ا",
+          "type": "رقم"
+        }
+      ],
+      "body": {
+        "bindings": [
+          {
+            "condition": {
+              "firstOperand": {
+                "value": "ا",
+                "_type": "expression.primitive.identifier"
+              },
+              "secondOperand": {
+                "value": 0.0,
+                "_type": "expression.primitive.number"
+              },
+              "_type": "expression.binary.equalityCheck"
+            },
+            "body": {
+              "bindings": [
+                {
+                  "target": {
+                    "value": "فو",
+                    "_type": "expression.primitive.string"
+                  },
+                  "_type": "statement.print"
+                },
+                {
+                  "target": {
+                    "value": 1.0,
+                    "_type": "expression.primitive.number"
+                  },
+                  "_type": "statement.return"
+                }
+              ],
+              "_type": "statement.block"
+            },
+            "_type": "statement.if"
+          },
+          {
+            "target": {
+              "method": {
+                "value": "بار",
+                "_type": "expression.primitive.identifier"
+              },
+              "arguments": [
+                {
+                  "firstOperand": {
+                    "value": "ا",
+                    "_type": "expression.primitive.identifier"
+                  },
+                  "secondOperand": {
+                    "value": 1.0,
+                    "_type": "expression.primitive.number"
+                  },
+                  "_type": "expression.binary.subtraction"
+                }
+              ],
+              "_type": "expression.call"
+            },
+            "_type": "statement.return"
+          }
+        ],
+        "_type": "statement.block"
+      },
+      "_type": "declaration.function"
+    },
+    {
+      "name": "بار",
+      "returnType": "رقم",
+      "parameters": [
+        {
+          "name": "ا",
+          "type": "رقم"
+        }
+      ],
+      "body": {
+        "bindings": [
+          {
+            "condition": {
+              "firstOperand": {
+                "value": "ا",
+                "_type": "expression.primitive.identifier"
+              },
+              "secondOperand": {
+                "value": 0.0,
+                "_type": "expression.primitive.number"
+              },
+              "_type": "expression.binary.equalityCheck"
+            },
+            "body": {
+              "bindings": [
+                {
+                  "target": {
+                    "value": "بار",
+                    "_type": "expression.primitive.string"
+                  },
+                  "_type": "statement.print"
+                },
+                {
+                  "target": {
+                    "value": 1.0,
+                    "_type": "expression.primitive.number"
+                  },
+                  "_type": "statement.return"
+                }
+              ],
+              "_type": "statement.block"
+            },
+            "_type": "statement.if"
+          },
+          {
+            "target": {
+              "method": {
+                "value": "فو",
+                "_type": "expression.primitive.identifier"
+              },
+              "arguments": [
+                {
+                  "firstOperand": {
+                    "value": "ا",
+                    "_type": "expression.primitive.identifier"
+                  },
+                  "secondOperand": {
+                    "value": 1.0,
+                    "_type": "expression.primitive.number"
+                  },
+                  "_type": "expression.binary.subtraction"
+                }
+              ],
+              "_type": "expression.call"
+            },
+            "_type": "statement.return"
+          }
+        ],
+        "_type": "statement.block"
+      },
+      "_type": "declaration.function"
+    },
+    {
+      "target": {
+        "method": {
+          "value": "فو",
+          "_type": "expression.primitive.identifier"
+        },
+        "arguments": [
+          {
+            "value": 2.0,
+            "_type": "expression.primitive.number"
+          }
+        ],
+        "_type": "expression.call"
+      },
+      "_type": "statement.print"
+    }
+  ]
+}

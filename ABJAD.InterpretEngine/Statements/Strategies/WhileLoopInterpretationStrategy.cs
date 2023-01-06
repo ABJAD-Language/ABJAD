@@ -1,4 +1,4 @@
-﻿using ABJAD.InterpretEngine.Shared.Expressions;
+﻿using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
 using ABJAD.InterpretEngine.Types;
 
@@ -7,10 +7,10 @@ namespace ABJAD.InterpretEngine.Statements.Strategies;
 public class WhileLoopInterpretationStrategy : StatementInterpretationStrategy
 {
     private readonly WhileLoop whileLoop;
-    private readonly Evaluator<Expression> expressionEvaluator;
-    private readonly Interpreter<Statement> statementInterpreter;
+    private readonly IExpressionEvaluator expressionEvaluator;
+    private readonly IStatementInterpreter statementInterpreter;
 
-    public WhileLoopInterpretationStrategy(WhileLoop whileLoop, Evaluator<Expression> expressionEvaluator, Interpreter<Statement> statementInterpreter)
+    public WhileLoopInterpretationStrategy(WhileLoop whileLoop, IExpressionEvaluator expressionEvaluator, IStatementInterpreter statementInterpreter)
     {
         this.whileLoop = whileLoop;
         this.expressionEvaluator = expressionEvaluator;

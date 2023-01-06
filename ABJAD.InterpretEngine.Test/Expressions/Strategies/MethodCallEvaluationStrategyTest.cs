@@ -1,10 +1,12 @@
-﻿using ABJAD.InterpretEngine.Expressions;
+﻿using ABJAD.InterpretEngine.Declarations;
+using ABJAD.InterpretEngine.Expressions;
 using ABJAD.InterpretEngine.Expressions.Strategies;
 using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared;
 using ABJAD.InterpretEngine.Shared.Declarations;
 using ABJAD.InterpretEngine.Shared.Expressions;
 using ABJAD.InterpretEngine.Shared.Statements;
+using ABJAD.InterpretEngine.Statements;
 using ABJAD.InterpretEngine.Types;
 using NSubstitute;
 
@@ -13,9 +15,9 @@ namespace ABJAD.InterpretEngine.Test.Expressions.Strategies;
 public class MethodCallEvaluationStrategyTest
 {
     private readonly ScopeFacade scope = Substitute.For<ScopeFacade>();
-    private readonly Evaluator<Expression> expressionEvaluator = Substitute.For<Evaluator<Expression>>();
-    private readonly Interpreter<Statement> statementInterpreter = Substitute.For<Interpreter<Statement>>();
-    private readonly Interpreter<Declaration> declarationInterpreter = Substitute.For<Interpreter<Declaration>>();
+    private readonly IExpressionEvaluator expressionEvaluator = Substitute.For<IExpressionEvaluator>();
+    private readonly IStatementInterpreter statementInterpreter = Substitute.For<IStatementInterpreter>();
+    private readonly IDeclarationInterpreter declarationInterpreter = Substitute.For<IDeclarationInterpreter>();
 
     [Fact(DisplayName = "throws error when method does not exist")]
     public void throws_error_when_method_does_not_exist()

@@ -1,5 +1,4 @@
-﻿using ABJAD.InterpretEngine.Shared;
-using ABJAD.InterpretEngine.Shared.Declarations;
+﻿using ABJAD.InterpretEngine.Declarations;
 using ABJAD.InterpretEngine.Shared.Statements;
 
 namespace ABJAD.InterpretEngine.Statements.Strategies;
@@ -7,9 +6,9 @@ namespace ABJAD.InterpretEngine.Statements.Strategies;
 public class BlockInterpretationStrategy : StatementInterpretationStrategy
 {
     private readonly Block block;
-    private readonly Interpreter<Binding> bindingInterpreter;
+    private readonly Interpreter bindingInterpreter;
 
-    public BlockInterpretationStrategy(Block block, Interpreter<Statement> statementInterpreter, Interpreter<Declaration> declarationInterpreter)
+    public BlockInterpretationStrategy(Block block, IStatementInterpreter statementInterpreter, IDeclarationInterpreter declarationInterpreter)
     {
         this.block = block;
         bindingInterpreter = new BindingInterpreter(statementInterpreter, declarationInterpreter);
