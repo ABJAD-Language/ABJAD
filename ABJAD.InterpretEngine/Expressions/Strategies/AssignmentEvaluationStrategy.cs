@@ -1,5 +1,6 @@
 ﻿using ABJAD.InterpretEngine.ScopeManagement;
 using ABJAD.InterpretEngine.Shared.Expressions.Assignments;
+using ABJAD.InterpretEngine.Test.Expressions;
 using ABJAD.InterpretEngine.Types;
 
 namespace ABJAD.InterpretEngine.Expressions.Strategies;
@@ -20,13 +21,19 @@ public class AssignmentEvaluationStrategy : ExpressionEvaluationStrategy
     public EvaluatedResult Apply()
     {
         FailIfReferenceDoesNotExist();
-        FailIfTargetIsNotNumber();
+        ValidateTargetIsNumberOrString();
         FailIfTargetValueWasUndefined();
-        
+
+        var targetType = GetTargetType();
         var offset = EvaluateOffset();
         var oldValue = GetTargetOldValue();
         
-        return ApplyOperationAndStoreNewValue(oldValue, offset);
+        return ApplyOperationAndStoreNewValue(targetType, oldValue, offset);
+    }
+
+    private DataType GetTargetType()
+    {
+        return scopeFacade.GetReferenceType(assignmentExpression.Target);
     }
 
     private void FailIfTargetValueWasUndefined()
@@ -37,19 +44,84 @@ public class AssignmentEvaluationStrategy : ExpressionEvaluationStrategy
         }
     }
 
-    private double GetTargetOldValue()
+    private object GetTargetOldValue()
     {
-        return (double)scopeFacade.GetReference(assignmentExpression.Target);
+        return scopeFacade.GetReference(assignmentExpression.Target);
     }
 
-    private EvaluatedResult ApplyOperationAndStoreNewValue(double oldValue, EvaluatedResult offset)
+    private EvaluatedResult ApplyOperationAndStoreNewValue(DataType targetType, object oldValue, EvaluatedResult offset)
     {
-        var newValue = EvaluateNewValue(oldValue, offset);
-        scopeFacade.UpdateReference(assignmentExpression.Target, newValue);
-        return new EvaluatedResult { Type = DataType.Number(), Value = newValue };
+        var result = targetType.IsNumber() 
+            ? HandleNumberAssignmentExpression(oldValue, offset) 
+            : HandleStringAssignmentExpression(oldValue, offset);
+        
+        scopeFacade.UpdateReference(assignmentExpression.Target, result.Value);
+        return result;
     }
 
-    private double EvaluateNewValue(double oldValue, EvaluatedResult offset)
+    private EvaluatedResult HandleStringAssignmentExpression(object oldValue, EvaluatedResult offset)
+    {
+        return assignmentExpression switch
+        {
+            AdditionAssignment => HandleStringAdditionAssignmentExpression(oldValue, offset),
+            MultiplicationAssignment when offset.Type.IsNumber() => HandleStringMultiplicationAssignmentExpression(
+                oldValue, offset),
+            _ => throw new IllegalStringAssignmentException()
+        };
+    }
+
+    private static EvaluatedResult HandleStringAdditionAssignmentExpression(object oldValue, EvaluatedResult offset)
+    {
+        return new EvaluatedResult
+        {
+            Type = DataType.String(),
+            Value = (string)oldValue + offset.Value
+        };
+    }
+
+    private static EvaluatedResult HandleStringMultiplicationAssignmentExpression(object oldValue, EvaluatedResult offset)
+    {
+        ValidateNumberIsNatural(offset);
+        ValidateNumberIsPositive(offset);
+
+        return new EvaluatedResult
+        {
+            Type = DataType.String(),
+            Value = string.Concat(Enumerable.Repeat((string)oldValue, Convert.ToInt32(offset.Value)))
+        };
+    }
+
+    private static void ValidateNumberIsPositive(EvaluatedResult offset)
+    {
+        if ((double)offset.Value < 0)
+        {
+            throw new NumberNotPositiveException((double)offset.Value);
+        }
+    }
+
+    private static void ValidateNumberIsNatural(EvaluatedResult offset)
+    {
+        if (!NumberUtils.IsNumberNatural((double)offset.Value))
+        {
+            throw new NumberNotNaturalException((double)offset.Value);
+        }
+    }
+
+    private EvaluatedResult HandleNumberAssignmentExpression(object oldValue, EvaluatedResult offset)
+    {
+        if (!offset.Type.IsNumber())
+        {
+            throw new InvalidTypeException(offset.Type, DataType.Number());
+        }
+
+        return new EvaluatedResult
+        {
+            Type = DataType.Number(),
+            Value = EvaluateNewNumberAssignment((double)oldValue, offset)
+        };
+    }
+
+    private double EvaluateNewNumberAssignment(double oldValue, EvaluatedResult offset)
     {
         return assignmentExpression switch
         {
@@ -64,20 +136,20 @@ public class AssignmentEvaluationStrategy : ExpressionEvaluationStrategy
     private EvaluatedResult EvaluateOffset()
     {
         var offset = expressionEvaluator.Evaluate(assignmentExpression.Value);
-        if (!offset.Type.IsNumber())
+        if (!offset.Type.IsNumber() && !offset.Type.IsString())
         {
-            throw new InvalidTypeException(offset.Type, DataType.Number());
+            throw new InvalidTypeException(offset.Type, DataType.Number(), DataType.String());
         }
 
         return offset;
     }
 
-    private void FailIfTargetIsNotNumber()
+    private void ValidateTargetIsNumberOrString()
     {
         var targetType = scopeFacade.GetReferenceType(assignmentExpression.Target);
-        if (!targetType.IsNumber())
+        if (!targetType.IsNumber() && !targetType.IsString())
         {
-            throw new InvalidTypeException(targetType, DataType.Number());
+            throw new InvalidTypeException(targetType, DataType.Number(), DataType.String());
         }
     }
 

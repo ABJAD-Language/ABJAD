@@ -1,0 +1,31 @@
+﻿{
+  "bindings": [
+    {
+      "type": "رقم",
+      "name": "عدد",
+      "value": {
+        "value": 4.0,
+        "_type": "expression.primitive.number"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "expression": {
+        "target": "عدد",
+        "value": {
+          "value": 3.0,
+          "_type": "expression.primitive.number"
+        },
+        "_type": "expression.assignment.subtraction"
+      },
+      "_type": "statement.expression"
+    },
+    {
+      "target": {
+        "value": "عدد",
+        "_type": "expression.primitive.identifier"
+      },
+      "_type": "statement.print"
+    }
+  ]
+}
