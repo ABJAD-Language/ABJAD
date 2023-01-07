@@ -21,6 +21,7 @@ public class VariableDeclarationInterpretationStrategy : DeclarationInterpretati
     public void Apply()
     {
         ValidateReferenceDoesNotExistsInScope();
+        ValidateTypeExists();
 
         if (declaration.Value is null)
         {
@@ -36,10 +37,19 @@ public class VariableDeclarationInterpretationStrategy : DeclarationInterpretati
         scope.DefineVariable(declaration.Name, declaration.Type, evaluatedResult.Value);
     }
 
+    private void ValidateTypeExists()
+    {
+        if (!declaration.Type.IsNumber() && !declaration.Type.IsString() && !declaration.Type.IsBool() &&
+            !scope.TypeExists(declaration.Type.GetValue()))
+        {
+            throw new ReferenceNameDoesNotExistException(declaration.Type.GetValue());
+        }
+    }
+
     private void ValidateVariableNullability(EvaluatedResult evaluatedResult)
     {
         if (evaluatedResult.Value.Equals(SpecialValues.NULL) &&
-            (evaluatedResult.Type.IsBool() || evaluatedResult.Type.IsNumber()))
+            (declaration.Type.IsBool() || declaration.Type.IsNumber()))
         {
             throw new IllegalNullAssignmentException(declaration.Type);
         }
@@ -55,10 +65,15 @@ public class VariableDeclarationInterpretationStrategy : DeclarationInterpretati
 
     private void ValidateTypeMatches(EvaluatedResult evaluatedResult)
     {
-        if (!declaration.Type.Is(evaluatedResult.Type))
+        if (!declaration.Type.Is(evaluatedResult.Type) && !ValueIsNull(evaluatedResult))
         {
             throw new IncompatibleTypesException(declaration.Type, evaluatedResult.Type);
         }
+    }
+
+    private static bool ValueIsNull(EvaluatedResult evaluatedResult)
+    {
+        return evaluatedResult.Type.IsUndefined() && evaluatedResult.Value.Equals(SpecialValues.NULL);
     }
 
     private void ValidateReferenceDoesNotExistsInScope()
