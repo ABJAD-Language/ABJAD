@@ -38,6 +38,58 @@ public class AssignmentInterpretationStrategyTest
         Assert.Throws<IncompatibleTypesException>(() => strategy.Apply());
     }
 
+    [Fact(DisplayName = "does not throw an error if the type of target is string and the value is null")]
+    public void does_not_throw_an_error_if_the_type_of_target_is_string_and_the_value_is_null()
+    {
+        scopeFacade.ReferenceExists("id").Returns(true);
+        scopeFacade.GetReferenceType("id").Returns(DataType.String());
+        var value = Substitute.For<Expression>();
+        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Undefined(), Value = SpecialValues.NULL });
+
+        var assignment = new Assignment { Target = "id", Value = value };
+        var strategy = new AssignmentInterpretationStrategy(assignment, scopeFacade, expressionEvaluator);
+        strategy.Apply();
+    }
+
+    [Fact(DisplayName = "does not throw an error if the type of target is custom and the value is null")]
+    public void does_not_throw_an_error_if_the_type_of_target_is_custom_and_the_value_is_null()
+    {
+        scopeFacade.ReferenceExists("id").Returns(true);
+        scopeFacade.GetReferenceType("id").Returns(DataType.Custom("type"));
+        var value = Substitute.For<Expression>();
+        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Undefined(), Value = SpecialValues.NULL });
+
+        var assignment = new Assignment { Target = "id", Value = value };
+        var strategy = new AssignmentInterpretationStrategy(assignment, scopeFacade, expressionEvaluator);
+        strategy.Apply();
+    }
+
+    [Fact(DisplayName = "throws error if the type of target is number and value is null")]
+    public void throws_error_if_the_type_of_target_is_number_and_value_is_null()
+    {
+        scopeFacade.ReferenceExists("id").Returns(true);
+        scopeFacade.GetReferenceType("id").Returns(DataType.Number());
+        var value = Substitute.For<Expression>();
+        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Undefined(), Value = SpecialValues.NULL });
+
+        var assignment = new Assignment { Target = "id", Value = value };
+        var strategy = new AssignmentInterpretationStrategy(assignment, scopeFacade, expressionEvaluator);
+        Assert.Throws<IllegalNullAssignmentException>(() => strategy.Apply());
+    }
+
+    [Fact(DisplayName = "throws error if the type of target is bool and value is null")]
+    public void throws_error_if_the_type_of_target_is_bool_and_value_is_null()
+    {
+        scopeFacade.ReferenceExists("id").Returns(true);
+        scopeFacade.GetReferenceType("id").Returns(DataType.Bool());
+        var value = Substitute.For<Expression>();
+        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Undefined(), Value = SpecialValues.NULL });
+
+        var assignment = new Assignment { Target = "id", Value = value };
+        var strategy = new AssignmentInterpretationStrategy(assignment, scopeFacade, expressionEvaluator);
+        Assert.Throws<IllegalNullAssignmentException>(() => strategy.Apply());
+    }
+
     [Fact(DisplayName = "throws error if the value to be assigned evaluates to undefined")]
     public void throws_error_if_the_value_to_be_assigned_evaluates_to_undefined()
     {

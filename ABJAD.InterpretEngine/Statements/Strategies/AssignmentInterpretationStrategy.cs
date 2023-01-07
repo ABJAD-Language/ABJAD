@@ -25,10 +25,20 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
         var evaluatedResult = expressionEvaluator.Evaluate(assignment.Value);
         ValidateValueTypeMatchesTargetType(evaluatedResult);
         ValidateValueIsNotUndefined(evaluatedResult);
+        ValidateReferenceAssignmentNullability(evaluatedResult);
 
         scopeFacade.UpdateReference(assignment.Target, evaluatedResult.Value);
 
         return StatementInterpretationResult.GetNotReturned();
+    }
+
+    private void ValidateReferenceAssignmentNullability(EvaluatedResult evaluatedResult)
+    {
+        var referenceType = scopeFacade.GetReferenceType(assignment.Target);
+        if ((referenceType.IsNumber() || referenceType.IsBool()) && ValueIsNull(evaluatedResult))
+        {
+            throw new IllegalNullAssignmentException(referenceType);
+        }
     }
 
     private static void ValidateValueIsNotUndefined(EvaluatedResult evaluatedResult)
@@ -42,10 +52,15 @@ public class AssignmentInterpretationStrategy : StatementInterpretationStrategy
     private void ValidateValueTypeMatchesTargetType(EvaluatedResult evaluatedResult)
     {
         var targetType = scopeFacade.GetReferenceType(assignment.Target);
-        if (!targetType.Is(evaluatedResult.Type))
+        if (!targetType.Is(evaluatedResult.Type) && !ValueIsNull(evaluatedResult))
         {
             throw new IncompatibleTypesException(targetType, evaluatedResult.Type);
         }
+    }
+
+    private static bool ValueIsNull(EvaluatedResult evaluatedResult)
+    {
+        return evaluatedResult.Type.IsUndefined() && evaluatedResult.Value.Equals(SpecialValues.NULL);
     }
 
     private void ValidateTargetExists()

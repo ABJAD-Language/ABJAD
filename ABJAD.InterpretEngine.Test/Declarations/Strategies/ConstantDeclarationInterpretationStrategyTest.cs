@@ -46,6 +46,14 @@ public class ConstantDeclarationInterpretationStrategyTest
         Assert.Throws<ConstantDeclarationFailureException>(() => strategy.Apply());
     }
 
+    [Fact(DisplayName = "does not throw an error if the constant type is string and value is null")]
+    public void does_not_throw_an_error_if_the_constant_type_is_string_and_value_is_null()
+    {
+        var constantDeclaration = new ConstantDeclaration() { Type = DataType.String(), Value = new NullPrimitive() };
+        var strategy = new ConstantDeclarationInterpretationStrategy(constantDeclaration, scope);
+        strategy.Apply();
+    }
+
     [Fact(DisplayName = "updates scope with the new reference when it is a string")]
     public void updates_scope_with_the_new_reference_when_it_is_a_string()
     {

@@ -62,7 +62,7 @@ public class VariableDeclarationInterpretationStrategyTest
         var value = Substitute.For<Expression>();
         var variableDeclaration = new VariableDeclaration() { Name = "id", Type = DataType.Bool(), Value = value };
         var strategy = new VariableDeclarationInterpretationStrategy(variableDeclaration, scope, expressionEvaluator);
-        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Bool(), Value = SpecialValues.NULL });
+        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Undefined(), Value = SpecialValues.NULL });
         Assert.Throws<IllegalNullAssignmentException>(() => strategy.Apply());
     }
 
@@ -73,8 +73,41 @@ public class VariableDeclarationInterpretationStrategyTest
         var value = Substitute.For<Expression>();
         var variableDeclaration = new VariableDeclaration() { Name = "id", Type = DataType.Number(), Value = value };
         var strategy = new VariableDeclarationInterpretationStrategy(variableDeclaration, scope, expressionEvaluator);
-        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Number(), Value = SpecialValues.NULL });
+        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Undefined(), Value = SpecialValues.NULL });
         Assert.Throws<IllegalNullAssignmentException>(() => strategy.Apply());
+    }
+
+    [Fact(DisplayName = "does not throw an error if the value of the expression evaluates to null and the variable type is string")]
+    public void does_not_throw_an_error_if_the_value_of_the_expression_evaluates_to_null_and_the_variable_type_is_string()
+    {
+        scope.ReferenceExistsInCurrentScope("id").Returns(false);
+        var value = Substitute.For<Expression>();
+        var variableDeclaration = new VariableDeclaration() { Name = "id", Type = DataType.String(), Value = value };
+        var strategy = new VariableDeclarationInterpretationStrategy(variableDeclaration, scope, expressionEvaluator);
+        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Undefined(), Value = SpecialValues.NULL });
+        strategy.Apply();
+    }
+
+    [Fact(DisplayName = "throws error if the declaration type does not exist")]
+    public void throws_error_if_the_declaration_type_does_not_exist()
+    {
+        scope.ReferenceExistsInCurrentScope("id").Returns(false);
+        scope.TypeExists("type").Returns(false);
+        var variableDeclaration = new VariableDeclaration() { Name = "id", Type = DataType.Custom("type") };
+        var strategy = new VariableDeclarationInterpretationStrategy(variableDeclaration, scope, expressionEvaluator);
+        Assert.Throws<ReferenceNameDoesNotExistException>(() => strategy.Apply());
+    }
+
+    [Fact(DisplayName = "does not throw an error if the value of the expression evaluates to null and the variable type is custom")]
+    public void does_not_throw_an_error_if_the_value_of_the_expression_evaluates_to_null_and_the_variable_type_is_custom()
+    {
+        scope.ReferenceExistsInCurrentScope("id").Returns(false);
+        scope.TypeExists("type").Returns(true);
+        var value = Substitute.For<Expression>();
+        var variableDeclaration = new VariableDeclaration() { Name = "id", Type = DataType.Custom("type"), Value = value };
+        var strategy = new VariableDeclarationInterpretationStrategy(variableDeclaration, scope, expressionEvaluator);
+        expressionEvaluator.Evaluate(value).Returns(new EvaluatedResult { Type = DataType.Undefined(), Value = SpecialValues.NULL });
+        strategy.Apply();
     }
 
     [Fact(DisplayName = "updates scope with the new reference when the value is passed on the happy path")]

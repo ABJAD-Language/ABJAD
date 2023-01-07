@@ -25,10 +25,19 @@ public class ConstantDeclarationInterpretationStrategy : DeclarationInterpretati
             return;
         }
 
-        if (constantDeclaration.Type.IsString() && constantDeclaration.Value is StringPrimitive @string)
+        if (constantDeclaration.Type.IsString())
         {
-            scope.DefineConstant(constantDeclaration.Name, constantDeclaration.Type, @string.Value);
-            return;
+            if (constantDeclaration.Value is StringPrimitive @string)
+            {
+                scope.DefineConstant(constantDeclaration.Name, constantDeclaration.Type, @string.Value);
+                return;
+            }
+
+            if (constantDeclaration.Value is NullPrimitive)
+            {
+                scope.DefineConstant(constantDeclaration.Name, constantDeclaration.Type, SpecialValues.NULL);
+                return;
+            }
         }
 
         if (constantDeclaration.Type.IsBool() && constantDeclaration.Value is BoolPrimitive @bool)
