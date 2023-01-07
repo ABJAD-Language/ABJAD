@@ -1,0 +1,31 @@
+﻿{
+  "bindings": [
+    {
+      "type": "مقطع",
+      "name": "رسالة",
+      "value": {
+        "value": "*",
+        "_type": "expression.primitive.string"
+      },
+      "_type": "declaration.variable"
+    },
+    {
+      "expression": {
+        "target": "رسالة",
+        "value": {
+          "value": "مرحبا",
+          "_type": "expression.primitive.string"
+        },
+        "_type": "expression.assignment.subtraction"
+      },
+      "_type": "statement.expression"
+    },
+    {
+      "target": {
+        "value": "رسالة",
+        "_type": "expression.primitive.identifier"
+      },
+      "_type": "statement.print"
+    }
+  ]
+}
