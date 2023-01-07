@@ -18,6 +18,7 @@ public class InterpretController : ControllerBase
 
     [HttpPost]
     [InterpretationFailureFilter]
+    [InternalServerErrorFilter]
     [ProducesResponseType((int) HttpStatusCode.OK, Type = typeof(List<InterpretBindingResponse>))]
     public ActionResult<InterpretBindingResponse> Interpret([FromBody] InterpretBindingsRequest request)
     {
