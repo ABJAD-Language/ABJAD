@@ -1,0 +1,184 @@
+﻿{
+  "tokens": [
+    {
+      "line": 1,
+      "index": 1,
+      "type": "FUNC",
+      "content": "دالة"
+    },
+    {
+      "line": 1,
+      "index": 5,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 1,
+      "index": 6,
+      "type": "ID",
+      "content": "احسب"
+    },
+    {
+      "line": 1,
+      "index": 10,
+      "type": "OPEN_PAREN",
+      "content": "("
+    },
+    {
+      "line": 1,
+      "index": 11,
+      "type": "NUMBER",
+      "content": "رقم"
+    },
+    {
+      "line": 1,
+      "index": 14,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 1,
+      "index": 15,
+      "type": "ID",
+      "content": "ع"
+    },
+    {
+      "line": 1,
+      "index": 16,
+      "type": "COMMA",
+      "content": "،"
+    },
+    {
+      "line": 1,
+      "index": 17,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 1,
+      "index": 18,
+      "type": "NUMBER",
+      "content": "رقم"
+    },
+    {
+      "line": 1,
+      "index": 21,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 1,
+      "index": 22,
+      "type": "ID",
+      "content": "س"
+    },
+    {
+      "line": 1,
+      "index": 23,
+      "type": "CLOSE_PAREN",
+      "content": ")"
+    },
+    {
+      "line": 1,
+      "index": 24,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 1,
+      "index": 25,
+      "type": "COLON",
+      "content": ":"
+    },
+    {
+      "line": 1,
+      "index": 26,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 1,
+      "index": 27,
+      "type": "NUMBER",
+      "content": "رقم"
+    },
+    {
+      "line": 1,
+      "index": 30,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 1,
+      "index": 31,
+      "type": "OPEN_BRACE",
+      "content": "{"
+    },
+    {
+      "line": 1,
+      "index": 32,
+      "type": "WHITE_SPACE",
+      "content": "\n    "
+    },
+    {
+      "line": 2,
+      "index": 1,
+      "type": "RETURN",
+      "content": "ارجع"
+    },
+    {
+      "line": 2,
+      "index": 5,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 2,
+      "index": 6,
+      "type": "ID",
+      "content": "ع"
+    },
+    {
+      "line": 2,
+      "index": 7,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 2,
+      "index": 8,
+      "type": "PLUS",
+      "content": "+"
+    },
+    {
+      "line": 2,
+      "index": 9,
+      "type": "WHITE_SPACE",
+      "content": " "
+    },
+    {
+      "line": 2,
+      "index": 10,
+      "type": "ID",
+      "content": "س"
+    },
+    {
+      "line": 2,
+      "index": 11,
+      "type": "SEMICOLON",
+      "content": "؛"
+    },
+    {
+      "line": 2,
+      "index": 12,
+      "type": "WHITE_SPACE",
+      "content": "\n"
+    },
+    {
+      "line": 3,
+      "index": 1,
+      "type": "CLOSE_BRACE",
+      "content": "}"
+    }
+  ]
+}

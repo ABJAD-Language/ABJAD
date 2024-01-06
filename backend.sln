@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{92432CAF-8282-4EC5-BFC5-774D2C8D632C}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABJAD.Test", "ABJAD.Test\ABJAD.Test.csproj", "{40EC8253-44CA-44F3-AFCF-FEB3F85615BE}"

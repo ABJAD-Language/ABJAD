@@ -1,0 +1,47 @@
+[
+  {
+    "target": {
+      "type": "رقم",
+      "name": "ا",
+      "value": {
+        "value": 0.0,
+        "_type": "expression.primitive.number"
+      },
+      "_type": "declaration.variable"
+    },
+    "condition": {
+      "expression": {
+        "firstOperand": {
+          "value": "ا",
+          "_type": "expression.primitive.identifier"
+        },
+        "secondOperand": {
+          "value": 10.0,
+          "_type": "expression.primitive.number"
+        },
+        "_type": "expression.binary.lessCheck"
+      },
+      "_type": "statement.expression"
+    },
+    "targetCallback": {
+      "target": {
+        "value": "ا",
+        "_type": "expression.primitive.identifier"
+      },
+      "_type": "expression.unary.postfix.addition"
+    },
+    "body": {
+      "bindings": [
+        {
+          "target": {
+            "value": "مرحبا بالعالم!",
+            "_type": "expression.primitive.string"
+          },
+          "_type": "statement.print"
+        }
+      ],
+      "_type": "statement.block"
+    },
+    "_type": "statement.for"
+  }
+]
