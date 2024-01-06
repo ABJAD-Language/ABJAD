@@ -3,7 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABJAD", "ABJAD\ABJAD.csproj", "{4C3C1DA5-4E88-46FD-8F1E-E492279F0B97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{92432CAF-8282-4EC5-BFC5-774D2C8D632C}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABJAD.Test", "ABJAD.Test\ABJAD.Test.csproj", "{40EC8253-44CA-44F3-AFCF-FEB3F85615BE}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C3C1DA5-4E88-46FD-8F1E-E492279F0B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C3C1DA5-4E88-46FD-8F1E-E492279F0B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C3C1DA5-4E88-46FD-8F1E-E492279F0B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C3C1DA5-4E88-46FD-8F1E-E492279F0B97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40EC8253-44CA-44F3-AFCF-FEB3F85615BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40EC8253-44CA-44F3-AFCF-FEB3F85615BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40EC8253-44CA-44F3-AFCF-FEB3F85615BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40EC8253-44CA-44F3-AFCF-FEB3F85615BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
