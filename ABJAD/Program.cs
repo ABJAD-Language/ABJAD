@@ -1,6 +1,36 @@
+using ABJAD.Interpreter.Core;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<InterpreterService, InterpreterWithTimeout>();
+
+builder.Services.AddCors(options =>
+    options.AddDefaultPolicy(config =>
+        config.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()));
+
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseCors();
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
+
+namespace ABJAD
+{
+    public partial class Program { }
+}
